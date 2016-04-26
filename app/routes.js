@@ -173,7 +173,7 @@ module.exports = function (app, passport) {
         user.find({}, function (err, users) {
 
             users.forEach(function (user) {
-                console.log('updateUsersTotalScores:' + user.username);
+                //console.log('updateUsersTotalScores:' + user.username);
 
                 // starting from 0:
                 var totalScore = 0;
@@ -248,7 +248,7 @@ module.exports = function (app, passport) {
 
     function updateMatchPredictionsScores() {
         var deferred = Q.defer();
-        console.log('updateMatchPredictionsScores start');
+        //console.log('updateMatchPredictionsScores start');
         matchespredictions.find({}, function (err, matchespredictionsRows) {
             if (matchespredictionsRows) {
                 matchespredictionsRows.forEach(function (matchespredictionsRow) {
@@ -347,7 +347,7 @@ module.exports = function (app, passport) {
         if (matchesInput) {
             matchesInput.forEach(
                 function (aMatch) {
-                    console.log('updateMatchPredictionValues:' + aMatch.matchID);
+                    //console.log('updateMatchPredictionValues:' + aMatch.matchID);
 
                     // check if match is exist:
                     matches.findOne({matchID: aMatch.matchID}, function (error, dbMatch) {
@@ -374,7 +374,7 @@ module.exports = function (app, passport) {
                                         dbMatchPrediction._goaldiff = isAdmin ? aMatch.goaldiff : aMatch._goaldiff;
                                         dbMatchPrediction._firstscore = isAdmin ? aMatch.firstscore : aMatch._firstscore;
                                         dbMatchPrediction.save(function (err) {
-                                            console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
+                                            //console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
                                         });
                                     } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
                                         new matchespredictions({
@@ -405,7 +405,7 @@ module.exports = function (app, passport) {
                                 });
                             }
                         } else {
-                            console.log('updateMatchPredictionValues resolved');
+                            //console.log('updateMatchPredictionValues resolved');
                             deferred.resolve({});
                         }
                     });
@@ -415,7 +415,7 @@ module.exports = function (app, passport) {
                     deferred.resolve();
                 });
             // after the for each
-            console.log('updateMatchPredictionValues resolved');
+            //console.log('updateMatchPredictionValues resolved');
             deferred.resolve({});
 
         } else {

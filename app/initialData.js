@@ -22,14 +22,6 @@ module.exports = {
                         team2: 'Romania',
                         kickofftime: new Date("2016-06-10T19:00:00Z")
 
-                        //REAL results :
-                        //,
-                        //winner: 'France',
-                        //team1score: '3',
-                        //team2score: '1',
-                        //goaldiff: '2',
-                        //firstscore: 'Romania'
-
                     }).save(function (err) {
                     }),
                     new matches({
@@ -529,6 +521,36 @@ module.exports = {
                     }).save(function () {
 
                     }),
+
+
+                    // *****
+                    // Fakes
+                    // *****
+
+                    // Test match:
+                    new matches({
+                        matchID: 52,
+                        team1: 'T1',
+                        team2: 'T2',
+                        kickofftime: new Date("2016-05-01T19:00:00Z"),
+                        winner: 'T1',
+                        team1score: '2',
+                        team2score: '1',
+                        goaldiff: '1',
+                        firstscore: 'T2'
+
+                    }).save(function (err) {
+                    }),
+
+                    new teams({
+                        teamID: 19,
+                        name: 'Test',
+                        deadline: new Date("2016-05-01T19:00:00Z"),
+                        predictscore: 0,
+                        team: 'T1'
+                    }).save(function () {
+
+                    })
 
                 ]).spread(function () {
                     deferred.resolve({});

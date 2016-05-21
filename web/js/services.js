@@ -18,10 +18,10 @@ angular.module('appname.services', [])
     })
     .factory('logginService', function (ulhttp) {
         return {
-            loggin: function (email, password) {
+            loggin: function (username, password) {
                 var url = "/api/login";
                 var data = {
-                    email: email,
+                    username: username,
                     password: password
                 };
                 return ulhttp.post(url, data).then(function (result) {
@@ -33,7 +33,7 @@ angular.module('appname.services', [])
     })
     .factory('logoutService', function (ulhttp, $rootScope, toastr, $location) {
         return {
-            logout: function (email, password) {
+            logout: function () {
                 var url = "/api/logout";
                 ulhttp.get(url).then(function (result) {
                     if (result.data.status === 'OK') {
@@ -68,49 +68,49 @@ angular.module('appname.services', [])
             }
         };
     }).factory('gameService', function (ulhttp) {
-        return {
-            // Align the clocks + get user info
-            getUserInfo: function (data) {
-                var url = "/api/game";
-                return ulhttp.get(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
-            },
-            submitAnswer: function (data) {
-                var url = "/api/submitAnswer?answer=" + data.answer;
-                return ulhttp.get(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
-            },
+    return {
+        // Align the clocks + get user info
+        getUserInfo: function (data) {
+            var url = "/api/game";
+            return ulhttp.get(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
+        },
+        submitAnswer: function (data) {
+            var url = "/api/submitAnswer?answer=" + data.answer;
+            return ulhttp.get(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
+        },
 
-            getHint: function (data) {
-                var url = "/api/getHint";
-                return ulhttp.get(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
+        getHint: function (data) {
+            var url = "/api/getHint";
+            return ulhttp.get(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
 
-            },
+        },
 
-            transfer: function (data) {
-                // Content-Type: application/x-www-form-urlencoded
-                var url = "/api/transferMoney";
-                return ulhttp.post(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
-            }
-        };
-    }).factory('leaderboardService', function (ulhttp) {
-        return {
-            getAllUserList: function (data) {
-                var url = "/api/users";
-                return ulhttp.get(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
-            }
-        };
-    });
+        transfer: function (data) {
+            // Content-Type: application/x-www-form-urlencoded
+            var url = "/api/transferMoney";
+            return ulhttp.post(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
+        }
+    };
+}).factory('leaderboardService', function (ulhttp) {
+    return {
+        getAllUserList: function (data) {
+            var url = "/api/users";
+            return ulhttp.get(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
+        }
+    };
+});

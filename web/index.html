@@ -6,11 +6,7 @@
     <link rel="stylesheet" type="text/css" href="/bower_components/angular-toastr/dist/angular-toastr.css"/>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"/>
     <link rel="stylesheet" type="text/css" href="/css/style.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/css.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/media.css"/>
-    <link rel="stylesheet" type="text/css" href="/css/primitives.latest.css"/>
 </head>
-<body style="background-image: url('img/anonymous.jpg')">
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
 <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.10.2/jquery-ui.min.js"></script>
 <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
@@ -19,9 +15,6 @@
 <script type="text/javascript" src="bower_components/angular-resource/angular-resource.min.js"></script>
 <script type="text/javascript" src="bower_components/angular-animate/angular-animate.js"></script>
 <script type="text/javascript" src="bower_components/angular-toastr/dist/angular-toastr.tpls.js"></script>
-<script type="text/javascript" src="js/primitives.min.js"></script>
-<script type="text/javascript" src="js/jquery.countdown.min.js"></script>
-<script type="text/javascript" src="js/tagcanvas.min.js"></script>
 <script type="text/javascript" src="js/controllers.js"></script>
 <script type="text/javascript" src="js/services.js"></script>
 <script type="text/javascript" src="js/app.js"></script>
@@ -38,8 +31,14 @@
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#/game"> <img alt="Brand" src="img/sap_logo.png" id="headerlogo"></a>
+            <a class="navbar-brand" href="#/game"> <img alt="Brand" src="img/logo.png" id="headerlogo"></a>
+
         </div>
+
+        <div class="navbar-header" style="padding-top: 25px">
+            <p><b>Predi</b>ction <b>Ga</b>me</p>
+        </div>
+
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
@@ -47,10 +46,10 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#/login" ng-hide="$root.currentUser">Sign In</a></li>
                     <li><a href="#/signup" ng-hide="$root.currentUser">Register</a></li>
-                    <li><a href="#/leaderboard2">Leaderboard</a></li>
-                    <li><a href="#/about" ng-show="$root.currentUser">About</a></li>
-                    <li><a href="#/help" ng-show="$root.currentUser">Help</a></li>
+                    <li><a href="#/profile" ng-show="$root.currentUser">Profile</a></li>
                     <li><a href="#/game" ng-show="$root.currentUser">Game</a></li>
+                    <li><a href="#/leaderboard" ng-show="$root.currentUser">Leaderboard</a></li>
+                    <li><a href="#/help" ng-show="$root.currentUser">Help</a></li>
                     <li><a href="" ng-click="logout()" ng-show="$root.currentUser">Sign Out</a></li>
                 </ul>
             </div>
@@ -61,24 +60,4 @@
 <br/>
 <br/>
 </body>
-
-<!-- Google Analytics -->
-<script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', '//www.google-analytics.com/analytics.js', 'ga');
-
-    ga('create', 'UA-72175431-1', 'auto');
-    ga('send', 'pageview', '/index.html');
-
-</script>
-<!-- End Google Analytics -->
 </html>

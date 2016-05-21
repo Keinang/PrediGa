@@ -5,7 +5,7 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
             when('/login', {
                 title: 'Home',
                 templateUrl: 'partials/login.html',
-                controller: 'tempCtrl',
+                controller: 'loginCtrl',
                 resolve: {loginRedirect: loginRedirect}
             })
             .when('/signup', {
@@ -29,16 +29,6 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 title: 'Leaderboard',
                 templateUrl: 'partials/leaderboard.html',
                 controller: 'leaderboardCtrl'
-            })
-            .when('/leaderboard2', {
-                title: 'Leaderboard2',
-                templateUrl: 'partials/leaderboard2.html',
-                controller: 'leaderboard2Ctrl'
-            })
-            .when('/about', {
-                title: 'About',
-                templateUrl: 'partials/about.html',
-                controller: 'aboutCtrl'
             })
             .when('/help', {
                 title: 'Help',

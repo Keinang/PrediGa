@@ -28,8 +28,8 @@ module.exports = function (passport) {
     // LOCAL LOGIN =============================================================
     // =========================================================================
     passport.use('local-login', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField: 'email',
+            // by default, local strategy uses username and password
+            usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
         },
@@ -63,8 +63,8 @@ module.exports = function (passport) {
     // LOCAL SIGNUP ============================================================
     // =========================================================================
     passport.use('local-signup', new LocalStrategy({
-            // by default, local strategy uses username and password, we will override with email
-            usernameField: 'email',
+            // by default, local strategy uses username and password
+            usernameField: 'username',
             passwordField: 'password',
             passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
         },
@@ -91,8 +91,7 @@ module.exports = function (passport) {
 
                             newUser.local.email = email;
                             newUser.local.password = newUser.generateHash(password);
-                            newUser.firstName = req.body.firstName;
-                            newUser.lastName = req.body.lastName;
+                            newUser.userName = req.body.userName;
 
                             newUser.save(function (err) {
                                 if (err)
@@ -118,8 +117,7 @@ module.exports = function (passport) {
                             var user = req.user;
                             user.local.email = email;
                             user.local.password = user.generateHash(password);
-                            user.firstName = req.body.firstName;
-                            user.lastName = req.body.lastName;
+                            user.userName = req.body.userName;
 
                             user.save(function (err) {
                                 if (err)

@@ -3,13 +3,20 @@
 }*/
 html, body, h1, h2, h3, h4, h5 {
     font-family: helvetica;
+    height: 100%;
+    width: 100%;
 }
 
 body {
-    background-color: #ececec;
+    background: url('../img/UEFA-EURO2016_Stade-de-France_PES2016-1024x576.jpg') no-repeat center center fixed;
+    background-size: cover;
+    -o-background-size: cover;
+    -moz-background-size: cover;
+    -webkit-background-size: cover;
     overflow-x: hidden;
+    height: 100%;
+    width: 100%;
 }
-
 
 .fading-img{
 	position: absolute;
@@ -32,7 +39,7 @@ body {
 }
 
 .navbar-header {
-    width: 200px;
+
 }
 
 .appname-standard-border {
@@ -173,42 +180,6 @@ body {
     font-size: 110%;
     width: 200px;
     height: 50px;
-}
-
-.leaderboard {
-}
-
-.catch-me-img-div {
-    position: absolute;
-    width: 100%;
-}
-
-.catch-me-img-div img {
-    display: inline-block;
-    position: relative;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.catch-me-top-div {
-    text-align: center;
-    margin-bottom: 10px;
-}
-
-.green {
-    background-image: url('../img/green.png');
-    background-repeat: repeat-x;
-    float: left;
-    width: 50%;
-    height: 294px;
-}
-
-.blue {
-    background-image: url('../img/blue.png');
-    background-repeat: repeat-x;
-    float: right;
-    width: 50%;
-    height: 294px;
 }
 
 .mouse-invisible{

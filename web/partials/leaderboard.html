@@ -1,26 +1,17 @@
 <br/>
 <br/>
-
-<div class="row">
-    <div id="catchMeDiv" class="catch-me-top-div">
-        <div class="green"></div>
-        <div class="catch-me-img-div"><img src="img/catch-me.png" style="z-index: 50"></div>
-        <div class="blue"></div>
-    </div>
-</div>
-<div class='header_bankhack'> <h1> Hack The Bank - Leader Board </h1> </div>
- <div id="cloud" style="width:100%;height:900px">
-	<canvas id="myCanvas" style="font-size: 50%;width:100%;height:100%" >
-		<p>Leaderboard</p>
-	</canvas>
-</div>
-
-
-<div id="userList"><ul></ul></div>
-	
-<script>
-    ga('send', 'pageview', '/leaderboard.html');
-</script>
 <br/>
 <br/>
 <br/>
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th style="color:greenyellow">User Name</th>
+        <th style="color:greenyellow">Score</th>
+    </tr>
+    </thead>
+    <tr ng-repeat="x in names">
+        <td>{{ x.Name }}</td>
+        <td>{{ x.Country }}</td>
+    </tr>
+</table>

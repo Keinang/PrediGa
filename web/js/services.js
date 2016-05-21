@@ -60,7 +60,7 @@ angular.module('appname.services', [])
     .factory('profileService', function (ulhttp) {
         return {
             getUserInfo: function (data) {
-                var url = "/api/getuserinfo";
+                var url = "/api/user";
                 return ulhttp.get(url, data).then(function (result) {
                     result = ulhttp.handleError(result);
                     return result;
@@ -69,39 +69,7 @@ angular.module('appname.services', [])
         };
     }).factory('gameService', function (ulhttp) {
     return {
-        // Align the clocks + get user info
-        getUserInfo: function (data) {
-            var url = "/api/game";
-            return ulhttp.get(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-        },
-        submitAnswer: function (data) {
-            var url = "/api/submitAnswer?answer=" + data.answer;
-            return ulhttp.get(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-        },
 
-        getHint: function (data) {
-            var url = "/api/getHint";
-            return ulhttp.get(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-
-        },
-
-        transfer: function (data) {
-            // Content-Type: application/x-www-form-urlencoded
-            var url = "/api/transferMoney";
-            return ulhttp.post(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-        }
     };
 }).factory('leaderboardService', function (ulhttp) {
     return {

@@ -60,12 +60,12 @@ var checkLogin = function ($q, $http, $location, $rootScope, toastr) {
     var deffered = $q.defer();
 
     $http.get('/api/loggedin').success(function (user) {
-        //User is authenticated
+        // User is authenticated
         if (user != 0) {
             $rootScope.currentUser = user;
             deffered.resolve();
         }
-        //User is not Authenticated
+        // User is not Authenticated
         else {
             $rootScope.currentUser = undefined;
             deffered.reject();

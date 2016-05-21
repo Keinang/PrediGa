@@ -10,13 +10,7 @@ var userSchema = mongoose.Schema({
         password: String
     },
     game: {
-        level: {type: Number, default: 1},
-        score: {type: Number, default: 0},
-        hints: [String],
-        hasMoreHints: Boolean,
-        timeStart: {type: Date},
-        timeEnd: {type: Date},
-        timeUserFinished: {type: Date}
+        score: {type: Number, default: 0}
     }
 });
 

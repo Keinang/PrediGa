@@ -10,8 +10,8 @@
         <th style="color:greenyellow">Score</th>
     </tr>
     </thead>
-    <tr ng-repeat="x in names">
-        <td>{{ x.Name }}</td>
-        <td>{{ x.Country }}</td>
+    <tr ng-repeat="x in users">
+        <td>{{ x.username }}</td>
+        <td>{{ x.game.score }}</td>
     </tr>
 </table>

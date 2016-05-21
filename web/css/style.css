@@ -1,0 +1,223 @@
+/*h1{
+	color: red;
+}*/
+html, body, h1, h2, h3, h4, h5 {
+    font-family: helvetica;
+}
+
+body {
+    background-color: #ececec;
+    overflow-x: hidden;
+}
+
+
+.fading-img{
+	position: absolute;
+	z-index: 51;
+	margin: auto;
+  	top: 0; left: 0; bottom: 0; right: 0;
+}
+
+.fading-img.ng-show-remove{
+	opacity: 0 !important;
+    transition: all linear 1s;
+	-webkit-transition:all linear 1s;
+  	-moz-transition:all linear 1s;
+  	-o-transition:all linear 1s;
+  	/*display: block !important;*/
+}
+
+.whiteBackground {
+    background-color: white;
+}
+
+.navbar-header {
+    width: 200px;
+}
+
+.appname-standard-border {
+    border: 1px solid #e8e8e8;
+}
+
+.appname-form {
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 30px;
+    padding-right: 30px;
+    background-color: white;
+}
+
+.animate-view.ng-animate {
+    -webkit-transition: all linear .5s;
+    transition: all linear .5s;
+}
+
+.animate-view.ng-leave,
+.animate-view.ng-leave.ng-leave-active {
+    display: none;
+}
+
+.animate-view.ng-enter {
+    opacity: 0;
+}
+
+.animate-view.ng-enter.ng-enter-active {
+    opacity: 1;
+}
+
+#headerlogo {
+    height: 50px;
+    padding-bottom: 2px;
+}
+
+.navbar-inverse {
+    background-color: #FFFFFF;
+    padding-bottom: 5px;
+    padding-right: 100px;
+    margin: 0px;
+}
+
+.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    background-color: #FFFFFF;
+    font-weight: bold;
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #FFF
+}
+
+.navbar-inverse .dropdown-menu {
+    background-color: #1070DE
+}
+
+.navbar-inverse .dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    background-color: #1070DE
+}
+
+.navbar-inverse {
+    background-image: none;
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    background-image: none;
+}
+
+.navbar-inverse {
+    border-color: #e8e8e8
+}
+
+.navbar-inverse .navbar-brand {
+    color: rgb(67, 67, 67);
+    padding-left: 70px;
+}
+
+.navbar-inverse .navbar-brand:hover {
+    color: #000000
+}
+
+.navbar-inverse .navbar-nav > li > a {
+    margin-top: 10px;
+    font-weight: bold;
+}
+
+/*color: rgb(67,67,67);*/
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: #000
+}
+
+.navbar-inverse .navbar-nav > .active > a:hover, .navbar-inverse .navbar-nav > .active > a:focus {
+    color: #1070DE
+}
+
+.dropdown-menu > li > a {
+    color: #333333
+}
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+    color: #FFFFFF
+}
+
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+    border-top-color: #1070DE;
+}
+
+.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+    border-top-color: #FFFFFF
+}
+
+.navbar-inverse .navbar-nav > .dropdown > a .caret {
+    border-bottom-color: #1070DE
+}
+
+.navbar-inverse .navbar-nav > .dropdown > a:hover .caret {
+    border-bottom-color: #555555
+}
+
+.navbar-inverse .navbar-nav > .active > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a, .navbar-inverse .navbar-nav > .open > a:hover, .navbar-inverse .navbar-nav > .open > a:focus {
+    background-color: #FFF
+}
+
+.button-start {
+    display: inline-block;
+    text-decoration: none !important;
+    vertical-align: middle;
+    text-align: center;
+    white-space: nowrap;
+    cursor: pointer;
+    padding: 13px 16px;
+    outline: 0;
+    background: rgb(28, 184, 65); /* this is a green */
+    color: white;
+    border-radius: 4px;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+    font-size: 110%;
+    width: 200px;
+    height: 50px;
+}
+
+.leaderboard {
+}
+
+.catch-me-img-div {
+    position: absolute;
+    width: 100%;
+}
+
+.catch-me-img-div img {
+    display: inline-block;
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.catch-me-top-div {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+.green {
+    background-image: url('../img/green.png');
+    background-repeat: repeat-x;
+    float: left;
+    width: 50%;
+    height: 294px;
+}
+
+.blue {
+    background-image: url('../img/blue.png');
+    background-repeat: repeat-x;
+    float: right;
+    width: 50%;
+    height: 294px;
+}
+
+.mouse-invisible{
+    cursor:crosshair;
+}
+
+.header_bankhack h1 {
+    font-family: inherit;
+    color: white;
+    text-align: center;
+    font-size: 115px;
+}

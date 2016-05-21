@@ -6,7 +6,7 @@
 
 <div class="col-sm-6 col-sm-offset-2" style="color: white">
 
-    <button class="btn-success btn-lg col-sm-offset-6">Save Changes</button>
+    <button class="btn-success btn-lg col-sm-offset-6" ng-click="saveChanges();">Save Changes</button>
 
     <h1>Matches</h1>
     <br/>
@@ -33,8 +33,8 @@
             <td>{{ x.kickofftime }}</td>
             <td>
                 <select ng-model="x._winner" style="color: blue">
-                    <option value="option-1">{{ x.team1 }}</option>
-                    <option value="option-2">{{ x.team2 }}</option>
+                    <option>{{ x.team1 }}</option>
+                    <option>{{ x.team2 }}</option>
                 </select>
                 <br/>Actual: {{x.winner}}
             </td>
@@ -50,8 +50,8 @@
                 <br/>Actual: {{x.goaldiff}}
             <td>
                 <select ng-model="x._firstscore" style="color: blue">
-                    <option value="option-1">{{ x.team1 }}</option>
-                    <option value="option-2">{{ x.team2 }}</option>
+                    <option>{{ x.team1 }}</option>
+                    <option>{{ x.team2 }}</option>
                 </select>
                 <br/>Actual: {{x.firstscore}}
             </td>
@@ -78,8 +78,7 @@
             <td>{{ x.name }}</td>
             <td>
                 <select ng-model="x._team" style="color: blue">
-                    <option value="option-1">Team 1</option>
-                    <option value="option-2">Team 2</option>
+                    <option ng-repeat="team in allTeams">{{team}}</option>
                 </select>
                 <br/>Actual: {{x.team}}
             </td>

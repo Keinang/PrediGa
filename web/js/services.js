@@ -65,7 +65,27 @@ angular.module('appname.services', [])
                     result = ulhttp.handleError(result);
                     return result;
                 });
-            }
+            },
+            saveChangesMatches: function (matchesInput) {
+                var url = "/api/saveChangesMatches";
+                var data = {
+                    matches: matchesInput
+                };
+                return ulhttp.post(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            },
+            saveChangesTeams: function (teamsInput) {
+            var url = "/api/saveChangesTeams";
+            var data = {
+                teams: teamsInput
+            };
+            return ulhttp.post(url, data).then(function (result) {
+                result = ulhttp.handleError(result);
+                return result;
+            });
+        }
         };
     })
     .factory('leaderboardService', function (ulhttp) {

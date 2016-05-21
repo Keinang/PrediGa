@@ -33,7 +33,7 @@ module.exports = function (app, passport) {
                     return next(err);
                 }
                 response.status = 'OK';
-
+                response.user = user;
                 return res.json(200, response);
             });
 
@@ -58,6 +58,7 @@ module.exports = function (app, passport) {
                     return next(err);
                 }
                 response.status = 'OK';
+                response.user = user;
 
                 return res.json(200, response);
             });
@@ -65,7 +66,7 @@ module.exports = function (app, passport) {
     });
 
     app.get('/api/loggedin', function (req, res) {
-        res.send(req.isAuthenticated() ? removeSensitiveInfo(req.user) : '0');
+        res.send(req.isAuthenticated() ? req.user : '0');
     });
 
     app.get('/api/user', isLoggedIn, function (req, res) {
@@ -96,7 +97,7 @@ module.exports = function (app, passport) {
             response.status = 'OK';
             var byScore = users.slice(0);
             byScore.sort(function (a, b) {
-                return b.game.score - a.game.score;
+                // return b.game.score - a.game.score;
             });
 
             response.users = byScore;
@@ -124,8 +125,8 @@ function isLoggedIn(req, res, next) {
 }
 
 function removeSensitiveInfo(user) {
-    user.local = undefined;
     user.__v = undefined;
     user._id = undefined;
+    user.password = undefined;
     return user;
 }

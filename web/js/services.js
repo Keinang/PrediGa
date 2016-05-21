@@ -18,10 +18,10 @@ angular.module('appname.services', [])
     })
     .factory('logginService', function (ulhttp) {
         return {
-            loggin: function (username, password) {
+            loggin: function (email, password) {
                 var url = "/api/login";
                 var data = {
-                    username: username,
+                    email: email,
                     password: password
                 };
                 return ulhttp.post(url, data).then(function (result) {

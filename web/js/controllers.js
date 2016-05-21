@@ -6,8 +6,8 @@ angular.module('appname.controllers', ['ngAnimate'])
     }])
     .controller('loginCtrl', ['$scope', 'logginService', 'logoutService', 'toastr', '$rootScope', '$location', function ($scope, logginService, logoutService, toastr, $rootScope, $location) {
         $scope.login = function () {
-            if ($scope.username && $scope.password) {
-                logginService.loggin($scope.username, $scope.password).then(function (result) {
+            if ($scope.email && $scope.password) {
+                logginService.loggin($scope.email, $scope.password).then(function (result) {
                     if (result.status === 'OK') {
                         //$rootScope.currentUser = result.user;
                         $location.path('/');

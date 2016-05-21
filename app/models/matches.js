@@ -6,7 +6,7 @@ var mongoose = require('mongoose');
 
 // define the schema for our matches model
 var matchesSchema = mongoose.Schema({
-    id: Number,
+    matchID: Number,
     team1: String,
     team2: String,
     kickofftime: Date,

@@ -30,17 +30,13 @@ angular.module('appname.controllers', ['ngAnimate'])
                 signupService.signup(data).then(function (result) {
                     if (result.status === 'OK') {
                         $rootScope.currentUser = result.user;
-                        $location.path('/profile');
+                        $location.path('/');
                     }
                 });
             } else {
                 toastr.error('All fields are required');
             }
         }
-
-    }])
-    .controller('profileCtrl', ['$scope', 'profileService', '$rootScope', function ($scope, profileService, $rootScope) {
-
     }])
     .controller('helpCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
@@ -52,5 +48,17 @@ angular.module('appname.controllers', ['ngAnimate'])
         });
     }])
     .controller('gameCtrl', ['$scope', '$timeout', 'logoutService', 'gameService', 'toastr', '$rootScope', function ($scope, $timeout, logoutService, gameService, toastr, $rootScope) {
+        $scope.combine = function(list1, list2){
+            list1.forEach(function(entry) {
+                // get all list2 values with the same id:
+                // merge values
+            });
+            return list1;
+        };
 
+        gameService.getUserPredictions().then(function (result) {
+            $scope.user = result.user;
+            $scope.matchesCombined = $scope.combine(result.matches, result.matchespredictions);
+            $scope.teamsCombined = $scope.combine(result.teams, result.teamspredictions);
+        });
     }]);

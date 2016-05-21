@@ -3,15 +3,21 @@
 <br/>
 <br/>
 <br/>
-<table class="table table-striped">
+<div class="col-sm-6 col-sm-offset-3" style="color: white">
+
+<table class="table">
     <thead>
     <tr>
-        <th style="color:greenyellow">User Name</th>
-        <th style="color:greenyellow">Score</th>
+        <th class="col-sm-1" style="color:greenyellow">Position</th>
+        <th class="col-sm-2" style="color:greenyellow">User Name</th>
+        <th class="col-sm-1" style="color:greenyellow">Score</th>
     </tr>
     </thead>
     <tr ng-repeat="x in users">
+        <td>{{$index+1}}</td>
         <td>{{ x.username }}</td>
         <td>{{ x.score }}</td>
     </tr>
 </table>
+
+</div>

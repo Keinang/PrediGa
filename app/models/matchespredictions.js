@@ -6,12 +6,13 @@ var mongoose = require('mongoose');
 // define the schema for our user's predictions
 var userPredictionsMatchesSchema = mongoose.Schema({
     matchID: Number,
-    username: String,
-    winner: String,
-    team1score: Number,
-    team2score: Number,
-    goaldiff: Number,
-    firstscore: String
+    user_id: String,
+    _winner: String,
+    _team1score: Number,
+    _team2score: Number,
+    _goaldiff: Number,
+    _firstscore: String,
+    score: Number
 });
 
 module.exports = mongoose.model('MatchesPredictions', userPredictionsMatchesSchema);

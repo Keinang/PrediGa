@@ -57,28 +57,25 @@ angular.module('appname.services', [])
             }
         };
     })
-    .factory('profileService', function (ulhttp) {
+    .factory('gameService', function (ulhttp) {
         return {
-            getUserInfo: function (data) {
-                var url = "/api/user";
+            getUserPredictions: function (data) {
+                var url = "/api/predictions";
                 return ulhttp.get(url, data).then(function (result) {
                     result = ulhttp.handleError(result);
                     return result;
                 });
             }
         };
-    }).factory('gameService', function (ulhttp) {
-    return {
-
-    };
-}).factory('leaderboardService', function (ulhttp) {
-    return {
-        getAllUserList: function (data) {
-            var url = "/api/users";
-            return ulhttp.get(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-        }
-    };
-});
+    })
+    .factory('leaderboardService', function (ulhttp) {
+        return {
+            getAllUserList: function (data) {
+                var url = "/api/users";
+                return ulhttp.get(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
+        };
+    });

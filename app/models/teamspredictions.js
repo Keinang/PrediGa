@@ -7,8 +7,8 @@ var mongoose = require('mongoose');
 // define the schema for our user's predictions
 var userPredictionsTeamsSchema = mongoose.Schema({
     teamId: Number,
-    username: String,
-    team: String,
+    user_id: String,
+    _team: String,
     score: Number
 });
 

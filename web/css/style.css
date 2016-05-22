@@ -192,3 +192,11 @@ body {
     text-align: center;
     font-size: 115px;
 }
+
+.green {
+    color: greenyellow;
+}
+
+.red {
+    color: red;
+}

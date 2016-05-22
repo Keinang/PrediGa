@@ -48,8 +48,29 @@ angular.module('appname.controllers', ['ngAnimate'])
         });
     }])
     .controller('gameCtrl', ['$scope', '$timeout', 'gameService', 'toastr', function ($scope, $timeout, gameService, toastr) {
-        $scope.combine = function(list1, list2){
-            list1.forEach(function(entry) {
+        $scope.formatDate = function(date){
+            var dateOut = new Date(date);
+            return dateOut;
+        };
+        
+        $scope.isDateOK = function (date) {
+            return (new Date(date)).getTime() - (new Date()).getTime() > 0;
+        };
+        $scope.isDateOKNOT = function (date) {
+            var val = $scope.isDateOK(date);
+            return !val;
+        };
+
+        $scope.getClass = function (userVal, actualVal) {
+            if (typeof(userVal) !== 'undefined' && userVal === actualVal) {
+                return 'green';
+            } else {
+                return 'red';
+            }
+        };
+
+        $scope.combine = function (list1, list2) {
+            list1.forEach(function (entry) {
                 // get all list2 values with the same id:
                 var list2Filtered = list2.filter(function (item) {
                     return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
@@ -61,7 +82,7 @@ angular.module('appname.controllers', ['ngAnimate'])
             return list1;
         };
 
-        $scope.saveChanges = function (){
+        $scope.saveChanges = function () {
             gameService.saveChangesMatches($scope.matchesCombined).then(function (result) {
                 gameService.saveChangesTeams($scope.teamsCombined).then(function (result) {
                     toastr.success('Successfully Saved');
@@ -69,13 +90,13 @@ angular.module('appname.controllers', ['ngAnimate'])
             });
         };
 
-        $scope.filterTeamsNames = function(matches){
+        $scope.filterTeamsNames = function (matches) {
             var uniqueNames = [];
-            matches.forEach(function(entry) {
-                if ($.inArray(entry.team1, uniqueNames) === -1){
+            matches.forEach(function (entry) {
+                if ($.inArray(entry.team1, uniqueNames) === -1) {
                     uniqueNames.push(entry.team1);
                 }
-                if ($.inArray(entry.team2, uniqueNames) === -1){
+                if ($.inArray(entry.team2, uniqueNames) === -1) {
                     uniqueNames.push(entry.team2);
                 }
             });

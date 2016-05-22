@@ -17,6 +17,11 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
             controller: 'gameCtrl',
             resolve: {logincheck: checkLogin}
         })
+        .when('/game/:userName', {
+            templateUrl: 'partials/game.html',
+            controller: 'gameCtrl',
+            resolve: {logincheck: checkLogin}
+        })
         .when('/leaderboard', {
             title: 'Leaderboard',
             templateUrl: 'partials/leaderboard.html',

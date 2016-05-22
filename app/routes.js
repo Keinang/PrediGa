@@ -325,66 +325,89 @@ module.exports = function (app, passport) {
         });
     });
 
-    function sortByMatchID(arr) {
-        var arrSorted = arr.slice(0);
-        arrSorted.sort(function (a, b) {
-            return a.matchID - b.matchID;
-        });
-        return arrSorted;
-    }
-
-    function sortByTeamID(arr) {
-        var arrSorted = arr.slice(0);
-        arrSorted.sort(function (a, b) {
-            return a.teamID - b.teamID;
-        });
-        return arrSorted;
-    }
-
-    function getAllUserPrediction(user_id, res) {
-        user.findOne({_id: user_id}, function (error, user) {
+    function getAllUserPrediction(user_id, userName, res) {
+        user.findOne({_id: user_id}, function (error, aUser) {
             var response = {};
             if (error) {
                 errorWrapper(response, res);
             } else {
                 response.status = 'OK';
-                response.user = removeSensitiveInfo(user);
+                response.user = removeSensitiveInfo(aUser);
 
-                // get all matches:
-                matches.find({}, function (err, matches) {
-                    if (!error) {
-                        response.matches = sortByMatchID(removeSensitiveInfoArray(matches));
+                // checking if we got other user to check for: userName
+                if (typeof(userName) === 'undefined' || aUser.username === userName) {
+                    // regular flow, get all matches:
+                    matches.find({}, function (err, matches) {
+                        if (!error) {
+                            response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
 
-                        // get all user's matches predictions
-                        matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
+                            // get all user's matches predictions
+                            matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
+                                if (!error) {
+
+                                    response.matchespredictions = sortByID(removeSensitiveInfoArray(matchespredictions), '1');
+                                    // get all teams:
+                                    teams.find({}, function (err, teams) {
+                                        if (!error) {
+                                            response.teams = sortByID(removeSensitiveInfoArray(teams), '2');
+
+                                            // get all user's teams predictions
+                                            teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
+                                                if (!error) {
+                                                    response.teamspredictions = sortByID(removeSensitiveInfoArray(teamspredictions), '2');
+
+                                                    res.json(200, response);
+                                                }
+                                            });
+                                        }
+                                    });
+                                }
+                            })
+                        }
+                    });
+                }
+                else if (typeof(userName) !== 'undefined' && user.username !== userName) {
+                    user.findOne({username: userName}, function (error, aUser) {
+                        var otherUserID = aUser._id;
+                        // looking for other user details, only results until this deadline date.
+                        matches.find({}, function (err, matches) {
                             if (!error) {
-                                response.matchespredictions = sortByMatchID(removeSensitiveInfoArray(matchespredictions));
+                                response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
 
-                                // get all teams:
-                                teams.find({}, function (err, teams) {
+                                // get all other user's matches predictions until this kickoff
+                                matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
                                     if (!error) {
-                                        response.teams = sortByTeamID(removeSensitiveInfoArray(teams));
+                                        response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
 
-                                        // get all user's teams predictions
-                                        teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
-                                            if (!error) {
-                                                response.teamspredictions = sortByTeamID(removeSensitiveInfoArray(teamspredictions));
+                                        // get all teams:
+                                        teams.find({}, function (err, teams) {
+                                                if (!error) {
+                                                    response.teams = sortByID(removeSensitiveInfoArray(teams), '2');
 
-                                                res.json(200, response);
+                                                    // get all user's teams predictions
+                                                    teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
+                                                        if (!error) {
+                                                            response.teamspredictions = sortByID(removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2'), '2');
+                                                            res.json(200, response);
+                                                        }
+                                                    });
+                                                }
                                             }
-                                        });
+                                        );
                                     }
                                 });
                             }
                         });
-                    }
-                });
+
+                    });
+                }
             }
         });
-    }
+
+    };
 
     app.get('/api/predictions', isLoggedIn, function (req, res) {
-        getAllUserPrediction(req.user._id, res);
+        getAllUserPrediction(req.user._id, req.query.user, res);
     });
 
 // =============================================================================
@@ -400,23 +423,72 @@ module.exports = function (app, passport) {
         }
     }
 
-    function removeSensitiveInfo(user) {
-        user.__v = undefined;
-        user._id = undefined;
-        user.password = undefined;
-
-        return user;
+    function removeSensitiveInfo(item) {
+        item.__v = undefined;
+        item._id = undefined;
+        item.password = undefined;
+        item.user_id = undefined;
+        return item;
     }
 
     function removeSensitiveInfoArray(arr) {
         if (arr) {
             arr.forEach(function (item) {
-                item._id = undefined;
-                item.__v = undefined;
-                item.user_id = undefined;
+                removeSensitiveInfo(item);
             })
         }
         return arr;
+    }
+
+    function removeSensitiveInfoArrayWithDate(matchespredictions, origList, type) {
+        var filteredPredictions = [];
+
+        if (matchespredictions && origList) {
+            if (type === '1') {
+                var matchFiltered = origList.filter(function (orgItem) {
+                    return orgItem.kickofftime.getTime() - (new Date()).getTime() < 0;
+                });
+                if (matchFiltered) {
+
+                    filteredPredictions = matchespredictions.filter(function (predictItem) {
+                        for (var i = 0; i < matchFiltered.length; i++) {
+                            if (matchFiltered[i].matchID === predictItem.matchID) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                }
+            } else {
+                var teamFiltered = origList.filter(function (orgItem) {
+                    return orgItem.deadline.getTime() - (new Date()).getTime() < 0;
+                });
+                if (teamFiltered) {
+
+                    filteredPredictions = matchespredictions.filter(function (predictItem) {
+                        for (var i = 0; i < teamFiltered.length; i++) {
+                            if (teamFiltered[i].teamID === predictItem.teamID) {
+                                return true;
+                            }
+                        }
+                        return false;
+                    });
+                }
+            }
+        }
+
+        return removeSensitiveInfoArray(filteredPredictions);
+    }
+
+    function sortByID(arr, type) {
+        var arrSorted = [];
+        if (arr) {
+            arrSorted = arr.slice(0);
+            arrSorted.sort(function (a, b) {
+                return type === '1' ? a.matchID - b.matchID : a.teamID - b.teamID;
+            });
+        }
+        return arrSorted;
     }
 
     function errorWrapper(innerRes, res) {
@@ -424,4 +496,5 @@ module.exports = function (app, passport) {
         innerRes.message = 'Something Went Wrong';
         res.json(200, innerRes);
     }
-};
+}
+;

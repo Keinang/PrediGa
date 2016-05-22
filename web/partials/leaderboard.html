@@ -15,7 +15,7 @@
     </thead>
     <tr ng-repeat="x in users">
         <td><label>{{$index+1}}</label></td>
-        <td><a class="btn ">{{ x.username }}</a></td>
+        <td><a href="#/game/:{{x.username}}" class="btn ">{{ x.username }}</a></td>
         <td><label>{{ x.score }}</label></td>
     </tr>
 </table>

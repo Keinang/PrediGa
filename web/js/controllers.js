@@ -47,12 +47,16 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.users = result.users;
         });
     }])
-    .controller('gameCtrl', ['$scope', '$timeout', 'gameService', 'toastr', function ($scope, $timeout, gameService, toastr) {
-        $scope.formatDate = function(date){
+    .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
+        $scope.userName = typeof($routeParams.userName) !== 'undefined' ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
+        $scope.isSameUser = function(){
+            return typeof($scope.userName) !== 'undefined' && $scope.userName === $rootScope.currentUser.username;
+        };
+        $scope.formatDate = function (date) {
             var dateOut = new Date(date);
             return dateOut;
         };
-        
+
         $scope.isDateOK = function (date) {
             return (new Date(date)).getTime() - (new Date()).getTime() > 0;
         };
@@ -103,7 +107,7 @@ angular.module('appname.controllers', ['ngAnimate'])
             return uniqueNames;
         };
 
-        gameService.getUserPredictions().then(function (result) {
+        gameService.getUserPredictions($scope.userName).then(function (result) {
             $scope.user = result.user;
             $scope.matchesCombined = $scope.combine(result.matches, result.matchespredictions);
             $scope.teamsCombined = $scope.combine(result.teams, result.teamspredictions);

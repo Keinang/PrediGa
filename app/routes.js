@@ -179,18 +179,22 @@ module.exports = function (app, passport) {
         // update user total score:
         user.find({}, function (err, users) {
             users.forEach(function (user) {
+                // starting from 0:
+                user.score = 0;
+                user.save();
+
                 matchespredictions.find({user_id: user._id}, function (err, matchespredictionsRows) {
                     matchespredictionsRows.forEach(function (matchespredictionsRow) {
                         user.score += matchespredictionsRow.score;
-                        user.save();
                     });
+                    user.save();
                 });
 
                 teamspredictions.find({user_id: user._id}, function (err, teamspredictionsRows) {
                     teamspredictionsRows.forEach(function (teamspredictionsRow) {
                         user.score += teamspredictionsRow.score;
-                        user.save();
                     });
+                    user.save();
                 });
             });
         });

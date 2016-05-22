@@ -8,7 +8,7 @@ html, body, h1, h2, h3, h4, h5 {
 }
 
 body {
-    background: url('../img/UEFA-EURO2016_Stade-de-France_PES2016-1024x576.jpg') no-repeat center center fixed;
+    background: url('../img/background.JPG') no-repeat center center fixed;
     background-size: cover;
     -o-background-size: cover;
     -moz-background-size: cover;

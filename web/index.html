@@ -51,6 +51,7 @@
                     <li><a href="#/leaderboard" ng-show="$root.currentUser">Leaderboard</a></li>
                     <li><a href="#/help" ng-show="$root.currentUser">Help</a></li>
                     <li><a href="" ng-click="logout()" ng-show="$root.currentUser">Sign Out</a></li>
+                    <li><label style="padding-top: 24px;">{{$root.currentUser.username}}</label></li>
                 </ul>
             </div>
         </div>

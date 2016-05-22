@@ -4,15 +4,15 @@
 <br/>
 <br/>
 
-<div class="col-sm-6 col-sm-offset-2" style="color: white">
+<div class="col-sm-6 col-sm-offset-2" style="color: blue">
 
-    <button class="btn-success btn-lg col-sm-offset-6" ng-click="saveChanges();">Save Changes</button>
+    <button class="btn-primary btn-lg col-sm-offset-6" ng-click="saveChanges();">Save Changes</button>
 
-    <h1 style="color: greenyellow">Matches</h1>
+    <h1>Matches</h1>
     <br/>
 
-    <table class="table">
-        <thead style="color: yellow">
+    <table class="table table-striped" style="color:black">
+        <thead>
         <tr>
             <th class="col-sm-2">#</th>
             <th class="col-sm-2">Team 1</th>
@@ -32,7 +32,7 @@
             <td><label>{{ x.team2 }}</label></td>
             <td><label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
-                <select ng-model="x._winner" style="color: blue; width: 150px; height: 25px"
+                <select ng-model="x._winner" style="width: 150px; height: 25px"
                         ng-show="isDateOK(x.kickofftime);">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
@@ -42,16 +42,16 @@
                 <br/><label ng-show="isDateOKNOT(x.kickofftime);">{{x.winner || ''}}</label>
             </td>
             <td>
-                <input type="number" ng-model="x._team1score" style="color: blue" ng-show="isDateOK(x.kickofftime);">
+                <input type="number" ng-model="x._team1score" ng-show="isDateOK(x.kickofftime);">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
                 <br/><label>{{x.team1score || ''}}</label>
             </td>
             <td>
-                <input type="number" ng-model="x._team2score" style="color: blue" ng-show="isDateOK(x.kickofftime);">
+                <input type="number" ng-model="x._team2score" ng-show="isDateOK(x.kickofftime);">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
                 <br/><label>{{x.team2score || ''}}</label>
             <td>
-                <input type="number" ng-model="x._goaldiff" style="color: blue" ng-show="isDateOK(x.kickofftime);">
+                <input type="number" ng-model="x._goaldiff" ng-show="isDateOK(x.kickofftime);">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
                 <br/><label>{{x.goaldiff || ''}}</label>
             <td>
@@ -68,10 +68,10 @@
     </table>
     <br/>
 
-    <h1 style="color: greenyellow">Teams</h1>
+    <h1>Teams</h1>
     <br/>
-    <table class="table">
-        <thead style="color: yellow">
+    <table class="table table-striped" style="color:black">
+        <thead>
         <tr>
             <th class="col-sm-1">#</th>
             <th class="col-sm-1">Type</th>
@@ -86,7 +86,7 @@
             <td><label>{{ x.name }}</label></td>
             <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
-                <select ng-model="x._team" style="color: blue; width: 150px; height: 25px"
+                <select ng-model="x._team" style="width: 150px; height: 25px"
                         ng-show="isDateOK(x.deadline);">
                     <option ng-repeat="team in allTeams">{{team}}</option>
                 </select>

@@ -168,7 +168,7 @@ module.exports = function (app, passport) {
                 teams.find({teamID: teamspredictionsRow.teamID}, function (err, teamRelated) {
                     teamspredictionsRow.score = 0;
                     if (typeof(teamRelated[0].team) !== 'undefined' && teamRelated[0].team === teamspredictionsRow._team) {
-                        teamspredictionsRow.score += teamRelated[0].predictscore;
+                        teamspredictionsRow.score += typeof(teamRelated[0].predictscore) === 'number' ? teamRelated[0].predictscore : 0;
                     }
 
                     teamspredictionsRow.save();
@@ -185,14 +185,14 @@ module.exports = function (app, passport) {
 
                 matchespredictions.find({user_id: user._id}, function (err, matchespredictionsRows) {
                     matchespredictionsRows.forEach(function (matchespredictionsRow) {
-                        user.score += matchespredictionsRow.score;
+                        user.score += typeof(matchespredictionsRow.score) === 'number' ? matchespredictionsRow.score : 0;
                     });
                     user.save();
                 });
 
                 teamspredictions.find({user_id: user._id}, function (err, teamspredictionsRows) {
                     teamspredictionsRows.forEach(function (teamspredictionsRow) {
-                        user.score += teamspredictionsRow.score;
+                        user.score += typeof(teamspredictionsRow.score) === 'number' ? teamspredictionsRow.score : 0;
                     });
                     user.save();
                 });

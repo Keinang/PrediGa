@@ -48,9 +48,9 @@ angular.module('appname.controllers', ['ngAnimate'])
         });
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
-        $scope.userName = typeof($routeParams.userName) !== 'undefined' ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
+        $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
         $scope.isSameUser = function(){
-            return typeof($scope.userName) !== 'undefined' && $scope.userName === $rootScope.currentUser.username;
+            return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;
         };
         $scope.formatDate = function (date) {
             var dateOut = new Date(date);
@@ -74,15 +74,18 @@ angular.module('appname.controllers', ['ngAnimate'])
         };
 
         $scope.combine = function (list1, list2) {
-            list1.forEach(function (entry) {
-                // get all list2 values with the same id:
-                var list2Filtered = list2.filter(function (item) {
-                    return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
-                        || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' );
+            if (list1){
+                list1.forEach(function (entry) {
+                    // get all list2 values with the same id:
+                    var list2Filtered = list2.filter(function (item) {
+                        return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
+                            || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' );
+                    });
+                    // merge values
+                    entry = $.extend(entry, list2Filtered[0]);
                 });
-                // merge values
-                entry = $.extend(entry, list2Filtered[0]);
-            });
+            }
+
             return list1;
         };
 
@@ -96,14 +99,17 @@ angular.module('appname.controllers', ['ngAnimate'])
 
         $scope.filterTeamsNames = function (matches) {
             var uniqueNames = [];
-            matches.forEach(function (entry) {
-                if ($.inArray(entry.team1, uniqueNames) === -1) {
-                    uniqueNames.push(entry.team1);
-                }
-                if ($.inArray(entry.team2, uniqueNames) === -1) {
-                    uniqueNames.push(entry.team2);
-                }
-            });
+            if (matches){
+                matches.forEach(function (entry) {
+                    if ($.inArray(entry.team1, uniqueNames) === -1) {
+                        uniqueNames.push(entry.team1);
+                    }
+                    if ($.inArray(entry.team2, uniqueNames) === -1) {
+                        uniqueNames.push(entry.team2);
+                    }
+                });
+            }
+
             return uniqueNames;
         };
 

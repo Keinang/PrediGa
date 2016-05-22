@@ -33,36 +33,59 @@
             <td><label>{{ x.team2 }}</label></td>
             <td><label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
-                <select ng-model="x._winner" style="width: 150px; height: 25px"
+                <!-- user values -->
+                <select ng-model="x._winner" style="color:blue; width: 150px; height: 25px"
                         ng-show="isDateOK(x.kickofftime) && isSameUser()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
                 </select>
                 <label ng-show="isDateOKNOT(x.kickofftime);"
                        ng-class="getClass(x._winner, x.winner)">{{x._winner}}</label>
+                <!-- original values -->
                 <br/><label ng-show="isDateOKNOT(x.kickofftime);">{{x.winner || ''}}</label>
+                <select ng-model="x.winner" style="color:blue; width: 150px; height: 25px"
+                        ng-show="isAdmin()">
+                    <option>{{ x.team1 }}</option>
+                    <option>{{ x.team2 }}</option>
+                </select>
             </td>
             <td>
-                <input type="number" ng-model="x._team1score" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <!-- user values -->
+                <input type="number" ng-model="x._team1score" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
+                <!-- original values -->
                 <br/><label>{{x.team1score || ''}}</label>
+                <input type="number" ng-model="x.team1score" style="color: blue" ng-show="isAdmin()">
             </td>
             <td>
-                <input type="number" ng-model="x._team2score" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <!-- user values -->
+                <input type="number" ng-model="x._team2score" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
+                <!-- original values -->
                 <br/><label>{{x.team2score || ''}}</label>
+                <input type="number" ng-model="x.team2score" style="color: blue" ng-show="isAdmin()">
             <td>
-                <input type="number" ng-model="x._goaldiff" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <!-- user values -->
+                <input type="number" ng-model="x._goaldiff" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
+                <!-- original values -->
                 <br/><label>{{x.goaldiff || ''}}</label>
+                <input type="number" ng-model="x.goaldiff" style="color: blue" ng-show="isAdmin()">
             <td>
+                <!-- user values -->
                 <select ng-model="x._firstscore" style="color: blue; width: 150px; height: 25px"
                         ng-show="isDateOK(x.kickofftime) && isSameUser()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
                 </select>
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._firstscore, x.firstscore)">{{x._firstscore}}</label>
+                <!-- original values -->
                 <br/><label>{{x.firstscore || ''}}</label>
+                <select ng-model="x.firstscore" style="color: blue; width: 150px; height: 25px"
+                        ng-show="isAdmin()">
+                    <option>{{ x.team1 }}</option>
+                    <option>{{ x.team2 }}</option>
+                </select>
             </td>
             <td><label>{{ x.score || 0}}</label></td>
         </tr>
@@ -87,12 +110,18 @@
             <td><label>{{ x.name }}</label></td>
             <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
-                <select ng-model="x._team" style="width: 150px; height: 25px"
+                <!-- user values -->
+                <select ng-model="x._team" style="color:blue; width: 150px; height: 25px"
                         ng-show="isDateOK(x.deadline) && isSameUser()">
                     <option ng-repeat="team in allTeams">{{team}}</option>
                 </select>
                 <label ng-show="isDateOKNOT(x.deadline);" ng-class="getClass(x._team, x.team)">{{x._team}}</label>
+                <!-- original values -->
                 <br/><label ng-show="isDateOKNOT(x.deadline);">{{x.team || ''}}</label>
+                <select ng-model="x.team" style="color:blue; width: 150px; height: 25px"
+                        ng-show="isAdmin()">
+                    <option ng-repeat="team in allTeams">{{team}}</option>
+                </select>
             </td>
             <td><label>{{ x.predictscore }}</label></td>
             <td><label>{{ x.score || 0 }}</label></td>

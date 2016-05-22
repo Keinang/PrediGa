@@ -59,8 +59,16 @@ module.exports = function (app, passport) {
                     return next(err);
                 }
                 response.status = 'OK';
-                response.user = removeSensitiveInfo(user);
-                return res.json(200, response);
+                if (isAdminUser(user)) {
+                    user.isAdmin = true;
+                    user.save(function () {
+                        response.user = removeSensitiveInfo(user);
+                        return res.json(200, response);
+                    });
+                } else {
+                    response.user = removeSensitiveInfo(user);
+                    return res.json(200, response);
+                }
             });
 
         })(req, res, next);
@@ -109,20 +117,25 @@ module.exports = function (app, passport) {
 
     app.get('/api/users', isLoggedIn, function (req, res) {
         user.find({}, function (err, users) {
-            var userMap = {};
-
-            users.forEach(function (user) {
-                userMap[user._id] = removeSensitiveInfo(user);
-            });
+            var filtered = [];
 
             var response = {};
             response.status = 'OK';
+
+            // order by score:
             var byScore = users.slice(0);
             byScore.sort(function (a, b) {
-                // return b.game.score - a.game.score;
+                return b.score - a.score;
             });
 
-            response.users = byScore;
+            // filter admin + sensitive values:
+            byScore.forEach(function (user) {
+                if (!isAdminUser(user)){
+                    filtered.push(removeSensitiveInfo(user));
+                }
+            });
+
+            response.users = filtered;
             res.json(200, response);
         });
     });
@@ -200,7 +213,7 @@ module.exports = function (app, passport) {
         });
     };
 
-    function updateMatchPrediction(matchesInput, user_id) {
+    function updateMatchPrediction(matchesInput, user) {
         var deferred = Q.defer();
 
         if (matchesInput) {
@@ -209,15 +222,18 @@ module.exports = function (app, passport) {
                 // check if match is exist:
                 matches.find({matchID: aMatch.matchID}).limit(1).exec(function (error, dbMatch) {
                     if (!error && dbMatch[0]) {
+                        // if admin, we need to update the match itself:
+                        var isAdmin = isAdminUser(user);
+
                         // check if we can update this item
-                        var isTimePassed = dbMatch[0].kickofftime.getTime() - (new Date()).getTime() < 0;
+                        var isTimePassed = dbMatch[0].kickofftime.getTime() - (new Date()).getTime() < 0 || !isAdmin;
 
                         if (!isTimePassed) {
 
                             // update match prediction with recent values
                             matchespredictions.find({
                                 matchID: aMatch.matchID,
-                                user_id: user_id
+                                user_id: user._id
                             }).limit(1).exec(function (error, dbMatchPrediction) {
                                 if (!error && dbMatchPrediction[0] && dbMatchPrediction[0] !== null && typeof (dbMatchPrediction[0]) !== 'undefined') {
                                     dbMatchPrediction[0]._winner = aMatch._winner;
@@ -229,7 +245,7 @@ module.exports = function (app, passport) {
                                 } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
                                     new matchespredictions({
                                         matchID: aMatch.matchID,
-                                        user_id: user_id,
+                                        user_id: user._id,
                                         _winner: aMatch._winner,
                                         _team1score: aMatch._team1score,
                                         _team2score: aMatch._team2score,
@@ -238,6 +254,18 @@ module.exports = function (app, passport) {
                                     }).save(function (err) {
                                     });
                                 }
+                            });
+                        }
+
+                        // update real matches
+                        if (isAdmin) {
+                            dbMatch[0].winner = aMatch.winner;
+                            dbMatch[0].team1score = aMatch.team1score;
+                            dbMatch[0].team2score = aMatch.team2score;
+                            dbMatch[0].goaldiff = aMatch.goaldiff;
+                            dbMatch[0].firstscore = aMatch.firstscore;
+                            dbMatch[0].save(function () {
+                                updateUsersScores();
                             });
                         }
                     }
@@ -252,21 +280,25 @@ module.exports = function (app, passport) {
         return deferred.promise;
     };
 
-    function updateTeamPrediction(teamsInput, user_id) {
+    function updateTeamPrediction(teamsInput, user) {
         var deferred = Q.defer();
         if (teamsInput) {
             teamsInput.forEach(function (aTeam) {
                 // check if team is exist:
                 teams.find({teamID: aTeam.teamID}).limit(1).exec(function (error, dbTeam) {
                     if (!error && dbTeam[0]) {
+
+                        // if admin, we need to update the match itself:
+                        var isAdmin = isAdminUser(user);
+
                         // check if we can update this item
-                        var isTimePassed = dbTeam[0].deadline.getTime() - (new Date()).getTime() < 0;
+                        var isTimePassed = dbTeam[0].deadline.getTime() - (new Date()).getTime() < 0 || !isAdmin;
 
                         if (!isTimePassed) {
                             // update match prediction with recent values
                             teamspredictions.find({
                                 teamID: aTeam.teamID,
-                                user_id: user_id
+                                user_id: user._id
                             }).limit(1).exec(function (error, dbTeamPrediction) {
                                 if (!error && dbTeamPrediction[0] !== null && typeof (dbTeamPrediction[0]) !== 'undefined') {
                                     dbTeamPrediction[0]._team = aTeam._team;
@@ -276,12 +308,21 @@ module.exports = function (app, passport) {
                                 } else if (aTeam._team !== null && typeof (aTeam._team) !== 'undefined') {
                                     new teamspredictions({
                                         teamID: aTeam.teamID,
-                                        user_id: user_id,
+                                        user_id: user._id,
                                         _team: aTeam._team
                                     }).save(function (err) {
 
                                     });
                                 }
+                            });
+                        }
+
+                        // update real teams
+                        if (isAdmin) {
+                            dbTeam[0].dbTeam = aTeam.dbTeam;
+
+                            dbTeam[0].save(function () {
+                                updateUsersScores();
                             });
                         }
                     }
@@ -303,7 +344,7 @@ module.exports = function (app, passport) {
                 errorWrapper(response, res);
             } else {
                 response.status = 'OK';
-                updateMatchPrediction(req.body.matches, user_id).then(
+                updateMatchPrediction(req.body.matches, user).then(
                     res.send(200, response)
                 );
             }
@@ -318,7 +359,7 @@ module.exports = function (app, passport) {
                 errorWrapper(response, res);
             } else {
                 response.status = 'OK';
-                updateTeamPrediction(req.body.teams, user_id).then(
+                updateTeamPrediction(req.body.teams, user).then(
                     res.send(200, response)
                 );
             }
@@ -498,6 +539,13 @@ module.exports = function (app, passport) {
         innerRes.status = 'ERROR';
         innerRes.message = 'Something Went Wrong';
         res.json(200, innerRes);
+    }
+
+    function isAdminUser(user) {
+        if (user.username === 'admin' && user.email === 'admin@admin') {
+            return true;
+        }
+        return false;
     }
 }
 ;

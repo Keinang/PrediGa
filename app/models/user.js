@@ -7,7 +7,11 @@ var userSchema = mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    score: Number
+    score: Number,
+    isAdmin: {
+        type: Boolean,
+        default: false
+    }
 });
 
 // generating a hash

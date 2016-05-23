@@ -9,10 +9,10 @@ module.exports = function (app, passport) {
     var Q = require('q');
 
     var initialDataService = function initialDataService() {
-        initialData.insertData(matches, teams);
-        updateUsersScores();
-
-        console.log('Done updating initial data.');
+        initialData.insertData(matches, teams).then(function () {
+            updateUsersScores();
+            console.log('Done updating initial data.');
+        });
     };
 
     // Calling this function when server start:

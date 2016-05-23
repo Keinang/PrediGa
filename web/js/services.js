@@ -61,8 +61,7 @@ angular.module('appname.services', [])
         return {
             getUserPredictions: function (userName) {
                 var url = "/api/predictions?user=" + userName;
-                var data = {
-                };
+                var data = {};
                 return ulhttp.get(url, data).then(function (result) {
                     result = ulhttp.handleError(result);
                     return result;
@@ -79,15 +78,15 @@ angular.module('appname.services', [])
                 });
             },
             saveChangesTeams: function (teamsInput) {
-            var url = "/api/saveChangesTeams";
-            var data = {
-                teams: teamsInput
-            };
-            return ulhttp.post(url, data).then(function (result) {
-                result = ulhttp.handleError(result);
-                return result;
-            });
-        }
+                var url = "/api/saveChangesTeams";
+                var data = {
+                    teams: teamsInput
+                };
+                return ulhttp.post(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
         };
     })
     .factory('leaderboardService', function (ulhttp) {

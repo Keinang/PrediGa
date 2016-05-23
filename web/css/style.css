@@ -204,15 +204,18 @@ body {
     color: red;
 }
 
-.matches:hover  tr:hover {
-    background: darkseagreen; !important;
+.matches:hover tr:hover {
+    background: darkseagreen;
+!important;
 }
 
 .teams:hover tr:hover {
-    background: darkseagreen; !important;
+    background: darkseagreen;
+!important;
 }
 
 .leaderboard:hover tr:hover {
     cursor: pointer;
-    background: darkseagreen; !important;
+    background: darkseagreen;
+!important;
 }

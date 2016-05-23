@@ -93,7 +93,7 @@ module.exports = function (passport) {
                         // check to see if theres already a user with that email
                         if (user) {
                             return done(null, false, 'That email is already taken.');
-                        }  else {
+                        } else {
 
                             // create the user
                             var newUser = new User();

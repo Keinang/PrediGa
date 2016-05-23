@@ -8,7 +8,7 @@ module.exports = function (app, passport) {
     var http = require('http');
     var Q = require('q');
 
-    var initialDataService = function initialDataService(){
+    var initialDataService = function initialDataService() {
         initialData.insertData(matches, teams);
         updateUsersScores();
 
@@ -151,7 +151,7 @@ module.exports = function (app, passport) {
 
             // filter admin + sensitive values:
             byScore.forEach(function (user) {
-                if (!isAdminUser(user)){
+                if (!isAdminUser(user)) {
                     filtered.push(removeSensitiveInfo(user));
                 }
             });
@@ -171,7 +171,7 @@ module.exports = function (app, passport) {
                 // find related match:
                 matches.find({matchID: matchespredictionsRow.matchID}, function (err, matchRelated) {
                     matchespredictionsRow.score = 0;
-                    if (matchRelated[0]){
+                    if (matchRelated[0]) {
                         if (typeof(matchRelated[0].winner) !== 'undefined' && matchRelated[0].winner === matchespredictionsRow._winner) {
                             matchespredictionsRow.score += 2;
                         }

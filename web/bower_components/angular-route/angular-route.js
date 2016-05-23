@@ -22,8 +22,7 @@
      * <div doc-module-components="ngRoute"></div>
      */
     /* global -ngRouteModule */
-    var ngRouteModule = angular.module('ngRoute', ['ng']).
-            provider('$route', $RouteProvider),
+    var ngRouteModule = angular.module('ngRoute', ['ng']).provider('$route', $RouteProvider),
         $routeMinErr = angular.$$minErr('ngRoute');
 
     /**
@@ -578,51 +577,49 @@
                             }
                         }
 
-                        $q.when(nextRoute).
-                            then(function () {
+                        $q.when(nextRoute).then(function () {
+                            if (nextRoute) {
+                                var locals = angular.extend({}, nextRoute.resolve),
+                                    template, templateUrl;
+
+                                angular.forEach(locals, function (value, key) {
+                                    locals[key] = angular.isString(value) ?
+                                        $injector.get(value) : $injector.invoke(value, null, null, key);
+                                });
+
+                                if (angular.isDefined(template = nextRoute.template)) {
+                                    if (angular.isFunction(template)) {
+                                        template = template(nextRoute.params);
+                                    }
+                                } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
+                                    if (angular.isFunction(templateUrl)) {
+                                        templateUrl = templateUrl(nextRoute.params);
+                                    }
+                                    templateUrl = $sce.getTrustedResourceUrl(templateUrl);
+                                    if (angular.isDefined(templateUrl)) {
+                                        nextRoute.loadedTemplateUrl = templateUrl;
+                                        template = $templateRequest(templateUrl);
+                                    }
+                                }
+                                if (angular.isDefined(template)) {
+                                    locals['$template'] = template;
+                                }
+                                return $q.all(locals);
+                            }
+                        }).then(function (locals) {
+                            // after route change
+                            if (nextRoute == $route.current) {
                                 if (nextRoute) {
-                                    var locals = angular.extend({}, nextRoute.resolve),
-                                        template, templateUrl;
-
-                                    angular.forEach(locals, function (value, key) {
-                                        locals[key] = angular.isString(value) ?
-                                            $injector.get(value) : $injector.invoke(value, null, null, key);
-                                    });
-
-                                    if (angular.isDefined(template = nextRoute.template)) {
-                                        if (angular.isFunction(template)) {
-                                            template = template(nextRoute.params);
-                                        }
-                                    } else if (angular.isDefined(templateUrl = nextRoute.templateUrl)) {
-                                        if (angular.isFunction(templateUrl)) {
-                                            templateUrl = templateUrl(nextRoute.params);
-                                        }
-                                        templateUrl = $sce.getTrustedResourceUrl(templateUrl);
-                                        if (angular.isDefined(templateUrl)) {
-                                            nextRoute.loadedTemplateUrl = templateUrl;
-                                            template = $templateRequest(templateUrl);
-                                        }
-                                    }
-                                    if (angular.isDefined(template)) {
-                                        locals['$template'] = template;
-                                    }
-                                    return $q.all(locals);
+                                    nextRoute.locals = locals;
+                                    angular.copy(nextRoute.params, $routeParams);
                                 }
-                            }).
-                            then(function (locals) {
-                                // after route change
-                                if (nextRoute == $route.current) {
-                                    if (nextRoute) {
-                                        nextRoute.locals = locals;
-                                        angular.copy(nextRoute.params, $routeParams);
-                                    }
-                                    $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
-                                }
-                            }, function (error) {
-                                if (nextRoute == $route.current) {
-                                    $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
-                                }
-                            });
+                                $rootScope.$broadcast('$routeChangeSuccess', nextRoute, lastRoute);
+                            }
+                        }, function (error) {
+                            if (nextRoute == $route.current) {
+                                $rootScope.$broadcast('$routeChangeError', nextRoute, lastRoute, error);
+                            }
+                        });
                     }
                 }
 

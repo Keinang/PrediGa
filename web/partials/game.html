@@ -6,7 +6,8 @@
 
 <div class="col-sm-6 col-sm-offset-2" style="color: blue">
 
-    <button class="btn-primary btn-lg col-sm-offset-6" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes</button>
+    <button class="btn-primary btn-lg col-sm-offset-6" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
+    </button>
     <h1>User {{userName}} predictions</h1>
     <br/>
     <h3>Matches</h3>
@@ -37,6 +38,7 @@
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
                 </select>
+                <br/>
                 <label ng-show="isDateOKNOT(x.kickofftime);"
                        ng-class="getClass(x._winner, x.winner)">{{x._winner}}</label>
                 <!-- original values -->
@@ -49,7 +51,8 @@
             </td>
             <td>
                 <!-- user values -->
-                <input type="number" ng-model="x._team1score" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <input type="number" ng-model="x._team1score" style="color: blue"
+                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
                 <!-- original values -->
                 <br/><label>{{x.team1score || ''}}</label>
@@ -57,14 +60,16 @@
             </td>
             <td>
                 <!-- user values -->
-                <input type="number" ng-model="x._team2score" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <input type="number" ng-model="x._team2score" style="color: blue"
+                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
                 <!-- original values -->
                 <br/><label>{{x.team2score || ''}}</label>
                 <input type="number" ng-model="x.team2score" style="color: blue" ng-show="isAdmin()">
             <td>
                 <!-- user values -->
-                <input type="number" ng-model="x._goaldiff" style="color: blue" ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                <input type="number" ng-model="x._goaldiff" style="color: blue"
+                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
                 <!-- original values -->
                 <br/><label>{{x.goaldiff || ''}}</label>

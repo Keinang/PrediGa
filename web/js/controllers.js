@@ -42,7 +42,7 @@ angular.module('appname.controllers', ['ngAnimate'])
 
     }])
     .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', '$location', function ($scope, $rootScope, leaderboardService, $location) {
-        $scope.redirect = function(item){
+        $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;
         };
         // Calling for data for the 1st time:
@@ -55,7 +55,7 @@ angular.module('appname.controllers', ['ngAnimate'])
         $scope.isAdmin = function () {
             return $rootScope.currentUser && $rootScope.currentUser.isAdmin;
         };
-        $scope.isSameUser = function(){
+        $scope.isSameUser = function () {
             return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;
         };
         $scope.formatDate = function (date) {
@@ -80,7 +80,7 @@ angular.module('appname.controllers', ['ngAnimate'])
         };
 
         $scope.combine = function (list1, list2) {
-            if (list1){
+            if (list1) {
                 list1.forEach(function (entry) {
                     // get all list2 values with the same id:
                     var list2Filtered = list2.filter(function (item) {
@@ -105,7 +105,7 @@ angular.module('appname.controllers', ['ngAnimate'])
 
         $scope.filterTeamsNames = function (matches) {
             var uniqueNames = [];
-            if (matches){
+            if (matches) {
                 matches.forEach(function (entry) {
                     if ($.inArray(entry.team1, uniqueNames) === -1) {
                         uniqueNames.push(entry.team1);

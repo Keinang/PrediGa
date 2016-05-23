@@ -2,7 +2,7 @@
  * Created by I305845 on 22/05/2016.
  */
 /*
-All Dates should be 2 hours before France time (UTC time)
+ All Dates should be 2 hours before France time (UTC time)
  */
 module.exports = {
     insertData: function (matches, teams) {
@@ -32,7 +32,7 @@ module.exports = {
             team1: 'Albania',
             team2: 'Switzerland',
             kickofftime: new Date("2016-06-11T11:00:00Z")
-            
+
         }).save(function (err) {
         });
         new matches({

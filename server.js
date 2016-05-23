@@ -10,7 +10,12 @@ var session = require('express-session');
 var configDB = require('./config/database.js');
 
 // configuration ===============================================================
-mongoose.connect(configDB.url); // connect to our database
+// connect to our database
+if (port === 3000){
+    mongoose.connect(configDB.localURL);
+} else{
+    mongoose.connect(configDB.remoteURL);
+}
 
 require('./config/passport')(passport); // pass passport for configuration
 

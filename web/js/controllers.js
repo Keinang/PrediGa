@@ -52,7 +52,7 @@ angular.module('appname.controllers', ['ngAnimate'])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
         $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
         $scope.isAdmin = function () {
-            return $rootScope.currentUser.isAdmin;
+            return $rootScope.currentUser && $rootScope.currentUser.isAdmin;
         };
         $scope.isSameUser = function(){
             return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;

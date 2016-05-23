@@ -73,7 +73,7 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         };
         $scope.isAdmin = function () {
-            return $rootScope.currentUser && $rootScope.currentUser.isAdmin;
+            return $rootScope.currentUser && $rootScope.currentUser && $rootScope.currentUser.isAdmin;
         };
         $scope.isSameUser = function () {
             return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;

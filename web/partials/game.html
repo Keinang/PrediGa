@@ -130,7 +130,8 @@
         </thead>
         <tr ng-repeat="x in teamsCombined">
             <td><label>{{ x.teamID }}</label></td>
-            <td><label>{{ x.name }}</label></td>
+            <td><img alt="{{x.name}} logo" style="width: 24px;height: 24px;"
+                     ng-src="{{x.name === 'Champion' && 'img/gold.png' || x.name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}" > <label>{{ x.name }}</label></td>
             <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
                 <!-- user values -->

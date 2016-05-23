@@ -49,7 +49,7 @@ module.exports = function (passport) {
                 process.nextTick(function () {
                     User.findOne({'username': username}, function (err, user) {
                         // if there are any errors, return the error
-                        if (err) {
+                        if (err) { 
                             return done(err);
                         }
                         // if no user is found, return the message

@@ -12,7 +12,7 @@ angular.module('appname.controllers', ['ngAnimate'])
                         $location.path('/');
                         toastr.success('Logged In');
                     }
-                });
+                }); 
             } else {
                 toastr.error('Must provide a valid user name and password');
             }

@@ -44,7 +44,6 @@ module.exports = function (passport) {
         },
         function (req, username, password, done) {
             if (username)
-                username = username.toLowerCase(); // Use lower-case e-mails to avoid case-sensitive e-mail matching
 
             // asynchronous
             process.nextTick(function () {

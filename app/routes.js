@@ -417,9 +417,10 @@ module.exports = function (app, passport) {
                         }
                     });
                 }
+                // Other user flow
                 else if (typeof(userName) !== 'undefined' && user.username !== userName) {
                     user.findOne({username: userName}, function (error, aUser) {
-                        if (error || !aUser) {
+                        if (error || !aUser || isAdminUser(aUser)) {
                             errorWrapper(response, res);
                         } else {
                             var otherUserID = aUser._id;

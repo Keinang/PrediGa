@@ -26,6 +26,7 @@ app.use(passport.session()); // persistent login sessions
 
 app.use(express.static(__dirname + '/web'));
 require('./app/routes.js')(app, passport); // load our routes and pass in our app and fully configured passport
+
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);

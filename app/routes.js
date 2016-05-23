@@ -8,7 +8,17 @@ module.exports = function (app, passport) {
     var http = require('http');
     var Q = require('q');
 
-    // Initial Data:
+    var initialDataService = function initialDataService(){
+        initialData.insertData(matches, teams);
+        updateUsersScores();
+
+        console.log('Done updating initial data.');
+    };
+
+    // Calling this function when server start:
+    initialDataService();
+
+    // Initial Data REST:
     app.get('/api/initial', isLoggedIn, function (req, res) {
         var user_id = req.user._id;
         user.findOne({_id: user_id}, function (error, user) {
@@ -180,7 +190,7 @@ module.exports = function (app, passport) {
                 // find related match:
                 teams.find({teamID: teamspredictionsRow.teamID}, function (err, teamRelated) {
                     teamspredictionsRow.score = 0;
-                    if (typeof(teamRelated[0].team) !== 'undefined' && teamRelated[0].team === teamspredictionsRow._team) {
+                    if (typeof(teamRelated[0]) !== 'undefined' && typeof(teamRelated[0].team) !== 'undefined' && teamRelated[0].team === teamspredictionsRow._team) {
                         teamspredictionsRow.score += typeof(teamRelated[0].predictscore) === 'number' ? teamRelated[0].predictscore : 0;
                     }
 
@@ -547,5 +557,4 @@ module.exports = function (app, passport) {
         }
         return false;
     }
-}
-;
+};

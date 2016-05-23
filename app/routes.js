@@ -24,7 +24,9 @@ module.exports = function (app, passport) {
         user.findOne({_id: user_id}, function (error, user) {
             var response = {};
             if (error) {
-                errorWrapper(response, res);
+                response.status = 'ERROR';
+                response.message = error.message;
+                return res.json(200, response);
             } else {
                 initialData.insertData(matches, teams);
 
@@ -92,7 +94,9 @@ module.exports = function (app, passport) {
             }
             var response = {};
             if (!user) {
-                errorWrapper(response, res);
+                response.status = 'ERROR';
+                response.message = message;
+                return res.json(200, response);
             }
             // Manually establish the session...
             req.login(user, function (err) {
@@ -160,25 +164,28 @@ module.exports = function (app, passport) {
                 // find related match:
                 matches.find({matchID: matchespredictionsRow.matchID}, function (err, matchRelated) {
                     matchespredictionsRow.score = 0;
-                    if (typeof(matchRelated[0].winner) !== 'undefined' && matchRelated[0].winner === matchespredictionsRow._winner) {
-                        matchespredictionsRow.score += 2;
+                    if (matchRelated[0]){
+                        if (typeof(matchRelated[0].winner) !== 'undefined' && matchRelated[0].winner === matchespredictionsRow._winner) {
+                            matchespredictionsRow.score += 2;
+                        }
+
+                        if (typeof(matchRelated[0].team1score) !== 'undefined' && matchRelated[0].team1score === matchespredictionsRow._team1score) {
+                            matchespredictionsRow.score += 2;
+                        }
+
+                        if (typeof(matchRelated[0].team2score) !== 'undefined' && matchRelated[0].team2score === matchespredictionsRow._team2score) {
+                            matchespredictionsRow.score += 2;
+                        }
+
+                        if (typeof(matchRelated[0].goaldiff) !== 'undefined' && matchRelated[0].goaldiff === matchespredictionsRow._goaldiff) {
+                            matchespredictionsRow.score += 2;
+                        }
+
+                        if (typeof(matchRelated[0].firstscore) !== 'undefined' && matchRelated[0].firstscore === matchespredictionsRow._firstscore) {
+                            matchespredictionsRow.score += 2;
+                        }
                     }
 
-                    if (typeof(matchRelated[0].team1score) !== 'undefined' && matchRelated[0].team1score === matchespredictionsRow._team1score) {
-                        matchespredictionsRow.score += 2;
-                    }
-
-                    if (typeof(matchRelated[0].team2score) !== 'undefined' && matchRelated[0].team2score === matchespredictionsRow._team2score) {
-                        matchespredictionsRow.score += 2;
-                    }
-
-                    if (typeof(matchRelated[0].goaldiff) !== 'undefined' && matchRelated[0].goaldiff === matchespredictionsRow._goaldiff) {
-                        matchespredictionsRow.score += 2;
-                    }
-
-                    if (typeof(matchRelated[0].firstscore) !== 'undefined' && matchRelated[0].firstscore === matchespredictionsRow._firstscore) {
-                        matchespredictionsRow.score += 2;
-                    }
                     matchespredictionsRow.save();
                 });
             });
@@ -548,7 +555,7 @@ module.exports = function (app, passport) {
 
     function errorWrapper(innerRes, res) {
         innerRes.status = 'ERROR';
-        innerRes.message = 'Something Went Wrong';
+        innerRes.message = 'Something Went Wrong (Server): ' + innerRes.message;
         res.json(200, innerRes);
     }
 

@@ -14,13 +14,22 @@ module.exports = function (passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
-        done(null, user.id);
+        if (user && user.id) {
+            done(null, user.id);
+        } else {
+            done(null, 'Error');
+        }
+
     });
 
     // used to deserialize the user
     passport.deserializeUser(function (id, done) {
         User.findById(id, function (err, user) {
-            done(err, user);
+            if (typeof (user) !== 'undefined') {
+                done(err, user);
+            } else {
+                done(err, 'Error');
+            }
         });
     });
 
@@ -95,7 +104,7 @@ module.exports = function (passport) {
 
                             newUser.save(function (err) {
                                 if (err)
-                                    return done(err, false, 'Something Went Wrong');
+                                    return done(err, false, 'Something Went Wrong (Passport)');
 
                                 return done(null, newUser);
                             });

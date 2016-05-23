@@ -40,7 +40,7 @@ angular.module('appname.services', [])
                         toastr.success('Logged Out');
                         $location.path('/login');
                     } else {
-                        toastr.error('Something went wrong');
+                        toastr.error('Something went wrong (Service)');
                     }
                 });
             }

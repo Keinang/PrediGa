@@ -12,7 +12,7 @@ angular.module('appname.controllers', ['ngAnimate'])
                         $location.path('/');
                         toastr.success('Logged In');
                     }
-                }); 
+                });
             } else {
                 toastr.error('Must provide a valid user name and password');
             }
@@ -52,6 +52,26 @@ angular.module('appname.controllers', ['ngAnimate'])
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
         $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
+        $scope.filterByType = function (type) {
+            if (type.startsWith("Champion")) {
+                return $scope.allTeams;
+            }
+            if (type.startsWith("A")) {
+                return $scope.groupA;
+            } else if (type.startsWith("B")) {
+                return $scope.groupB;
+            } else if (type.startsWith("C")) {
+                return $scope.groupC;
+            } else if (type.startsWith("D")) {
+                return $scope.groupD;
+            } else if (type.startsWith("E")) {
+                return $scope.groupE;
+            } else if (type.startsWith("F")) {
+                return $scope.groupF;
+            } else {
+                return $scope.allTeams;
+            }
+        };
         $scope.isAdmin = function () {
             return $rootScope.currentUser && $rootScope.currentUser.isAdmin;
         };
@@ -124,5 +144,11 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.matchesCombined = $scope.combine(result.matches, result.matchespredictions);
             $scope.teamsCombined = $scope.combine(result.teams, result.teamspredictions);
             $scope.allTeams = $scope.filterTeamsNames(result.matches);
+            $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
+            $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
+            $scope.groupC = ['Germany', 'Ukraine', 'Turkey', 'Croatia'];
+            $scope.groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
+            $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
+            $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
         });
     }]);

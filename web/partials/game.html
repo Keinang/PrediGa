@@ -134,18 +134,18 @@
             <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
                 <!-- user values -->
-                <select ng-model="x._team" style="color:blue; width: 150px; height: 25px"
+                <select ng-model="x._team" class="select"
                         ng-show="isDateOK(x.deadline) && isSameUser()">
-                    <option ng-repeat="team in allTeams">{{team}}</option>
+                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
                 </select>
                 <label ng-show="isDateOKNOT(x.deadline);" ng-class="getClass(x._team, x.team)">{{x._team}}</label>
                 <br/>
                 <!-- original values -->
                 <label ng-show="isDateOKNOT(x.deadline);">{{x.team || ''}}</label>
                 <br/>
-                <select ng-model="x.team" style="color:blue; width: 150px; height: 25px"
+                <select ng-model="x.team" class="select"
                         ng-show="isAdmin()">
-                    <option ng-repeat="team in allTeams">{{team}}</option>
+                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
                 </select>
             </td>
             <td><label>{{ x.predictscore }}</label></td>

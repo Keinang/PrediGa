@@ -1,29 +1,28 @@
 <br/>
 <br/>
-<br/>
-<br/>
-<br/>
+<div class="col-sm-8 col-sm-offset-2" style="color: maroon">
 
-<div class="col-sm-8 col-sm-offset-2" style="color: blue">
+    <div>
+        <p class="h1">User <b>{{userName}}</b> predictions</p>
+        <br/>
+        <p class="h3">Matches</p>
+        <button class="btn-primary btn-lg " ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
+        </button>
+    </div>
 
-    <button class="btn-primary btn-lg col-sm-offset-5" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
-    </button>
-    <h1>User <b>{{userName}}</b> predictions</h1>
-    <br/>
-    <h3>Matches</h3>
     <table class="table table-striped matches text-nowrap" style="color:black;">
-        <thead style="color: maroon">
+        <thead>
         <tr>
-            <th class="col-sm-1">#</th>
-            <th class="col-sm-1">Team 1</th>
-            <th class="col-sm-1">Team 2</th>
-            <th class="col-sm-1">Kick Off Time</th>
-            <th class="col-sm-1">Winner</th>
-            <th class="col-sm-1">Team 1 Score</th>
-            <th class="col-sm-1">Team 2 Score</th>
-            <th class="col-sm-1">Goal Diff</th>
-            <th class="col-sm-1">First To Score</th>
-            <th class="col-sm-1">Points Collected</th>
+            <th>#</th>
+            <th>Team 1</th>
+            <th>Team 2</th>
+            <th>Kick Off Time</th>
+            <th>Winner</th>
+            <th>Team 1 Score</th>
+            <th>Team 2 Score</th>
+            <th>Goal Diff</th>
+            <th>First To Score</th>
+            <th>Points Collected</th>
         </tr>
         </thead>
         <tr ng-repeat="x in matchesCombined">
@@ -106,21 +105,27 @@
             <td><label>{{ x.score || 0}}</label></td>
         </tr>
     </table>
+
     <br/>
     <br/>
-    <button class="btn-primary btn-lg col-sm-offset-5" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
-    </button>
+
+    <div>
+        <p class="h3">Teams</p>
+        <button class="btn-primary btn-lg" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
+        </button>
+    </div>
+
     <br/>
-    <h3>Teams</h3>
+
     <table class="table table-striped teams" style="color:black">
-        <thead style="color: maroon">
+        <thead>
         <tr>
-            <th class="col-sm-1">#</th>
-            <th class="col-sm-1">Type</th>
-            <th class="col-sm-1">Deadline</th>
-            <th class="col-sm-1">Team</th>
-            <th class="col-sm-1">Prediction Points</th>
-            <th class="col-sm-1">Points Collected</th>
+            <th>#</th>
+            <th>Type</th>
+            <th>Deadline</th>
+            <th>Team</th>
+            <th>Prediction Points</th>
+            <th>Points Collected</th>
         </tr>
         </thead>
         <tr ng-repeat="x in teamsCombined">

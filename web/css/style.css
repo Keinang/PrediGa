@@ -219,3 +219,10 @@ body {
     background: darkseagreen;
 !important;
 }
+
+.select {
+    color: blue;
+    width: 150px;
+    height: 25px;
+    text-align: center
+}

@@ -43,28 +43,29 @@ module.exports = function (passport) {
             passReqToCallback: true // allows us to pass in the req from our route (lets us check if a user is logged in or not)
         },
         function (req, username, password, done) {
-            if (username)
-
-            // asynchronous
-            process.nextTick(function () {
-                User.findOne({'username': username}, function (err, user) {
-                    // if there are any errors, return the error
-                    if (err)
-                        return done(err);
-
-                    // if no user is found, return the message
-                    if (!user)
-                        return done(null, false, 'No user found.');
-
-                    if (!user.validPassword(password))
-                        return done(null, false, 'Oops! Wrong password.');
-
-                    // all is well, return user
-                    else
-                        return done(null, user);
+            if (username) {
+                username = username.trim();
+                // asynchronous
+                process.nextTick(function () {
+                    User.findOne({'username': username}, function (err, user) {
+                        // if there are any errors, return the error
+                        if (err) {
+                            return done(err);
+                        }
+                        // if no user is found, return the message
+                        if (!user) {
+                            return done(null, false, 'No user found.');
+                        }
+                        if (!user.validPassword(password)) {
+                            return done(null, false, 'Oops! Wrong password.');
+                        }
+                        // all is well, return user
+                        else {
+                            return done(null, user);
+                        }
+                    });
                 });
-            });
-
+            }
         }));
 
     // =========================================================================

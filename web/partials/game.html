@@ -117,6 +117,7 @@
                         ng-show="isDateOK(x.deadline) && isSameUser()">
                     <option ng-repeat="team in allTeams">{{team}}</option>
                 </select>
+                <br/>
                 <label ng-show="isDateOKNOT(x.deadline);" ng-class="getClass(x._team, x.team)">{{x._team}}</label>
                 <!-- original values -->
                 <br/><label ng-show="isDateOKNOT(x.deadline);">{{x.team || ''}}</label>

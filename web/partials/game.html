@@ -37,6 +37,7 @@
                         ng-show="isDateOK(x.kickofftime) && isSameUser()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
+                    <option>Draw</option>
                 </select>
                 <br/>
                 <label ng-show="isDateOKNOT(x.kickofftime);"
@@ -47,6 +48,7 @@
                         ng-show="isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
+                    <option>Draw</option>
                 </select>
             </td>
             <td>
@@ -80,6 +82,7 @@
                         ng-show="isDateOK(x.kickofftime) && isSameUser()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
+                    <option>Draw</option>
                 </select>
                 <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._firstscore, x.firstscore)">{{x._firstscore}}</label>
                 <!-- original values -->
@@ -88,6 +91,7 @@
                         ng-show="isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
+                    <option>Draw</option>
                 </select>
             </td>
             <td><label>{{ x.score || 0}}</label></td>

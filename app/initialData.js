@@ -474,7 +474,14 @@ module.exports = {
         });
         new teams({
             teamID: 13,
-            name: 'E3',
+            name: 'F1',
+            deadline: new Date("2016-06-10T19:00:00Z"),
+            predictscore: 4
+        }).save(function (err) {
+        });
+        new teams({
+            teamID: 14,
+            name: 'F2',
             deadline: new Date("2016-06-10T19:00:00Z"),
             predictscore: 4
         }).save(function (err) {

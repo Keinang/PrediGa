@@ -250,9 +250,9 @@ module.exports = function (app, passport) {
                         var isAdmin = isAdminUser(user);
 
                         // check if we can update this item
-                        var isTimePassed = dbMatch[0].kickofftime.getTime() - (new Date()).getTime() < 0 || !isAdmin;
+                        var isTimePassed = dbMatch[0].kickofftime.getTime() - (new Date()).getTime() < 0;
 
-                        if (!isTimePassed) {
+                        if (!isTimePassed || isAdmin) {
 
                             // update match prediction with recent values
                             matchespredictions.find({
@@ -316,9 +316,9 @@ module.exports = function (app, passport) {
                         var isAdmin = isAdminUser(user);
 
                         // check if we can update this item
-                        var isTimePassed = dbTeam[0].deadline.getTime() - (new Date()).getTime() < 0 || !isAdmin;
+                        var isTimePassed = dbTeam[0].deadline.getTime() - (new Date()).getTime() < 0;
 
-                        if (!isTimePassed) {
+                        if (!isTimePassed || isAdmin) {
                             // update match prediction with recent values
                             teamspredictions.find({
                                 teamID: aTeam.teamID,
@@ -391,6 +391,7 @@ module.exports = function (app, passport) {
     });
 
     function getAllUserPrediction(user_id, userName, res) {
+
         user.findOne({_id: user_id}, function (error, aUser) {
             var response = {};
             if (error || !aUser) {
@@ -400,7 +401,7 @@ module.exports = function (app, passport) {
                 response.user = removeSensitiveInfo(aUser);
 
                 // checking if we got other user to check for: userName
-                if (typeof(userName) === 'undefined' || aUser.username === userName) {
+                if (typeof(userName) === 'undefined' || aUser.username === userName.toLocaleString()) {
                     // regular flow, get all matches:
                     matches.find({}, function (err, matches) {
                         if (!error) {
@@ -432,8 +433,8 @@ module.exports = function (app, passport) {
                     });
                 }
                 // Other user flow
-                else if (typeof(userName) !== 'undefined' && user.username !== userName) {
-                    user.findOne({username: userName}, function (error, aUser) {
+                else if (typeof(userName) !== 'undefined' && user.username !== userName.toLowerCase()) {
+                    user.findOne({username: userName.toLowerCase()}, function (error, aUser) {
                         if (error || !aUser || isAdminUser(aUser)) {
                             errorWrapper(response, res);
                         } else {

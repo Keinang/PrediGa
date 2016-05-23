@@ -20,11 +20,12 @@ angular.module('appname.controllers', ['ngAnimate'])
     }])
     .controller('signupCtrl', ['$scope', 'signupService', 'toastr', '$rootScope', '$location', function ($scope, signupService, toastr, $rootScope, $location) {
         $scope.signup = function () {
-            if ($scope.username && $scope.email && $scope.password) {
+            if ($scope.username && $scope.email && $scope.password && $scope.access) {
                 var data = {
                     email: $scope.email,
                     password: $scope.password,
-                    username: $scope.username
+                    username: $scope.username,
+                    access: $scope.access
                 };
                 signupService.signup(data).then(function (result) {
                     if (result.status === 'OK') {

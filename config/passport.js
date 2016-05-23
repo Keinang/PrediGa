@@ -87,13 +87,13 @@ module.exports = function (passport) {
                 if (!req.user) {
                     User.findOne({'email': email}, function (err, user) {
                         // if there are any errors, return the error
-                        if (err)
+                        if (err) {
                             return done(err);
-
+                        }
                         // check to see if theres already a user with that email
                         if (user) {
                             return done(null, false, 'That email is already taken.');
-                        } else {
+                        }  else {
 
                             // create the user
                             var newUser = new User();
@@ -103,8 +103,9 @@ module.exports = function (passport) {
                             newUser.username = req.body.username;
 
                             newUser.save(function (err) {
-                                if (err)
+                                if (err) {
                                     return done(err, false, 'Something Went Wrong (Passport)');
+                                }
 
                                 return done(null, newUser);
                             });

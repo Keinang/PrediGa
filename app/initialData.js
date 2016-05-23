@@ -15,14 +15,16 @@ module.exports = {
             matchID: 1,
             team1: 'France',
             team2: 'Romania',
-            kickofftime: new Date("2016-06-10T19:00:00Z"),
+            kickofftime: new Date("2016-06-10T19:00:00Z")
 
-            // fakes for testing:
-            winner: 'France',
-            team1score: '3',
-            team2score: '1',
-            goaldiff: '2',
-            firstscore: 'Romania'
+            //REAL results :
+            //,
+            //winner: 'France',
+            //team1score: '3',
+            //team2score: '1',
+            //goaldiff: '2',
+            //firstscore: 'Romania'
+
         }).save(function (err) {
         });
         new matches({

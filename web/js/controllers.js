@@ -22,9 +22,9 @@ angular.module('appname.controllers', ['ngAnimate'])
         $scope.signup = function () {
             if ($scope.username && $scope.email && $scope.password && $scope.access) {
                 var data = {
-                    email: $scope.email,
+                    email: $scope.email.trim().toLowerCase(),
                     password: $scope.password,
-                    username: $scope.username,
+                    username: $scope.username.trim().toLowerCase(),
                     access: $scope.access
                 };
                 signupService.signup(data).then(function (result) {

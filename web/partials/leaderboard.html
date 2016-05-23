@@ -5,7 +5,7 @@
 <br/>
 <div class="col-sm-6 col-sm-offset-3">
 
-<table class="table table-striped" style="color:black">
+<table class="table table-striped leaderboard" style="color:black">
     <thead>
     <tr>
         <th class="col-sm-1">Position</th>
@@ -13,9 +13,9 @@
         <th class="col-sm-1">Score</th>
     </tr>
     </thead>
-    <tr ng-repeat="x in users">
+    <tr ng-repeat="x in users" ng-click="redirect(x);" >
         <td><label>{{$index+1}}</label></td>
-        <td><a href="#/game/:{{x.username}}" class="btn ">{{ x.username }}</a></td>
+        <td><label>{{ x.username }}</label></td>
         <td><label>{{ x.score }}</label></td>
     </tr>
 </table>

@@ -41,7 +41,10 @@ angular.module('appname.controllers', ['ngAnimate'])
     .controller('helpCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
     }])
-    .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', function ($scope, $rootScope, leaderboardService) {
+    .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', '$location', function ($scope, $rootScope, leaderboardService, $location) {
+        $scope.redirect = function(item){
+            window.location = '#/game/:' + item.username;
+        };
         // Calling for data for the 1st time:
         leaderboardService.getAllUserList().then(function (result) {
             $scope.users = result.users;

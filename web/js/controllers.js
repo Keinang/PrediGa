@@ -50,6 +50,48 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.users = result.users;
         });
     }])
+    .controller('adminCtrl', ['$scope', '$rootScope', 'adminService', function ($scope, $rootScope, $adminService) {
+        $scope.groupByValue = function (items, groupByType) {
+            var result = {};
+            items.forEach(function (entry) {
+                var itemAttributeVal = entry[groupByType];
+
+                if (typeof(itemAttributeVal) !== 'undefined') {
+                    var obj = result [itemAttributeVal];
+                    if (typeof(obj) !== 'undefined') {
+                        result [itemAttributeVal] = {
+                            key: itemAttributeVal,
+                            value: obj.value += 1
+                        };
+                    } else {
+                        // first time:
+                        result [itemAttributeVal] = {
+                            key: itemAttributeVal,
+                            value: 1
+                        };
+                    }
+
+                }
+            });
+            
+            return result;
+        };
+        $adminService.getPredictions().then(function (result) {
+            $scope.user = result.user;
+            if (result.matchespredictions) {
+
+                $scope.matchespredictions = groupBy(result.matchespredictions, function (item) {
+                    return [item.matchID];
+                });
+            }
+
+            if (result.teamspredictions){
+                $scope.teamspredictions = groupBy(result.teamspredictions, function (item) {
+                    return [item.teamID];
+                });
+            }
+        })
+    }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
         $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
         $scope.filterByType = function (type) {
@@ -99,22 +141,6 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         };
 
-        $scope.combine = function (list1, list2) {
-            if (list1) {
-                list1.forEach(function (entry) {
-                    // get all list2 values with the same id:
-                    var list2Filtered = list2.filter(function (item) {
-                        return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
-                            || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' );
-                    });
-                    // merge values
-                    entry = $.extend(entry, list2Filtered[0]);
-                });
-            }
-
-            return list1;
-        };
-
         $scope.saveChanges = function () {
             gameService.saveChangesMatches($scope.matchesCombined).then(function (result) {
                 gameService.saveChangesTeams($scope.teamsCombined).then(function (result) {
@@ -141,8 +167,8 @@ angular.module('appname.controllers', ['ngAnimate'])
 
         gameService.getUserPredictions($scope.userName).then(function (result) {
             $scope.user = result.user;
-            $scope.matchesCombined = $scope.combine(result.matches, result.matchespredictions);
-            $scope.teamsCombined = $scope.combine(result.teams, result.teamspredictions);
+            $scope.matchesCombined = combine(result.matches, result.matchespredictions);
+            $scope.teamsCombined = combine(result.teams, result.teamspredictions);
             $scope.allTeams = $scope.filterTeamsNames(result.matches);
             $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
             $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
@@ -152,3 +178,32 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
         });
     }]);
+
+
+var combine = function (list1, list2) {
+    if (list1) {
+        list1.forEach(function (entry) {
+            // get all list2 values with the same id:
+            var list2Filtered = list2.filter(function (item) {
+                return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
+                    || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' );
+            });
+            // merge values
+            entry = $.extend(entry, list2Filtered[0]);
+        });
+    }
+
+    return list1;
+};
+
+function groupBy(array, f) {
+    var groups = {};
+    array.forEach(function (o) {
+        var group = JSON.stringify(f(o));
+        groups[group] = groups[group] || [];
+        groups[group].push(o);
+    });
+    return Object.keys(groups).map(function (group) {
+        return groups[group];
+    })
+}

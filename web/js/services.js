@@ -57,6 +57,28 @@ angular.module('appname.services', [])
             }
         };
     })
+    .factory('signupService', function (ulhttp) {
+        return {
+            signup: function (data) {
+                var url = "/api/signup";
+                return ulhttp.post(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
+        };
+    })
+    .factory('adminService', function (ulhttp) {
+        return {
+            getPredictions: function (data) {
+                var url = "/api/predictions2";
+                return ulhttp.get(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
+        };
+    })
     .factory('gameService', function (ulhttp) {
         return {
             getUserPredictions: function (userName) {

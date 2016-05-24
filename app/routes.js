@@ -390,8 +390,35 @@ module.exports = function (app, passport) {
         });
     });
 
-    function getAllUserPrediction(user_id, userName, res) {
+    app.get('/api/predictions2', isLoggedIn, function (req, res) {
+        var user_id = req.user._id;
+        user.findOne({_id: user_id}, function (error, aUser) {
+            var response = {};
+            if (error || !aUser || !isAdminUser(aUser)) {
+                errorWrapper(response, res);
+            } else {
+                response.status = 'OK';
+                response.user = removeSensitiveInfo(aUser);
 
+                matchespredictions.find({}, function (err, matchespredictions) {
+                    if (!error && matchespredictions) {
+                        response.matchespredictions = sortByID(matchespredictions, '1');
+
+                        teamspredictions.find({}, function (err, teamspredictions) {
+                            if (!error && teamspredictions) {
+                                response.teamspredictions = sortByID(teamspredictions, '2');
+                                res.send(200, response);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    app.get('/api/predictions', isLoggedIn, function (req, res) {
+        var user_id = req.user._id;
+        var userName = req.query.user;
         user.findOne({_id: user_id}, function (error, aUser) {
             var response = {};
             if (error || !aUser) {
@@ -473,11 +500,6 @@ module.exports = function (app, passport) {
                 }
             }
         });
-
-    };
-
-    app.get('/api/predictions', isLoggedIn, function (req, res) {
-        getAllUserPrediction(req.user._id, req.query.user, res);
     });
 
 // =============================================================================

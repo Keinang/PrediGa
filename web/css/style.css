@@ -222,7 +222,7 @@ body {
 
 .select {
     color: blue;
-    width: 150px;
+    width: 125px;
     height: 25px;
     text-align: center
 }
@@ -230,4 +230,10 @@ body {
 .input {
     color: blue;
     text-align: center
+}
+
+.table td.fit,
+.table th.fit {
+    white-space: nowrap;
+    width: 1%;
 }

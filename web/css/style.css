@@ -214,10 +214,15 @@ body {
 !important;
 }
 
-.leaderboard:hover tr:hover {
+.clickable:hover tr:hover {
     cursor: pointer;
     background: darkseagreen;
 !important;
+}
+
+.clickableTd:hover {
+    cursor: pointer;
+    background: darkseagreen; !important;
 }
 
 .select {

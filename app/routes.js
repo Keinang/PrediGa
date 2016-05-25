@@ -236,6 +236,7 @@ module.exports = function (app, passport) {
             });
         });
     }
+
     function updateMatchPrediction(matchesInput, user) {
         var deferred = Q.defer();
 
@@ -302,6 +303,7 @@ module.exports = function (app, passport) {
         }
         return deferred.promise;
     }
+
     function updateTeamPrediction(teamsInput, user) {
         var deferred = Q.defer();
         if (teamsInput) {
@@ -357,6 +359,7 @@ module.exports = function (app, passport) {
         }
         return deferred.promise;
     }
+
     app.post('/api/saveChangesMatches', isLoggedIn, function (req, res) {
         var user_id = req.user._id;
         user.findOne({_id: user_id}, function (error, user) {
@@ -383,6 +386,40 @@ module.exports = function (app, passport) {
                 updateTeamPrediction(req.body.teams, user).then(
                     res.send(200, response)
                 );
+            }
+        });
+    });
+
+    app.get('/api/matchSimulator', isLoggedIn, function (req, res) {
+        var matchId = req.query.matchId;
+        var user_id = req.user._id;
+        user.findOne({_id: user_id}, function (error, aUser) {
+            var response = {};
+            if (error || !aUser) {
+                errorWrapper(response, res);
+            } else {
+                response.status = 'OK';
+                response.user = removeSensitiveInfo(aUser);
+
+                // looking for other user details, only results until this deadline date.
+                matches.find({matchID: matchId}, function (err, matches) {
+                    if (!error) {
+                        response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
+
+                        // get all other user's matches predictions until this kickoff
+                        matchespredictions.find({matchID: matchId}, function (err, matchespredictions) {
+                            if (!error && matchespredictions) {
+                                response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
+
+                                user.find({}, function (error, allUsers) {
+                                    response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
+                                    res.json(200, response);
+                                });
+
+                            }
+                        });
+                    }
+                });
             }
         });
     });
@@ -524,10 +561,20 @@ module.exports = function (app, passport) {
 
     function removeSensitiveInfo(item) {
         item.__v = undefined;
-        item._id = undefined;
         item.password = undefined;
-        item.user_id = undefined;
         return item;
+    }
+
+    function removeSensitiveInfoArrayAndAdmin(arr) {
+        if (arr) {
+            var arr2 = [];
+            arr.forEach(function (item) {
+                if (!isAdminUser(item)){
+                    arr2.push(removeSensitiveInfo(item));
+                }
+            })
+        }
+        return arr2;
     }
 
     function removeSensitiveInfoArray(arr) {

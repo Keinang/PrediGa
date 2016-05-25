@@ -1,0 +1,43 @@
+<br/>
+<br/>
+<div class="col-sm-8 col-sm-offset-2" style="color: maroon">
+
+    <br/>
+    <br/>
+    <div>
+        <label>Match</label> <select class="select" ng-change="changeSim()" ng-model="currentGame">
+            <option ng-repeat="n in [].constructor(52) track by $index">{{$index}}</option>
+        </select>
+        <br/>
+        <img ng-src="{{match.team1.length > 4 && 'img/'+match.team1+'.png' || 'img/question.png' }}">
+            <label>{{ match.team1}}</label> VS. <img alt="{{match.team2}} logo"
+                 ng-src="{{match.team2.length > 4 && 'img/'+match.team2+'.png' || 'img/question.png' }}">
+            <label>{{match.team2}}</label>
+
+
+    </div>
+
+    <br/>
+    <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
+        <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Winner</th>
+            <th>Team 1 Score</th>
+            <th>Team 2 Score</th>
+            <th>Goal Diff</th>
+            <th>First To Score</th>
+            <th>Points Collected</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="x in matchesCombined | orderBy:'-score'">
+            <td><label>{{x.username}}</label></td>
+            <td><label>{{x._winner}}</label></td>
+            <td><label>{{x._team1score}}</label></td>
+            <td><label>{{x._team2score}}</label></td>
+            <td><label>{{x._goaldiff}}</label></td>
+            <td><label>{{x._firstscore}}</label></td>
+            <td><label>{{x.score || 0}}</label></td>
+        </tr>
+    </table>
+</div>

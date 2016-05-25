@@ -79,6 +79,18 @@ angular.module('appname.services', [])
             }
         };
     })
+    .factory('simulatorService', function (ulhttp) {
+        return {
+            matchSimulator: function (matchId) {
+                var url = "/api/matchSimulator?matchId=" + matchId;
+                var data = {};
+                return ulhttp.get(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
+        };
+    })
     .factory('gameService', function (ulhttp) {
         return {
             getUserPredictions: function (userName) {

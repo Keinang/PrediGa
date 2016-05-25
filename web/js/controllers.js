@@ -50,6 +50,22 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.users = result.users;
         });
     }])
+    .controller('simulatorCtrl', ['$routeParams', '$scope', '$rootScope', 'simulatorService', '$location', function ($routeParams, $scope, $rootScope, simulatorService, $location) {
+        $scope.currentGame = typeof($routeParams.matchID) !== 'undefined' ? $routeParams.matchID.substr(1) : 1;
+
+        $scope.changeSim = function () {
+            window.location = '#/simulator/:' + $scope.currentGame;
+        };
+        // Calling for data for the 1st time:
+        simulatorService.matchSimulator($scope.currentGame).then(function (result) {
+            $scope.matchesCombined = combineSimulator(result.matchespredictions, result.users);
+            $scope.match = result.matches[0]; // always one match
+        });
+
+        $scope.range1 = function (i) {
+            return i ? range1(i - 1).concat(i) : []
+        }
+    }])
     .controller('adminCtrl', ['$scope', '$rootScope', 'adminService', function ($scope, $rootScope, $adminService) {
         $scope.groupByValue = function (items, groupByType) {
             var result = {};
@@ -93,6 +109,9 @@ angular.module('appname.controllers', ['ngAnimate'])
         })
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
+        $scope.redirectSim = function (matchID) {
+            window.location = '#/simulator/:' + matchID;
+        };
         $scope.navigate = function (userName, type) {
             if (!userName || userName == null) {
                 userName = $rootScope.currentUser.username;
@@ -197,7 +216,8 @@ var combine = function (list1, list2) {
             // get all list2 values with the same id:
             var list2Filtered = list2.filter(function (item) {
                 return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
-                    || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' );
+                    || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' )
+                    || (item._id === entry.user_id && typeof (entry.user_id) !== 'undefined' );
             });
             // merge values
             entry = $.extend(entry, list2Filtered[0]);
@@ -205,6 +225,25 @@ var combine = function (list1, list2) {
     }
 
     return list1;
+};
+
+var combineSimulator = function (matches, users) {
+    if (matches) {
+        matches.forEach(function (entry) {
+            if (entry){
+                // get all list2 values with the same id:
+                var usersFiltered = users.filter(function (user) {
+                    return (user._id === entry.user_id && typeof (entry.user_id) !== 'undefined' );
+                });
+                // merge values
+                if (usersFiltered && usersFiltered[0]){
+                    entry.username = usersFiltered[0].username;
+                }
+            }
+        });
+    }
+
+    return matches;
 };
 
 function groupBy(array, f) {

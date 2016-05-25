@@ -3,7 +3,7 @@
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
 
     <div class="col-sm-offset-4">
-        <p class="h1">User <b>{{userName}}</b> predictions</p>
+        <p class="h1"><b>{{userName}}</b>'s predictions</p>
         <button class="btn-primary btn-sm " ng-click="navigate(userName, 2);" ng-show="!isSameUser()">See User's Teams
         </button>
         <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-show="!isSameUser()">See my Matches
@@ -29,17 +29,17 @@
         </tr>
         </thead>
         <tr ng-repeat="x in matchesCombined">
-            <td><label>{{ x.matchID }}</label></td>
-            <td><img alt="{{x.team1}} logo"
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><label>{{ x.matchID }}</label></td>
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><img alt="{{x.team1}} logo"
                      ng-src="{{x.team1.length > 4 && 'img/'+x.team1+'.png' || 'img/question.png' }}"> <label>{{ x.team1
                 }}</label></td>
-            <td><img alt="{{x.team2}} logo"
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><img alt="{{x.team2}} logo"
                      ng-src="{{x.team2.length > 4 && 'img/'+x.team2+'.png' || 'img/question.png' }}"> <label>{{ x.team2
                 }}</label></td>
-            <td><label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label></td>
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
                 <!-- user values -->
-                <select ng-model="x._winner" class="select col-xs-12"
+                <select ng-model="x._winner" class="select col-xs-13"
                         ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
@@ -52,7 +52,7 @@
                 <!-- original values -->
                 <label>{{x.winner || ''}}</label>
                 <br/>
-                <select ng-model="x.winner" class="select col-xs-12"
+                <select ng-model="x.winner" class="select col-xs-13"
                         ng-show="isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>

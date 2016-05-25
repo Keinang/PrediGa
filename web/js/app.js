@@ -22,6 +22,16 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
             controller: 'gameCtrl',
             resolve: {logincheck: checkLogin}
         })
+        .when('/simulator', {
+            templateUrl: 'partials/simulator.html',
+            controller: 'simulatorCtrl',
+            resolve: {logincheck: checkLogin}
+        })
+        .when('/simulator/:matchID', {
+            templateUrl: 'partials/simulator.html',
+            controller: 'simulatorCtrl',
+            resolve: {logincheck: checkLogin}
+        })
         .when('/teams', {
             title: 'Match Predictions',
             templateUrl: 'partials/teams.html',

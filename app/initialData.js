@@ -36,7 +36,7 @@ module.exports = {
                         matchID: 2,
                         team1: 'Albania',
                         team2: 'Switzerland',
-                        kickofftime: new Date("2016-06-11T11:00:00Z")
+                        kickofftime: new Date("2016-06-11T13:00:00Z")
 
                     }).save(function (err) {
                     }),
@@ -492,7 +492,43 @@ module.exports = {
                         predictscore: 4
                     }).save(function () {
 
-                    })
+                    }),
+
+                    new teams({
+                        teamID: 15,
+                        name: '1st of 3rd place table',
+                        deadline: new Date("2016-06-10T19:00:00Z"),
+                        predictscore: 4
+                    }).save(function () {
+
+                    }),
+
+                    new teams({
+                        teamID: 16,
+                        name: '2nd of 3rd place table',
+                        deadline: new Date("2016-06-10T19:00:00Z"),
+                        predictscore: 4
+                    }).save(function () {
+
+                    }),
+
+                    new teams({
+                        teamID: 17,
+                        name: '3rd of 3rd place table',
+                        deadline: new Date("2016-06-10T19:00:00Z"),
+                        predictscore: 4
+                    }).save(function () {
+
+                    }),
+
+                    new teams({
+                        teamID: 18,
+                        name: '4th of 3rd place table',
+                        deadline: new Date("2016-06-10T19:00:00Z"),
+                        predictscore: 4
+                    }).save(function () {
+
+                    }),
 
                 ]).spread(function () {
                     deferred.resolve({});

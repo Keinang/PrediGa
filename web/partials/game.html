@@ -2,13 +2,16 @@
 <br/>
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
 
-    <div>
+    <div class="col-sm-offset-4">
         <p class="h1">User <b>{{userName}}</b> predictions</p>
-        <br/>
-        <p class="h3">Matches</p>
-        <button class="btn-primary btn-lg " ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
+        <button class="btn-primary btn-sm " ng-click="navigate(userName, 2);" ng-show="!isSameUser()">See User's Teams
         </button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-show="!isSameUser()">See my Matches
+        </button>
+        <button class="btn-primary btn-sm " ng-click="saveChanges();" ng-show="isSameUser()">Save Changes</button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 2);" ng-show="isSameUser()">See my Teams</button>
     </div>
+    <p class="h3">Matches</p>
     <br/>
     <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
         <thead>
@@ -27,22 +30,27 @@
         </thead>
         <tr ng-repeat="x in matchesCombined">
             <td><label>{{ x.matchID }}</label></td>
-            <td><img alt="{{x.team1}} logo" ng-src="{{x.team1.length > 4 && 'img/'+x.team1+'.png' || 'img/question.png' }}" > <label>{{ x.team1 }}</label></td>
-            <td><img alt="{{x.team2}} logo" ng-src="{{x.team2.length > 4 && 'img/'+x.team2+'.png' || 'img/question.png' }}" > <label>{{ x.team2 }}</label></td>
+            <td><img alt="{{x.team1}} logo"
+                     ng-src="{{x.team1.length > 4 && 'img/'+x.team1+'.png' || 'img/question.png' }}"> <label>{{ x.team1
+                }}</label></td>
+            <td><img alt="{{x.team2}} logo"
+                     ng-src="{{x.team2.length > 4 && 'img/'+x.team2+'.png' || 'img/question.png' }}"> <label>{{ x.team2
+                }}</label></td>
             <td><label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label></td>
             <td>
                 <!-- user values -->
                 <select ng-model="x._winner" class="select col-xs-12"
-                        ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                        ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
                     <option>Draw</option>
                 </select>
-                <label ng-show="isDateOKNOT(x.kickofftime);"
+                <br/>
+                <label ng-show="isDateOKNOT(x.kickofftime) || isAdmin()"
                        ng-class="getClass(x._winner, x.winner)">{{x._winner}}</label>
                 <br/>
                 <!-- original values -->
-                <label ng-show="isDateOKNOT(x.kickofftime);">{{x.winner || ''}}</label>
+                <label>{{x.winner || ''}}</label>
                 <br/>
                 <select ng-model="x.winner" class="select col-xs-12"
                         ng-show="isAdmin()">
@@ -54,8 +62,10 @@
             <td>
                 <!-- user values -->
                 <input type="number" ng-model="x._team1score" class="input col-xs-10"
-                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
-                <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
+                       ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()"/>
+                <br/>
+                <label ng-show="isDateOKNOT(x.kickofftime) || isAdmin()"
+                       ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
                 <br/>
                 <!-- original values -->
                 <label>{{x.team1score || ''}}</label>
@@ -65,8 +75,10 @@
             <td>
                 <!-- user values -->
                 <input type="number" ng-model="x._team2score" class="input col-xs-10"
-                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
-                <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
+                       ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()"/>
+                <br/>
+                <label ng-show="isDateOKNOT(x.kickofftime) || isAdmin()"
+                       ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
                 <br/>
                 <!-- original values -->
                 <label>{{x.team2score || ''}}</label>
@@ -75,8 +87,9 @@
             <td>
                 <!-- user values -->
                 <input type="number" ng-model="x._goaldiff" class="input col-xs-10"
-                       ng-show="isDateOK(x.kickofftime) && isSameUser()">
-                <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
+                       ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()"/>
+                <br/>
+                <label ng-show="isDateOKNOT(x.kickofftime) || isAdmin()" ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
                 <br/>
                 <!-- original values -->
                 <label>{{x.goaldiff || ''}}</label>
@@ -85,12 +98,14 @@
             <td>
                 <!-- user values -->
                 <select ng-model="x._firstscore" class="select col-xs-10"
-                        ng-show="isDateOK(x.kickofftime) && isSameUser()">
+                        ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()">
                     <option>{{ x.team1 }}</option>
                     <option>{{ x.team2 }}</option>
                     <option>None</option>
                 </select>
-                <label ng-show="isDateOKNOT(x.kickofftime);" ng-class="getClass(x._firstscore, x.firstscore)">{{x._firstscore}}</label>
+                <br/>
+                <label ng-show="isDateOKNOT(x.kickofftime) || isAdmin()"
+                       ng-class="getClass(x._firstscore, x.firstscore)">{{x._firstscore}}</label>
                 <br/>
                 <!-- original values -->
                 <label>{{x.firstscore || ''}}</label>
@@ -103,54 +118,6 @@
                 </select>
             </td>
             <td><label>{{ x.score || 0}}</label></td>
-        </tr>
-    </table>
-
-    <br/>
-    <br/>
-
-    <div>
-        <p class="h3">Teams</p>
-        <button class="btn-primary btn-lg" ng-click="saveChanges();" ng-show="isSameUser()">Save Changes
-        </button>
-    </div>
-
-    <br/>
-
-    <table class="table table-striped teams table-condensed" style="color:black">
-        <thead>
-        <tr>
-            <th>#</th>
-            <th>Type</th>
-            <th>Deadline</th>
-            <th>Team</th>
-            <th>Prediction Points</th>
-            <th>Points Collected</th>
-        </tr>
-        </thead>
-        <tr ng-repeat="x in teamsCombined">
-            <td><label>{{ x.teamID }}</label></td>
-            <td><img alt="{{x.name}} logo" style="width: 24px;height: 24px;"
-                     ng-src="{{x.name === 'Champion' && 'img/gold.png' || x.name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}" > <label>{{ x.name }}</label></td>
-            <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
-            <td>
-                <!-- user values -->
-                <select ng-model="x._team" class="select"
-                        ng-show="isDateOK(x.deadline) && isSameUser()">
-                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
-                </select>
-                <label ng-show="isDateOKNOT(x.deadline);" ng-class="getClass(x._team, x.team)">{{x._team}}</label>
-                <br/>
-                <!-- original values -->
-                <label ng-show="isDateOKNOT(x.deadline);">{{x.team || ''}}</label>
-                <br/>
-                <select ng-model="x.team" class="select"
-                        ng-show="isAdmin()">
-                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
-                </select>
-            </td>
-            <td><label>{{ x.predictscore }}</label></td>
-            <td><label>{{ x.score || 0 }}</label></td>
         </tr>
     </table>
 </div>

@@ -47,7 +47,8 @@
                 <ul class="nav navbar-nav navbar-right">
                     <li><a href="#/login" ng-hide="$root.currentUser">Sign In</a></li>
                     <li><a href="#/signup" ng-hide="$root.currentUser">Register</a></li>
-                    <li><a href="#/game" ng-show="$root.currentUser">Predictions</a></li>
+                    <li><a href="#/game" ng-show="$root.currentUser">Match Predictions</a></li>
+                    <li><a href="#/teams" ng-show="$root.currentUser">Teams Predictions</a></li>
                     <li><a href="#/admin" ng-show="$root.currentUser && $root.currentUser.isAdmin">Admin</a></li>
                     <li><a href="#/leaderboard" ng-show="$root.currentUser">Leaderboard</a></li>
                     <li><a href="#/help" ng-show="$root.currentUser">Help</a></li>

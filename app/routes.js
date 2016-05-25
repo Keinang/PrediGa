@@ -235,8 +235,7 @@ module.exports = function (app, passport) {
                 });
             });
         });
-    };
-
+    }
     function updateMatchPrediction(matchesInput, user) {
         var deferred = Q.defer();
 
@@ -302,8 +301,7 @@ module.exports = function (app, passport) {
             deferred.resolve({});
         }
         return deferred.promise;
-    };
-
+    }
     function updateTeamPrediction(teamsInput, user) {
         var deferred = Q.defer();
         if (teamsInput) {
@@ -343,7 +341,7 @@ module.exports = function (app, passport) {
 
                         // update real teams
                         if (isAdmin) {
-                            dbTeam[0].dbTeam = aTeam.dbTeam;
+                            dbTeam[0].team = aTeam.team;
 
                             dbTeam[0].save(function () {
                                 updateUsersScores();
@@ -358,8 +356,7 @@ module.exports = function (app, passport) {
             deferred.resolve({});
         }
         return deferred.promise;
-    };
-
+    }
     app.post('/api/saveChangesMatches', isLoggedIn, function (req, res) {
         var user_id = req.user._id;
         user.findOne({_id: user_id}, function (error, user) {
@@ -428,7 +425,7 @@ module.exports = function (app, passport) {
                 response.user = removeSensitiveInfo(aUser);
 
                 // checking if we got other user to check for: userName
-                if (typeof(userName) === 'undefined' || aUser.username === userName.toLocaleString()) {
+                if (typeof(userName) === 'undefined' || aUser.username === userName.toLowerCase()) {
                     // regular flow, get all matches:
                     matches.find({}, function (err, matches) {
                         if (!error) {
@@ -460,12 +457,12 @@ module.exports = function (app, passport) {
                     });
                 }
                 // Other user flow
-                else if (typeof(userName) !== 'undefined' && user.username !== userName.toLowerCase()) {
-                    user.findOne({username: userName.toLowerCase()}, function (error, aUser) {
-                        if (error || !aUser || isAdminUser(aUser)) {
+                else if (typeof(userName) !== 'undefined' && aUser.username !== userName.toLowerCase() && userName !== 'admin') {
+                    user.findOne({username: userName.toLowerCase()}, function (error, otherUser) {
+                        if (error || !otherUser) {
                             errorWrapper(response, res);
                         } else {
-                            var otherUserID = aUser._id;
+                            var otherUserID = otherUser._id;
                             // looking for other user details, only results until this deadline date.
                             matches.find({}, function (err, matches) {
                                 if (!error) {
@@ -474,7 +471,11 @@ module.exports = function (app, passport) {
                                     // get all other user's matches predictions until this kickoff
                                     matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
                                         if (!error && matchespredictions) {
-                                            response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
+                                            if (isAdminUser(aUser)) {
+                                                response.matchespredictions = sortByID(matchespredictions, '1');
+                                            } else {
+                                                response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
+                                            }
 
                                             // get all teams:
                                             teams.find({}, function (err, teams) {
@@ -484,7 +485,13 @@ module.exports = function (app, passport) {
                                                         // get all user's teams predictions
                                                         teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
                                                             if (!error && teamspredictions) {
-                                                                response.teamspredictions = sortByID(removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2'), '2');
+
+                                                                if (isAdminUser(aUser)) {
+                                                                    response.teamspredictions = sortByID(teamspredictions, '2');
+                                                                } else {
+                                                                    response.teamspredictions = sortByID(removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2'), '2');
+                                                                }
+
                                                                 res.json(200, response);
                                                             }
                                                         });

@@ -12,13 +12,24 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
             controller: 'signupCtrl'
         })
         .when('/game', {
-            title: 'Predictions',
+            title: 'Match Predictions',
             templateUrl: 'partials/game.html',
             controller: 'gameCtrl',
             resolve: {logincheck: checkLogin}
         })
         .when('/game/:userName', {
             templateUrl: 'partials/game.html',
+            controller: 'gameCtrl',
+            resolve: {logincheck: checkLogin}
+        })
+        .when('/teams', {
+            title: 'Match Predictions',
+            templateUrl: 'partials/teams.html',
+            controller: 'gameCtrl',
+            resolve: {logincheck: checkLogin}
+        })
+        .when('/teams/:userName', {
+            templateUrl: 'partials/teams.html',
             controller: 'gameCtrl',
             resolve: {logincheck: checkLogin}
         })

@@ -73,7 +73,7 @@ angular.module('appname.controllers', ['ngAnimate'])
 
                 }
             });
-            
+
             return result;
         };
         $adminService.getPredictions().then(function (result) {
@@ -85,7 +85,7 @@ angular.module('appname.controllers', ['ngAnimate'])
                 });
             }
 
-            if (result.teamspredictions){
+            if (result.teamspredictions) {
                 $scope.teamspredictions = groupBy(result.teamspredictions, function (item) {
                     return [item.teamID];
                 });
@@ -93,6 +93,16 @@ angular.module('appname.controllers', ['ngAnimate'])
         })
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
+        $scope.navigate = function (userName, type) {
+            if (!userName || userName == null) {
+                userName = $rootScope.currentUser.username;
+            }
+            if (type == 1) {
+                window.location = '#/game/:' + userName;
+            } else if (type == 2) {
+                window.location = '#/teams/:' + userName;
+            }
+        };
         $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
         $scope.filterByType = function (type) {
             if (type.startsWith("Champion")) {
@@ -177,7 +187,8 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
             $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
         });
-    }]);
+    }
+    ]);
 
 
 var combine = function (list1, list2) {

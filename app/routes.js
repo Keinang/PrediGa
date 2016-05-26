@@ -583,30 +583,29 @@ module.exports = function (app, passport) {
                 if (typeof(userName) === 'undefined' || aUser.username === userName.toLowerCase()) {
                     // regular flow, get all matches:
                     if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
-                        matches.find({}, function (err, matches) {
-                            if (!error) {
-                                response.matches = removeSensitiveInfoArray(matches);
+                        // get all user's matches predictions
+                        matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
+                            if (!error && matchespredictions) {
+                                response.matchespredictions = matchespredictions;
 
-                                // get all user's matches predictions
-                                matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
-                                    if (!error && matchespredictions) {
-
-                                        response.matchespredictions = removeSensitiveInfoArray(matchespredictions);
-                                        res.json(200, response);
+                                matches.find({}, function (err, matches) {
+                                    if (!error) {
+                                        response.matches = matches;
                                     }
-                                })
+                                    res.json(200, response);
+                                });
                             }
                         });
                     } else {
                         // get all teams:
                         teams.find({}, function (err, teams) {
                             if (!error) {
-                                response.teams = removeSensitiveInfoArray(teams);
+                                response.teams = teams;
 
                                 // get all user's teams predictions
                                 teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
                                     if (!error && teamspredictions) {
-                                        response.teamspredictions = removeSensitiveInfoArray(teamspredictions);
+                                        response.teamspredictions = teamspredictions;
                                         res.json(200, response);
                                     }
                                 });
@@ -626,7 +625,7 @@ module.exports = function (app, passport) {
                             if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
                                 matches.find({}, function (err, matches) {
                                     if (!error) {
-                                        response.matches = removeSensitiveInfoArray(matches);
+                                        response.matches = matches;
 
                                         // get all other user's matches predictions until this kickoff
                                         matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
@@ -646,7 +645,7 @@ module.exports = function (app, passport) {
                                 // get all teams:
                                 teams.find({}, function (err, teams) {
                                         if (!error) {
-                                            response.teams = removeSensitiveInfoArray(teams);
+                                            response.teams = teams;
 
                                             // get all user's teams predictions
                                             teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
@@ -665,7 +664,6 @@ module.exports = function (app, passport) {
                                     }
                                 );
                             }
-
                         }
                     });
                 }

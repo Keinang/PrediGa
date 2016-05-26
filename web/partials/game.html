@@ -29,14 +29,14 @@
         </tr>
         </thead>
         <tr ng-repeat="x in matchesCombined">
-            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><label>{{ x.matchID }}</label></td>
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);"><label>{{ ::x.matchID }}</label></td>
             <td class="clickableTd" ng-click="redirectSim(x.matchID);">
                 <img ng-src="{{x.team1.length > 4 && 'img/'+x.team1+'.png' || 'img/question.png' }}">
-                <label>{{ x.team1 }}</label>
+                <label>{{ ::x.team1 }}</label>
             </td>
             <td class="clickableTd" ng-click="redirectSim(x.matchID);">
                 <img ng-src="{{x.team2.length > 4 && 'img/'+x.team2+'.png' || 'img/question.png' }}">
-                <label>{{ x.team2 }}</label></td>
+                <label>{{ ::x.team2 }}</label></td>
             <td class="clickableTd" ng-click="redirectSim(x.matchID);">
                 <label ng-bind="formatDate(x.kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label>
             </td>
@@ -45,8 +45,8 @@
                 <div ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._winner" class="selectName"
                             ng-init="x._winner = x._winner || 'Draw'">
-                        <option>{{ x.team1 }}</option>
-                        <option>{{ x.team2 }}</option>
+                        <option>{{ ::x.team1 }}</option>
+                        <option>{{ ::x.team2 }}</option>
                         <option>Draw</option>
                     </select>
                     <br/>
@@ -57,14 +57,14 @@
                 </div>
                 <!-- original values -->
                 <div>
-                    <label>{{x.winner || ''}}</label>
+                    <label>{{ ::x.winner || ''}}</label>
                     <br/>
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.winner" class="selectName">
                         <option></option>
-                        <option>{{ x.team1 }}</option>
-                        <option>{{ x.team2 }}</option>
+                        <option>{{ ::x.team1 }}</option>
+                        <option>{{ ::x.team2 }}</option>
                         <option>Draw</option>
                     </select>
                 </div>
@@ -80,12 +80,12 @@
                     <br/>
                 </div>
                 <div ng-show="isDateOKNOT(x.kickofftime) || isAdmin()">
-                    <label ng-class="getClass(x._team1score, x.team1score)">{{x._team1score}}</label>
+                    <label ng-class="getClass(x._team1score, x.team1score)">{{::x._team1score}}</label>
                     <br/>
                 </div>
                 <!-- original values -->
                 <div>
-                    <label>{{x.team1score || ''}}</label>
+                    <label>{{::x.team1score || ''}}</label>
                     <br/>
                 </div>
 
@@ -108,7 +108,7 @@
                     <br/>
                 </div>
                 <div ng-show="isDateOKNOT(x.kickofftime) || isAdmin()">
-                    <label ng-class="getClass(x._team2score, x.team2score)">{{x._team2score}}</label>
+                    <label ng-class="getClass(x._team2score, x.team2score)">{{::x._team2score}}</label>
                     <br/>
                 </div>
 
@@ -136,7 +136,7 @@
                     <br/>
                 </div>
                 <div ng-show="isDateOKNOT(x.kickofftime) || isAdmin()">
-                    <label ng-class="getClass(x._goaldiff, x.goaldiff)">{{x._goaldiff}}</label>
+                    <label ng-class="getClass(x._goaldiff, x.goaldiff)">{{::x._goaldiff}}</label>
                     <br/>
                 </div>
 
@@ -158,33 +158,33 @@
                 <div ng-show="isDateOK(x.kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._firstscore" class="selectName"
                             ng-init="x._firstscore = x._firstscore || 'None'">
-                        <option>{{ x.team1 }}</option>
-                        <option>{{ x.team2 }}</option>
+                        <option>{{ ::x.team1 }}</option>
+                        <option>{{ ::x.team2 }}</option>
                         <option>None</option>
                     </select>
                     <br/>
                 </div>
                 <div ng-show="isDateOKNOT(x.kickofftime) || isAdmin()">
-                    <label ng-class="getClass(x._firstscore, x.firstscore)">{{x._firstscore}}</label>
+                    <label ng-class="getClass(x._firstscore, x.firstscore)">{{::x._firstscore}}</label>
                     <br/>
                 </div>
 
                 <!-- original values -->
                 <div>
-                    <label>{{x.firstscore || ''}}</label>
+                    <label>{{::x.firstscore || ''}}</label>
                     <br/>
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.firstscore" class="selectName">
                         <option></option>
-                        <option>{{ x.team1 }}</option>
-                        <option>{{ x.team2 }}</option>
+                        <option>{{ ::x.team1 }}</option>
+                        <option>{{ ::x.team2 }}</option>
                         <option>None</option>
                     </select>
                 </div>
             </td>
             <td>
-                <label>{{ x.score || 0}}</label>
+                <label>{{ ::x.score || 0}}</label>
             </td>
         </tr>
     </table>

@@ -170,12 +170,16 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         };
 
-        $scope.saveChanges = function () {
-            gameService.saveChangesMatches($scope.matchesCombined).then(function (result) {
+        $scope.saveChanges = function (type) {
+            if (type === 1) {
+                gameService.saveChangesMatches($scope.matchesCombined).then(function (result) {
+                    toastr.success('Successfully Saved');
+                });
+            } else {
                 gameService.saveChangesTeams($scope.teamsCombined).then(function (result) {
                     toastr.success('Successfully Saved');
                 });
-            });
+            }
         };
 
         $scope.filterTeamsNames = function (matches) {
@@ -194,17 +198,27 @@ angular.module('appname.controllers', ['ngAnimate'])
             return uniqueNames;
         };
 
-        gameService.getUserPredictions($scope.userName).then(function (result) {
+        $scope.isMatches = window.location.href.indexOf("game") !== -1;
+        gameService.getUserPredictions($scope.userName, $scope.isMatches).then(function (result) {
             $scope.user = result.user;
-            $scope.matchesCombined = combine(result.matches, result.matchespredictions);
-            $scope.teamsCombined = combine(result.teams, result.teamspredictions);
-            $scope.allTeams = $scope.filterTeamsNames(result.matches);
-            $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
-            $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
-            $scope.groupC = ['Germany', 'Ukraine', 'Turkey', 'Croatia'];
-            $scope.groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
-            $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
-            $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
+            if ($scope.isMatches) {
+                $scope.matchesCombined = combine(result.matches, result.matchespredictions);
+            } else {
+                $scope.teamsCombined = combine(result.teams, result.teamspredictions);
+
+                $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
+                $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
+                $scope.groupC = ['Germany', 'Ukraine', 'Poland', 'Northern Ireland'];
+                $scope.groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
+                $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
+                $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
+
+                $scope.allTeamsAB = $.merge($scope.groupA, $scope.groupB);
+                $scope.allTeamsCD = $.merge($scope.groupC, $scope.groupD);
+                $scope.allTeamsEF = $.merge($scope.groupE, $scope.groupF);
+                $scope.allTeamsABCD = $.merge($scope.allTeamsAB, $scope.allTeamsCD);
+                $scope.allTeams = $.merge($scope.allTeamsABCD, $scope.allTeamsEF);
+            }
         });
 
         $scope.getNumber = function (num) {
@@ -238,13 +252,13 @@ var combine = function (list1, list2) {
 var combineSimulator = function (matches, users) {
     if (matches) {
         matches.forEach(function (entry) {
-            if (entry){
+            if (entry) {
                 // get all list2 values with the same id:
                 var usersFiltered = users.filter(function (user) {
                     return (user._id === entry.user_id && typeof (entry.user_id) !== 'undefined' );
                 });
                 // merge values
-                if (usersFiltered && usersFiltered[0]){
+                if (usersFiltered && usersFiltered[0]) {
                     entry.username = usersFiltered[0].username;
                 }
             }

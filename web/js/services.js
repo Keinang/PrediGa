@@ -93,8 +93,8 @@ angular.module('appname.services', [])
     })
     .factory('gameService', function (ulhttp) {
         return {
-            getUserPredictions: function (userName) {
-                var url = "/api/predictions?user=" + userName;
+            getUserPredictions: function (userName, isMatches) {
+                var url = "/api/predictions?user=" + userName + "&isMatches=" + isMatches;
                 var data = {};
                 return ulhttp.get(url, data).then(function (result) {
                     result = ulhttp.handleError(result);

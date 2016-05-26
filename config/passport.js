@@ -82,7 +82,7 @@ module.exports = function (passport) {
                 email = email.trim().toLowerCase();
 
                 var accessToken = req.body ? req.body.access : null;
-                if (!accessToken || accessToken !== '271083') {
+                if (!accessToken || accessToken !== '111184') {
                     return done(null, false, 'Wrong access token, contact the administrator.');
                 }
 

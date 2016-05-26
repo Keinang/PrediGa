@@ -23,7 +23,7 @@ module.exports = function (app, passport) {
         var user_id = req.user._id;
         user.findOne({_id: user_id}, function (error, user) {
             var response = {};
-            if (error) {
+            if (error || !isAdminUser(user)) {
                 response.status = 'ERROR';
                 response.message = error.message;
                 return res.json(200, response);
@@ -113,7 +113,7 @@ module.exports = function (app, passport) {
     });
 
     app.get('/api/loggedin', function (req, res) {
-        res.send(req.isAuthenticated() ? req.user : '0');
+        res.send(req.isAuthenticated() ? removeSensitiveInfo(req.user) : '0');
     });
 
     app.get('/api/user', isLoggedIn, function (req, res) {
@@ -158,6 +158,7 @@ module.exports = function (app, passport) {
 // =============================================================================
 // Game ROUTES =================================================================
 // =============================================================================
+    // admin flow
     function updateUsersScores() {
         // update user matches:
         matchespredictions.find({}, function (err, matchespredictionsRows) {
@@ -231,6 +232,7 @@ module.exports = function (app, passport) {
         });
     }
 
+    // update matches and teams:
     function updateMatchPrediction(matchesInput, user) {
         var deferred = Q.defer();
 
@@ -238,28 +240,28 @@ module.exports = function (app, passport) {
             matchesInput.forEach(function (aMatch) {
 
                 // check if match is exist:
-                matches.find({matchID: aMatch.matchID}).limit(1).exec(function (error, dbMatch) {
-                    if (!error && dbMatch[0]) {
+                matches.findOne({matchID: aMatch.matchID}, function (error, dbMatch) {
+                    if (!error && dbMatch) {
                         // if admin, we need to update the match itself:
                         var isAdmin = isAdminUser(user);
 
                         // check if we can update this item
-                        var isTimePassed = dbMatch[0].kickofftime.getTime() - (new Date()).getTime() < 0;
+                        var isTimePassed = dbMatch.kickofftime.getTime() - (new Date()).getTime() < 0;
 
                         if (!isTimePassed || isAdmin) {
 
                             // update match prediction with recent values
-                            matchespredictions.find({
+                            matchespredictions.findOne({
                                 matchID: aMatch.matchID,
                                 user_id: user._id
-                            }).limit(1).exec(function (error, dbMatchPrediction) {
-                                if (!error && dbMatchPrediction[0] && dbMatchPrediction[0] !== null && typeof (dbMatchPrediction[0]) !== 'undefined') {
-                                    dbMatchPrediction[0]._winner = aMatch._winner;
-                                    dbMatchPrediction[0]._team1score = aMatch._team1score;
-                                    dbMatchPrediction[0]._team2score = aMatch._team2score;
-                                    dbMatchPrediction[0]._goaldiff = aMatch._goaldiff;
-                                    dbMatchPrediction[0]._firstscore = aMatch._firstscore;
-                                    dbMatchPrediction[0].save();
+                            }, function (error, dbMatchPrediction) {
+                                if (!error && dbMatchPrediction) {
+                                    dbMatchPrediction._winner = aMatch._winner;
+                                    dbMatchPrediction._team1score = aMatch._team1score;
+                                    dbMatchPrediction._team2score = aMatch._team2score;
+                                    dbMatchPrediction._goaldiff = aMatch._goaldiff;
+                                    dbMatchPrediction._firstscore = aMatch._firstscore;
+                                    dbMatchPrediction.save();
                                 } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
                                     new matchespredictions({
                                         matchID: aMatch.matchID,
@@ -277,12 +279,12 @@ module.exports = function (app, passport) {
 
                         // update real matches
                         if (isAdmin) {
-                            dbMatch[0].winner = aMatch.winner;
-                            dbMatch[0].team1score = aMatch.team1score;
-                            dbMatch[0].team2score = aMatch.team2score;
-                            dbMatch[0].goaldiff = aMatch.goaldiff;
-                            dbMatch[0].firstscore = aMatch.firstscore;
-                            dbMatch[0].save(function () {
+                            dbMatch.winner = aMatch.winner;
+                            dbMatch.team1score = aMatch.team1score;
+                            dbMatch.team2score = aMatch.team2score;
+                            dbMatch.goaldiff = aMatch.goaldiff;
+                            dbMatch.firstscore = aMatch.firstscore;
+                            dbMatch.save(function () {
                                 updateUsersScores();
                             });
                         }
@@ -303,24 +305,24 @@ module.exports = function (app, passport) {
         if (teamsInput) {
             teamsInput.forEach(function (aTeam) {
                 // check if team is exist:
-                teams.find({teamID: aTeam.teamID}).limit(1).exec(function (error, dbTeam) {
-                    if (!error && dbTeam[0]) {
+                teams.findOne({teamID: aTeam.teamID}, function (error, dbTeam) {
+                    if (!error && dbTeam) {
 
                         // if admin, we need to update the match itself:
                         var isAdmin = isAdminUser(user);
 
                         // check if we can update this item
-                        var isTimePassed = dbTeam[0].deadline.getTime() - (new Date()).getTime() < 0;
+                        var isTimePassed = dbTeam.deadline.getTime() - (new Date()).getTime() < 0;
 
                         if (!isTimePassed || isAdmin) {
                             // update match prediction with recent values
-                            teamspredictions.find({
+                            teamspredictions.findOne({
                                 teamID: aTeam.teamID,
                                 user_id: user._id
-                            }).limit(1).exec(function (error, dbTeamPrediction) {
-                                if (!error && dbTeamPrediction[0] !== null && typeof (dbTeamPrediction[0]) !== 'undefined') {
-                                    dbTeamPrediction[0]._team = aTeam._team;
-                                    dbTeamPrediction[0].save();
+                            }, function (error, dbTeamPrediction) {
+                                if (!error && dbTeamPrediction) {
+                                    dbTeamPrediction._team = aTeam._team;
+                                    dbTeamPrediction.save();
 
 
                                 } else if (aTeam._team !== null && typeof (aTeam._team) !== 'undefined') {
@@ -337,9 +339,9 @@ module.exports = function (app, passport) {
 
                         // update real teams
                         if (isAdmin) {
-                            dbTeam[0].team = aTeam.team;
+                            dbTeam.team = aTeam.team;
 
-                            dbTeam[0].save(function () {
+                            dbTeam.save(function () {
                                 updateUsersScores();
                             });
                         }
@@ -384,6 +386,7 @@ module.exports = function (app, passport) {
         });
     });
 
+    // match simulator
     app.get('/api/matchSimulator', isLoggedIn, function (req, res) {
         var matchId = req.query.matchId;
         var user_id = req.user._id;
@@ -398,12 +401,12 @@ module.exports = function (app, passport) {
                 // looking for other user details, only results until this deadline date.
                 matches.find({matchID: matchId}, function (err, matches) {
                     if (!error) {
-                        response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
+                        response.matches = removeSensitiveInfoArray(matches);
 
                         // get all other user's matches predictions until this kickoff
                         matchespredictions.find({matchID: matchId}, function (err, matchespredictions) {
                             if (!error && matchespredictions) {
-                                response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
+                                response.matchespredictions = removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1');
 
                                 user.find({}, function (error, allUsers) {
                                     response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
@@ -418,6 +421,7 @@ module.exports = function (app, passport) {
         });
     });
 
+    // admin page
     app.get('/api/predictions2', isLoggedIn, function (req, res) {
         var user_id = req.user._id;
         user.findOne({_id: user_id}, function (error, aUser) {
@@ -430,11 +434,11 @@ module.exports = function (app, passport) {
 
                 matchespredictions.find({}, function (err, matchespredictions) {
                     if (!error && matchespredictions) {
-                        response.matchespredictions = sortByID(matchespredictions, '1');
+                        response.matchespredictions = matchespredictions;
 
                         teamspredictions.find({}, function (err, teamspredictions) {
                             if (!error && teamspredictions) {
-                                response.teamspredictions = sortByID(teamspredictions, '2');
+                                response.teamspredictions = teamspredictions;
                                 res.send(200, response);
                             }
                         });
@@ -444,9 +448,11 @@ module.exports = function (app, passport) {
         });
     });
 
+    // get user's prediction (main flow)
     app.get('/api/predictions', isLoggedIn, function (req, res) {
         var user_id = req.user._id;
         var userName = req.query.user;
+        var isMatches = req.query.isMatches;
         user.findOne({_id: user_id}, function (error, aUser) {
             var response = {};
             if (error || !aUser) {
@@ -458,34 +464,37 @@ module.exports = function (app, passport) {
                 // checking if we got other user to check for: userName
                 if (typeof(userName) === 'undefined' || aUser.username === userName.toLowerCase()) {
                     // regular flow, get all matches:
-                    matches.find({}, function (err, matches) {
-                        if (!error) {
-                            response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
+                    if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
+                        matches.find({}, function (err, matches) {
+                            if (!error) {
+                                response.matches = removeSensitiveInfoArray(matches);
 
-                            // get all user's matches predictions
-                            matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
-                                if (!error && matchespredictions) {
+                                // get all user's matches predictions
+                                matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
+                                    if (!error && matchespredictions) {
 
-                                    response.matchespredictions = sortByID(removeSensitiveInfoArray(matchespredictions), '1');
-                                    // get all teams:
-                                    teams.find({}, function (err, teams) {
-                                        if (!error) {
-                                            response.teams = sortByID(removeSensitiveInfoArray(teams), '2');
+                                        response.matchespredictions = removeSensitiveInfoArray(matchespredictions);
+                                        res.json(200, response);
+                                    }
+                                })
+                            }
+                        });
+                    } else {
+                        // get all teams:
+                        teams.find({}, function (err, teams) {
+                            if (!error) {
+                                response.teams = removeSensitiveInfoArray(teams);
 
-                                            // get all user's teams predictions
-                                            teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
-                                                if (!error && teamspredictions) {
-                                                    response.teamspredictions = sortByID(removeSensitiveInfoArray(teamspredictions), '2');
-
-                                                    res.json(200, response);
-                                                }
-                                            });
-                                        }
-                                    });
-                                }
-                            })
-                        }
-                    });
+                                // get all user's teams predictions
+                                teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
+                                    if (!error && teamspredictions) {
+                                        response.teamspredictions = removeSensitiveInfoArray(teamspredictions);
+                                        res.json(200, response);
+                                    }
+                                });
+                            }
+                        });
+                    }
                 }
                 // Other user flow
                 else if (typeof(userName) !== 'undefined' && aUser.username !== userName.toLowerCase() && userName !== 'admin') {
@@ -495,44 +504,50 @@ module.exports = function (app, passport) {
                         } else {
                             var otherUserID = otherUser._id;
                             // looking for other user details, only results until this deadline date.
-                            matches.find({}, function (err, matches) {
-                                if (!error) {
-                                    response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
 
-                                    // get all other user's matches predictions until this kickoff
-                                    matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
-                                        if (!error && matchespredictions) {
-                                            if (isAdminUser(aUser)) {
-                                                response.matchespredictions = sortByID(matchespredictions, '1');
-                                            } else {
-                                                response.matchespredictions = sortByID(removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1'), '1');
-                                            }
+                            if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
+                                matches.find({}, function (err, matches) {
+                                    if (!error) {
+                                        response.matches = removeSensitiveInfoArray(matches);
 
-                                            // get all teams:
-                                            teams.find({}, function (err, teams) {
-                                                    if (!error) {
-                                                        response.teams = sortByID(removeSensitiveInfoArray(teams), '2');
-
-                                                        // get all user's teams predictions
-                                                        teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
-                                                            if (!error && teamspredictions) {
-
-                                                                if (isAdminUser(aUser)) {
-                                                                    response.teamspredictions = sortByID(teamspredictions, '2');
-                                                                } else {
-                                                                    response.teamspredictions = sortByID(removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2'), '2');
-                                                                }
-
-                                                                res.json(200, response);
-                                                            }
-                                                        });
-                                                    }
+                                        // get all other user's matches predictions until this kickoff
+                                        matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
+                                            if (!error && matchespredictions) {
+                                                if (isAdminUser(aUser)) {
+                                                    response.matchespredictions = matchespredictions;
+                                                } else {
+                                                    response.matchespredictions = removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1');
                                                 }
-                                            );
+
+                                                res.json(200, response);
+                                            }
+                                        });
+                                    }
+                                });
+                            } else {
+                                // get all teams:
+                                teams.find({}, function (err, teams) {
+                                        if (!error) {
+                                            response.teams = removeSensitiveInfoArray(teams);
+
+                                            // get all user's teams predictions
+                                            teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
+                                                if (!error && teamspredictions) {
+
+                                                    if (isAdminUser(aUser)) {
+                                                        response.teamspredictions = teamspredictions;
+                                                    } else {
+                                                        response.teamspredictions = removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2');
+                                                    }
+
+                                                    res.json(200, response);
+                                                }
+                                            });
                                         }
-                                    });
-                                }
-                            });
+                                    }
+                                );
+                            }
+
                         }
                     });
                 }
@@ -563,7 +578,7 @@ module.exports = function (app, passport) {
         if (arr) {
             var arr2 = [];
             arr.forEach(function (item) {
-                if (!isAdminUser(item)){
+                if (!isAdminUser(item)) {
                     arr2.push(removeSensitiveInfo(item));
                 }
             })
@@ -580,17 +595,24 @@ module.exports = function (app, passport) {
         return arr;
     }
 
-    function removeSensitiveInfoArrayWithDate(matchespredictions, origList, type) {
+    /**
+     * Removing games/teams that are still open
+     * @param predictions
+     * @param origList
+     * @param type
+     * @returns {*}
+     */
+    function removeSensitiveInfoArrayWithDate(predictions, origList, type) {
         var filteredPredictions = [];
 
-        if (matchespredictions && origList) {
+        if (predictions && origList) {
             if (type === '1') {
                 var matchFiltered = origList.filter(function (orgItem) {
                     return orgItem.kickofftime.getTime() - (new Date()).getTime() < 0;
                 });
                 if (matchFiltered) {
 
-                    filteredPredictions = matchespredictions.filter(function (predictItem) {
+                    filteredPredictions = predictions.filter(function (predictItem) {
                         for (var i = 0; i < matchFiltered.length; i++) {
                             if (matchFiltered[i].matchID === predictItem.matchID) {
                                 return true;
@@ -605,7 +627,7 @@ module.exports = function (app, passport) {
                 });
                 if (teamFiltered) {
 
-                    filteredPredictions = matchespredictions.filter(function (predictItem) {
+                    filteredPredictions = predictions.filter(function (predictItem) {
                         for (var i = 0; i < teamFiltered.length; i++) {
                             if (teamFiltered[i].teamID === predictItem.teamID) {
                                 return true;

@@ -8,9 +8,9 @@ var userPredictionsMatchesSchema = mongoose.Schema({
     matchID: Number,
     user_id: String,
     _winner: String,
-    _team1score: Number,
-    _team2score: Number,
-    _goaldiff: Number,
+    _team1score: String,
+    _team2score: String,
+    _goaldiff: String,
     _firstscore: String,
     score: Number
 });

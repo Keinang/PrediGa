@@ -27,31 +27,47 @@
         </tr>
         </thead>
         <tr ng-repeat="x in teamsCombined">
-            <td><label>{{ x.teamID }}</label></td>
-            <td><img alt="{{x.name}} logo" style="width: 24px;height: 24px;"
+            <td>
+                <label>{{ x.teamID }}</label>
+            </td>
+            <td>
+                <img style="width: 24px;height: 24px;"
                      ng-src="{{x.name === 'Champion' && 'img/gold.png' || x.name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
-                <label>{{ x.name }}</label></td>
-            <td><label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label></td>
+                <label>{{ x.name }}</label>
+            </td>
+            <td>
+                <label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label>
+            </td>
             <td>
                 <!-- user values -->
-                <select ng-model="x._team" class="select"
-                        ng-show="isDateOK(x.deadline) && isSameUser() && !isAdmin()">
-                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
-                </select>
-                <br/>
-                <label ng-show="isDateOKNOT(x.deadline) || isAdmin()"
-                       ng-class="getClass(x._team, x.team)">{{x._team}}</label>
-                <br/>
+                <div ng-show="isDateOK(x.deadline) && isSameUser() && !isAdmin()">
+                    <select ng-model="x._team" class="selectName">
+                        <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
+                    </select>
+                    <br/>
+                </div>
+                <div ng-show="isDateOKNOT(x.deadline) || isAdmin()">
+                    <label ng-class="getClass(x._team, x.team)">{{x._team}}</label>
+                    <br/>
+                </div>
+
                 <!-- original values -->
-                <label>{{x.team || ''}}</label>
-                <br/>
-                <select ng-model="x.team" class="select"
-                        ng-show="isAdmin()">
-                    <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
-                </select>
+                <div>
+                    <label>{{x.team || ''}}</label>
+                    <br/>
+                </div>
+                <div ng-show="isAdmin()">
+                    <select ng-model="x.team" class="selectName">
+                        <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
+                    </select>
+                </div>
             </td>
-            <td><label>{{ x.predictscore }}</label></td>
-            <td><label>{{ x.score || 0 }}</label></td>
+            <td>
+                <label>{{ x.predictscore }}</label>
+            </td>
+            <td>
+                <label>{{ x.score || 0 }}</label>
+            </td>
         </tr>
     </table>
 </div>

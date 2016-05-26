@@ -206,6 +206,14 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
             $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
         });
+
+        $scope.getNumber = function (num) {
+            var arr = [];
+            for (var i = 0; i <= num; i++) {
+                arr.push(i);
+            }
+            return arr;
+        };
     }
     ]);
 

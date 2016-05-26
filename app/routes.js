@@ -89,12 +89,6 @@ module.exports = function (app, passport) {
     // SIGNUP =================================
     app.post('/api/signup', function handleLocalAuthentication(req, res, next) { //Utilizing custom callback to send json objects
         var response = {};
-        var accessToken = req.body.access;
-        if (!accessToken || accessToken !== '271083') {
-            response.status = 'ERROR';
-            response.message = 'Access token is wrong.';
-            res.json(200, response);
-        }
         passport.authenticate('local-signup', function (err, user, message) {
             if (err) {
                 return next(err);

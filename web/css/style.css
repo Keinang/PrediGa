@@ -227,6 +227,12 @@ body {
 
 .select {
     color: blue;
+    height: 25px;
+    text-align: center
+}
+
+.selectName {
+    color: blue;
     width: 125px;
     height: 25px;
     text-align: center

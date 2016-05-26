@@ -81,6 +81,11 @@ module.exports = function (passport) {
             if (email) {
                 email = email.trim().toLowerCase();
 
+                var accessToken = req.body ? req.body.access : null;
+                if (!accessToken || accessToken !== '271083') {
+                    return done(null, false, 'Wrong access token, contact the administrator.');
+                }
+
                 // asynchronous
                 process.nextTick(function () {
                     // if the user is not already logged in:

@@ -11,9 +11,9 @@ var matchesSchema = mongoose.Schema({
     team2: String,
     kickofftime: Date,
     winner: String,
-    team1score: Number,
-    team2score: Number,
-    goaldiff: Number,
+    team1score: String,
+    team2score: String,
+    goaldiff: String,
     firstscore: String
 });
 

@@ -372,7 +372,7 @@ module.exports = {
                         matchID: 49,
                         team1: 'W45',
                         team2: 'W46',
-                        kickofftime: new Date("2016-06-10T19:00:00Z")
+                        kickofftime: new Date("2016-07-06T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({

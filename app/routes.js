@@ -356,7 +356,7 @@ module.exports = function (app, passport) {
                             var isAdmin = isAdminUser(user);
 
                             // check if we can update this item
-                            var isTimePassed = dbMatch.kickofftime.getTime() - (new Date()).getTime() < 0;
+                            var isTimePassed = getIfTimePassed(dbMatch.kickofftime);
 
                             if (!isTimePassed || isAdmin) {
 
@@ -437,7 +437,7 @@ module.exports = function (app, passport) {
                         var isAdmin = isAdminUser(user);
 
                         // check if we can update this item
-                        var isTimePassed = dbTeam.deadline.getTime() - (new Date()).getTime() < 0;
+                        var isTimePassed = getIfTimePassed(dbTeam.deadline);
 
                         if (!isTimePassed || isAdmin) {
                             // update match prediction with recent values
@@ -719,7 +719,7 @@ module.exports = function (app, passport) {
         if (predictions && origList) {
             if (type === '1') {
                 var matchFiltered = origList.filter(function (orgItem) {
-                    return orgItem.kickofftime.getTime() - (new Date()).getTime() < 0;
+                    return getIfTimePassed(orgItem.kickofftime);
                 });
                 if (matchFiltered) {
 
@@ -734,7 +734,7 @@ module.exports = function (app, passport) {
                 }
             } else {
                 var teamFiltered = origList.filter(function (orgItem) {
-                    return orgItem.deadline.getTime() - (new Date()).getTime() < 0;
+                    return getIfTimePassed(orgItem.deadline);
                 });
                 if (teamFiltered) {
 
@@ -751,6 +751,12 @@ module.exports = function (app, passport) {
         }
 
         return removeSensitiveInfoArray(filteredPredictions);
+    }
+
+    function getIfTimePassed(dateValue) {
+        // If the kick off time is less than 1 hour than time is passed:
+        var isTimePassed = dateValue.getTime() - (new Date()).getTime() < 3600000;
+        return isTimePassed;
     }
 
     function sortByID(arr, type) {

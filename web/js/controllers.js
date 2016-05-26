@@ -155,7 +155,9 @@ angular.module('appname.controllers', ['ngAnimate'])
         };
 
         $scope.isDateOK = function (date) {
-            return (new Date(date)).getTime() - (new Date()).getTime() > 0;
+            // If the kick off time is less than 1 hour than time is passed:
+            var isTimeOK = (new Date(date)).getTime() - (new Date()).getTime() > 3600000;
+            return isTimeOK;
         };
         $scope.isDateOKNOT = function (date) {
             var val = $scope.isDateOK(date);

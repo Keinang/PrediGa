@@ -8,15 +8,19 @@ module.exports = function (app, passport) {
     var http = require('http');
     var Q = require('q');
 
-    var initialDataService = function initialDataService() {
-        initialData.insertData(matches, teams).then(function () {
-            updateUsersScores();
-            console.log('Done updating initial data.');
-        });
-    };
+    /*
+     on server start up:
+     var initialDataService = function initialDataService() {
+     initialData.insertData(matches, teams).then(function () {
+     updateUsersScores();
+     console.log('Done updating initial data.');
+     });
 
-    // Calling this function when server start:
-    initialDataService();
+     };
+
+     // Calling this function when server start:
+     initialDataService();
+     */
 
     // Initial Data REST:
     app.get('/api/initial', isLoggedIn, function (req, res) {
@@ -28,14 +32,16 @@ module.exports = function (app, passport) {
                 response.message = error.message;
                 return res.json(200, response);
             } else {
-                initialData.insertData(matches, teams);
+                initialData.insertData(matches, teams).then(function () {
+                    updateUsersScores().then(function () {
+                        console.log('Done updating initial data.');
 
-                updateUsersScores();
-
-                // done:
-                response.status = 'OK';
-                response.user = removeSensitiveInfo(user);
-                return res.json(200, response);
+                        // done:
+                        response.status = 'OK';
+                        response.user = removeSensitiveInfo(user);
+                        return res.json(200, response);
+                    });
+                });
             }
         });
     });
@@ -159,148 +165,267 @@ module.exports = function (app, passport) {
 // Game ROUTES =================================================================
 // =============================================================================
     // admin flow
-    function updateUsersScores() {
-        // update user matches:
-        matchespredictions.find({}, function (err, matchespredictionsRows) {
-            matchespredictionsRows.forEach(function (matchespredictionsRow) {
-                // find related match:
-                matches.find({matchID: matchespredictionsRow.matchID}, function (err, matchRelated) {
-                    matchespredictionsRow.score = 0;
-                    if (matchRelated[0]) {
-                        if (typeof(matchRelated[0].winner) !== 'undefined' && matchRelated[0].winner === matchespredictionsRow._winner) {
-                            matchespredictionsRow.score += 2;
-                        }
-
-                        if (typeof(matchRelated[0].team1score) !== 'undefined' && matchRelated[0].team1score === matchespredictionsRow._team1score) {
-                            matchespredictionsRow.score += 2;
-                        }
-
-                        if (typeof(matchRelated[0].team2score) !== 'undefined' && matchRelated[0].team2score === matchespredictionsRow._team2score) {
-                            matchespredictionsRow.score += 2;
-                        }
-
-                        if (typeof(matchRelated[0].goaldiff) !== 'undefined' && matchRelated[0].goaldiff === matchespredictionsRow._goaldiff) {
-                            matchespredictionsRow.score += 2;
-                        }
-
-                        if (typeof(matchRelated[0].firstscore) !== 'undefined' && matchRelated[0].firstscore === matchespredictionsRow._firstscore) {
-                            matchespredictionsRow.score += 2;
-                        }
-                    }
-
-                    matchespredictionsRow.save();
-                });
-            });
-        });
-
-        // update user teams:
-        teamspredictions.find({}, function (err, teamspredictionsRows) {
-            teamspredictionsRows.forEach(function (teamspredictionsRow) {
-                // find related match:
-                teams.find({teamID: teamspredictionsRow.teamID}, function (err, teamRelated) {
-                    teamspredictionsRow.score = 0;
-                    if (typeof(teamRelated[0]) !== 'undefined' && typeof(teamRelated[0].team) !== 'undefined' && teamRelated[0].team === teamspredictionsRow._team) {
-                        teamspredictionsRow.score += typeof(teamRelated[0].predictscore) === 'number' ? teamRelated[0].predictscore : 0;
-                    }
-
-                    teamspredictionsRow.save();
-                });
-            });
-        });
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+    function updateUsersTotalScores() {
+        var deferred = Q.defer();
 
         // update user total score:
         user.find({}, function (err, users) {
+
             users.forEach(function (user) {
+                console.log('updateUsersTotalScores:' + user.username);
+
                 // starting from 0:
-                user.score = 0;
-                user.save();
+                var totalScore = 0;
 
                 matchespredictions.find({user_id: user._id}, function (err, matchespredictionsRows) {
-                    matchespredictionsRows.forEach(function (matchespredictionsRow) {
-                        user.score += typeof(matchespredictionsRow.score) === 'number' ? matchespredictionsRow.score : 0;
-                    });
-                    user.save();
-                });
-
-                teamspredictions.find({user_id: user._id}, function (err, teamspredictionsRows) {
-                    teamspredictionsRows.forEach(function (teamspredictionsRow) {
-                        user.score += typeof(teamspredictionsRow.score) === 'number' ? teamspredictionsRow.score : 0;
-                    });
-                    user.save();
-                });
-            });
-        });
-    }
-
-    // update matches and teams:
-    function updateMatchPrediction(matchesInput, user) {
-        var deferred = Q.defer();
-
-        if (matchesInput) {
-            matchesInput.forEach(function (aMatch) {
-
-                // check if match is exist:
-                matches.findOne({matchID: aMatch.matchID}, function (error, dbMatch) {
-                    if (!error && dbMatch) {
-                        // if admin, we need to update the match itself:
-                        var isAdmin = isAdminUser(user);
-
-                        // check if we can update this item
-                        var isTimePassed = dbMatch.kickofftime.getTime() - (new Date()).getTime() < 0;
-
-                        if (!isTimePassed || isAdmin) {
-
-                            // update match prediction with recent values
-                            matchespredictions.findOne({
-                                matchID: aMatch.matchID,
-                                user_id: user._id
-                            }, function (error, dbMatchPrediction) {
-                                if (!error && dbMatchPrediction) {
-                                    dbMatchPrediction._winner = aMatch._winner;
-                                    dbMatchPrediction._team1score = aMatch._team1score;
-                                    dbMatchPrediction._team2score = aMatch._team2score;
-                                    dbMatchPrediction._goaldiff = aMatch._goaldiff;
-                                    dbMatchPrediction._firstscore = aMatch._firstscore;
-                                    dbMatchPrediction.save();
-                                } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
-                                    new matchespredictions({
-                                        matchID: aMatch.matchID,
-                                        user_id: user._id,
-                                        _winner: aMatch._winner,
-                                        _team1score: aMatch._team1score,
-                                        _team2score: aMatch._team2score,
-                                        _goaldiff: aMatch._goaldiff,
-                                        _firstscore: aMatch._firstscore
-                                    }).save(function (err) {
-                                    });
-                                }
-                            });
-                        }
-
-                        // update real matches
-                        if (isAdmin) {
-                            dbMatch.winner = aMatch.winner;
-                            dbMatch.team1score = aMatch.team1score;
-                            dbMatch.team2score = aMatch.team2score;
-                            dbMatch.goaldiff = aMatch.goaldiff;
-                            dbMatch.firstscore = aMatch.firstscore;
-                            dbMatch.save(function () {
-                                updateUsersScores();
-                            });
-                        }
+                    if (matchespredictionsRows) {
+                        matchespredictionsRows.forEach(function (matchespredictionsRow) {
+                            totalScore += typeof(matchespredictionsRow.score) === 'number' ? matchespredictionsRow.score : 0;
+                        });
                     }
+
+                    teamspredictions.find({user_id: user._id}, function (err, teamspredictionsRows) {
+                        if (teamspredictionsRows) {
+                            teamspredictionsRows.forEach(function (teamspredictionsRow) {
+                                totalScore += typeof(teamspredictionsRow.score) === 'number' ? teamspredictionsRow.score : 0;
+                            });
+                        }
+                        // Finish iterating, saving the total score:
+                        user.score = totalScore;
+                        user.save(function (err) {
+
+                        });
+                    });
                 });
-            }, function () {
+
+            }, function (err) {
                 deferred.resolve({});
             });
 
+            // after the loop:
+            deferred.resolve();
+        });
+
+        return deferred.promise;
+    }
+
+    function updateTeamsPredictionsScore() {
+        var deferred = Q.defer();
+
+        // update user teams:
+        teamspredictions.find({}, function (err, teamspredictionsRows) {
+            if (teamspredictionsRows) {
+                teamspredictionsRows.forEach(function (teamspredictionsRow) {
+                    //console.log('updateTeamsPredictionsScore:' + teamspredictionsRow.teamID);
+
+                    // find related match:
+                    teams.findOne({teamID: teamspredictionsRow.teamID}, function (err, teamRelated) {
+                        teamspredictionsRow.score = 0;
+                        if (typeof(teamRelated) !== 'undefined' && typeof(teamRelated.team) !== 'undefined' && teamRelated.team === teamspredictionsRow._team) {
+                            teamspredictionsRow.score += typeof(teamRelated.predictscore) === 'number' ? teamRelated.predictscore : 0;
+                        }
+
+                        teamspredictionsRow.save(function (err) {
+                            //console.log('updateTeamsPredictionsScore save:' + teamspredictionsRow.teamID);
+                        });
+                    });
+
+                }, function (err) {
+                    deferred.resolve()
+                });
+
+                // after the loop:
+                deferred.resolve();
+
+            } else {
+                deferred.resolve()
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    function updateMatchPredictionsScores() {
+        var deferred = Q.defer();
+        console.log('updateMatchPredictionsScores start');
+        matchespredictions.find({}, function (err, matchespredictionsRows) {
+            if (matchespredictionsRows) {
+                matchespredictionsRows.forEach(function (matchespredictionsRow) {
+                    //console.log('updateMatchPredictionsScores:' + matchespredictionsRow.matchID);
+
+                    // find related match:
+                    matches.findOne({matchID: matchespredictionsRow.matchID}, function (err, matchRelated) {
+                        matchespredictionsRow.score = 0;
+                        if (matchRelated) {
+                            if (typeof(matchRelated.winner) !== 'undefined' && matchRelated.winner === matchespredictionsRow._winner) {
+                                matchespredictionsRow.score += 2;
+                            }
+
+                            if (typeof(matchRelated.team1score) !== 'undefined' && matchRelated.team1score === matchespredictionsRow._team1score) {
+                                matchespredictionsRow.score += 2;
+                            }
+
+                            if (typeof(matchRelated.team2score) !== 'undefined' && matchRelated.team2score === matchespredictionsRow._team2score) {
+                                matchespredictionsRow.score += 2;
+                            }
+
+                            if (typeof(matchRelated.goaldiff) !== 'undefined' && matchRelated.goaldiff === matchespredictionsRow._goaldiff) {
+                                matchespredictionsRow.score += 2;
+                            }
+
+                            if (typeof(matchRelated.firstscore) !== 'undefined' && matchRelated.firstscore === matchespredictionsRow._firstscore) {
+                                matchespredictionsRow.score += 2;
+                            }
+                        }
+
+                        matchespredictionsRow.save(function (err) {
+                            //console.log('updateMatchPredictionsScores save:' + matchespredictionsRow.matchID);
+                        });
+                    });
+
+                }, function (err) {
+                    deferred.resolve()
+                });
+
+                // after the loop:
+                deferred.resolve();
+            } else {
+                deferred.resolve()
+            }
+        });
+
+        return deferred.promise;
+    }
+
+    function updateUsersScores() {
+        var deferred = Q.defer();
+        updateMatchPredictionsScores().then(function () {
+            updateTeamsPredictionsScore().then(function () {
+                updateUsersTotalScores().then(function () {
+                    deferred.resolve()
+                })
+            })
+        });
+        return deferred.promise;
+    }
+
+    // admin page
+    app.get('/api/predictions2', isLoggedIn, function (req, res) {
+        var user_id = req.user._id;
+        user.findOne({_id: user_id}, function (error, aUser) {
+            var response = {};
+            if (error || !aUser || !isAdminUser(aUser)) {
+                errorWrapper(response, res);
+            } else {
+                response.status = 'OK';
+                response.user = removeSensitiveInfo(aUser);
+
+                matchespredictions.find({}, function (err, matchespredictions) {
+                    if (!error && matchespredictions) {
+                        response.matchespredictions = matchespredictions;
+
+                        teamspredictions.find({}, function (err, teamspredictions) {
+                            if (!error && teamspredictions) {
+                                response.teamspredictions = teamspredictions;
+                                res.send(200, response);
+                            }
+                        });
+                    }
+                });
+            }
+        });
+    });
+
+    // regular user flow
+    // ~~~~~~~~~~~~~~~~~~~~~~~~~
+
+    // update matches and teams:
+    function updateMatchPredictionValues(matchesInput, user) {
+        var deferred = Q.defer();
+
+        if (matchesInput) {
+            matchesInput.forEach(
+                function (aMatch) {
+                    console.log('updateMatchPredictionValues:' + aMatch.matchID);
+
+                    // check if match is exist:
+                    matches.findOne({matchID: aMatch.matchID}, function (error, dbMatch) {
+                        if (!error && dbMatch) {
+                            // if admin, we need to update the match itself:
+                            var isAdmin = isAdminUser(user);
+
+                            // check if we can update this item
+                            var isTimePassed = dbMatch.kickofftime.getTime() - (new Date()).getTime() < 0;
+
+                            if (!isTimePassed || isAdmin) {
+
+                                // update match prediction with recent values
+                                matchespredictions.findOne({
+                                    matchID: aMatch.matchID,
+                                    user_id: user._id
+                                }, function (error, dbMatchPrediction) {
+                                    //console.log('updateMatchPredictionValues (matchespredictions):' + aMatch.matchID);
+
+                                    if (!error && dbMatchPrediction) {
+                                        dbMatchPrediction._winner = isAdmin ? aMatch.winner : aMatch._winner;
+                                        dbMatchPrediction._team1score = isAdmin ? aMatch.team1score : aMatch._team1score;
+                                        dbMatchPrediction._team2score = isAdmin ? aMatch.team2score : aMatch._team2score;
+                                        dbMatchPrediction._goaldiff = isAdmin ? aMatch.goaldiff : aMatch._goaldiff;
+                                        dbMatchPrediction._firstscore = isAdmin ? aMatch.firstscore : aMatch._firstscore;
+                                        dbMatchPrediction.save(function (err) {
+                                            console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
+                                        });
+                                    } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
+                                        new matchespredictions({
+                                            matchID: aMatch.matchID,
+                                            user_id: user._id,
+                                            _winner: isAdmin ? aMatch.winner : aMatch._winner,
+                                            _team1score: isAdmin ? aMatch.team1score : aMatch._team1score,
+                                            _team2score: isAdmin ? aMatch.goaldiff : aMatch._goaldiff,
+                                            _goaldiff: isAdmin ? aMatch.goaldiff : aMatch._goaldiff,
+                                            _firstscore: isAdmin ? aMatch.firstscore : aMatch._firstscore
+                                        }).save(function (err) {
+                                            //console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
+                                        });
+                                    }
+                                });
+                            }
+
+                            // update real matches
+                            if (isAdmin) {
+                                dbMatch.winner = aMatch.winner;
+                                dbMatch.team1score = aMatch.team1score;
+                                dbMatch.team2score = aMatch.team2score;
+                                dbMatch.goaldiff = aMatch.goaldiff;
+                                dbMatch.firstscore = aMatch.firstscore;
+                                dbMatch.save(function (err) {
+                                    //console.log('updateMatchPredictionValues (matchespredictions) save admin:' + aMatch.matchID);
+
+                                });
+                            }
+                        } else {
+                            console.log('updateMatchPredictionValues resolved');
+                            deferred.resolve({});
+                        }
+                    });
+
+
+                }, function () {
+                    deferred.resolve();
+                });
+            // after the for each
+            console.log('updateMatchPredictionValues resolved');
+            deferred.resolve({});
+
         } else {
+            //console.log('updateMatchPredictionValues resolved');
             deferred.resolve({});
         }
         return deferred.promise;
     }
 
-    function updateTeamPrediction(teamsInput, user) {
+    function updateTeamPredictionValues(teamsInput, user) {
         var deferred = Q.defer();
         if (teamsInput) {
             teamsInput.forEach(function (aTeam) {
@@ -321,7 +446,7 @@ module.exports = function (app, passport) {
                                 user_id: user._id
                             }, function (error, dbTeamPrediction) {
                                 if (!error && dbTeamPrediction) {
-                                    dbTeamPrediction._team = aTeam._team;
+                                    dbTeamPrediction._team = isAdmin ? aTeam.team : aTeam._team;
                                     dbTeamPrediction.save();
 
 
@@ -329,7 +454,7 @@ module.exports = function (app, passport) {
                                     new teamspredictions({
                                         teamID: aTeam.teamID,
                                         user_id: user._id,
-                                        _team: aTeam._team
+                                        _team: isAdmin ? aTeam.team : aTeam._team
                                     }).save(function (err) {
 
                                     });
@@ -342,14 +467,18 @@ module.exports = function (app, passport) {
                             dbTeam.team = aTeam.team;
 
                             dbTeam.save(function () {
-                                updateUsersScores();
+
                             });
                         }
+                    } else {
+                        deferred.resolve({});
                     }
                 });
             }, function () {
                 deferred.resolve({});
             });
+
+            deferred.resolve({});
         } else {
             deferred.resolve({});
         }
@@ -364,8 +493,16 @@ module.exports = function (app, passport) {
                 errorWrapper(response, res);
             } else {
                 response.status = 'OK';
-                updateMatchPrediction(req.body.matches, user).then(
-                    res.send(200, response)
+                updateMatchPredictionValues(req.body.matches, user).then(
+                    function () {
+                        if (isAdminUser(user)) {
+                            updateUsersScores().then(function () {
+                                res.send(200, response)
+                            })
+                        } else {
+                            res.send(200, response)
+                        }
+                    }
                 );
             }
         });
@@ -379,8 +516,16 @@ module.exports = function (app, passport) {
                 errorWrapper(response, res);
             } else {
                 response.status = 'OK';
-                updateTeamPrediction(req.body.teams, user).then(
-                    res.send(200, response)
+                updateTeamPredictionValues(req.body.teams, user).then(
+                    function () {
+                        if (isAdminUser(user)) {
+                            updateUsersScores().then(function () {
+                                res.send(200, response)
+                            })
+                        } else {
+                            res.send(200, response)
+                        }
+                    }
                 );
             }
         });
@@ -413,33 +558,6 @@ module.exports = function (app, passport) {
                                     res.json(200, response);
                                 });
 
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    });
-
-    // admin page
-    app.get('/api/predictions2', isLoggedIn, function (req, res) {
-        var user_id = req.user._id;
-        user.findOne({_id: user_id}, function (error, aUser) {
-            var response = {};
-            if (error || !aUser || !isAdminUser(aUser)) {
-                errorWrapper(response, res);
-            } else {
-                response.status = 'OK';
-                response.user = removeSensitiveInfo(aUser);
-
-                matchespredictions.find({}, function (err, matchespredictions) {
-                    if (!error && matchespredictions) {
-                        response.matchespredictions = matchespredictions;
-
-                        teamspredictions.find({}, function (err, teamspredictions) {
-                            if (!error && teamspredictions) {
-                                response.teamspredictions = teamspredictions;
-                                res.send(200, response);
                             }
                         });
                     }
@@ -595,13 +713,6 @@ module.exports = function (app, passport) {
         return arr;
     }
 
-    /**
-     * Removing games/teams that are still open
-     * @param predictions
-     * @param origList
-     * @param type
-     * @returns {*}
-     */
     function removeSensitiveInfoArrayWithDate(predictions, origList, type) {
         var filteredPredictions = [];
 

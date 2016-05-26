@@ -62,6 +62,7 @@
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.winner" class="selectName">
+                        <option></option>
                         <option>{{ x.team1 }}</option>
                         <option>{{ x.team2 }}</option>
                         <option>Draw</option>
@@ -90,6 +91,7 @@
 
                 <div ng-show="isAdmin()">
                     <select ng-model="x.team1score" class="select">
+                        <option></option>
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
                     </select>
@@ -117,6 +119,7 @@
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.team2score" class="select">
+                        <option></option>
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
                     </select>
@@ -144,6 +147,7 @@
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.goaldiff" class="select">
+                        <option></option>
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
                     </select>
@@ -172,6 +176,7 @@
                 </div>
                 <div ng-show="isAdmin()">
                     <select ng-model="x.firstscore" class="selectName">
+                        <option></option>
                         <option>{{ x.team1 }}</option>
                         <option>{{ x.team2 }}</option>
                         <option>None</option>

@@ -3,13 +3,13 @@
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
 
     <div class="col-sm-offset-4">
-        <p class="h1"><b>{{userName}}</b>'s predictions</p>
-        <button class="btn-primary btn-sm " ng-click="navigate(userName, 1);" ng-show="!isSameUser()">See User's
+        <p class="h1"><b>{{ ::userName}}</b>'s predictions</p>
+        <button class="btn-primary btn-sm " ng-click="navigate(userName, 1);" ng-if="!isSameUser()">See User's
             Matches
         </button>
-        <button class="btn-primary btn-sm " ng-click="navigate(null, 2);" ng-show="!isSameUser()">See my Teams</button>
-        <button class="btn-primary btn-sm" ng-click="saveChanges(2);" ng-show="isSameUser()">Save Changes</button>
-        <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-show="isSameUser()">See my Matches</button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 2);" ng-if="!isSameUser()">See my Teams</button>
+        <button class="btn-primary btn-sm" ng-click="saveChanges(2);" ng-if="isSameUser()">Save Changes</button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-if="isSameUser()">See my Matches</button>
     </div>
 
     <p class="h3">Teams</p>
@@ -26,47 +26,48 @@
             <th>Points Collected</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in teamsCombined">
+        <tr ng-repeat="x in teamspredictions | orderBy : 'teamID'">
             <td>
-                <label>{{ x.teamID }}</label>
+                <label>{{ ::x.teamID }}</label>
             </td>
             <td>
                 <img style="width: 24px;height: 24px;"
-                     ng-src="{{x.name === 'Champion' && 'img/gold.png' || x.name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
-                <label>{{ x.name }}</label>
+                     ng-src="{{ teams[x.teamID - 1].name === 'Champion' && 'img/gold.png' || teams[x.teamID - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
+                <label>{{ ::x.name }}</label>
             </td>
             <td>
-                <label ng-bind="formatDate(x.deadline) |  date:'dd.MM.yyyy HH:mm'"></label>
+                <label ng-bind="formatDate(teams[x.teamID - 1].deadline) |  date:'dd.MM.yyyy HH:mm'"></label>
             </td>
             <td>
                 <!-- user values -->
-                <div ng-show="isDateOK(x.deadline) && isSameUser() && !isAdmin()">
+                <div ng-if="isDateOK(teams[x.teamID - 1].deadline) && isSameUser() && !isAdmin()">
                     <select ng-model="x._team" class="selectName">
-                        <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
+                        <option ng-repeat="team in filterByType(teams[x.teamID - 1].name)">{{::team}}</option>
                     </select>
                     <br/>
                 </div>
-                <div ng-show="isDateOKNOT(x.deadline) || isAdmin()">
-                    <label ng-class="getClass(x._team, x.team)">{{x._team}}</label>
+                <div ng-if="isDateOKNOT(teams[x.teamID - 1].deadline) || isAdmin()">
+                    <label ng-class="getClass(x._team, teams[x.teamID - 1].team)">{{::x._team}}</label>
                     <br/>
                 </div>
 
                 <!-- original values -->
                 <div>
-                    <label>{{x.team || ''}}</label>
+                    <label>{{ ::teams[x.teamID - 1].team || ''}}</label>
                     <br/>
                 </div>
-                <div ng-show="isAdmin()">
-                    <select ng-model="x.team" class="selectName">
-                        <option ng-repeat="team in filterByType(x.name)">{{team}}</option>
+                <div ng-if="isSameUser() && isAdmin()">
+                    <select ng-model="x._team" class="selectName">
+                        <option></option>
+                        <option ng-repeat="team in filterByType(teams[x.teamID - 1].name)">{{ ::team}}</option>
                     </select>
                 </div>
             </td>
             <td>
-                <label>{{ x.predictscore }}</label>
+                <label>{{ ::teams[x.teamID - 1].predictscore }}</label>
             </td>
             <td>
-                <label>{{ x.score || 0 }}</label>
+                <label>{{ ::x.score || 0 }}</label>
             </td>
         </tr>
     </table>

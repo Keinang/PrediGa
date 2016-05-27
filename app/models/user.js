@@ -7,7 +7,10 @@ var userSchema = mongoose.Schema({
     username: String,
     email: String,
     password: String,
-    score: Number,
+    score: {
+        type: Number,
+        default: 0
+    },
     isAdmin: {
         type: Boolean,
         default: false

@@ -1,68 +1,74 @@
-angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers', 'appname.services', 'ngAnimate', 'toastr']).config(['$routeProvider', function ($routeProvider) {
-    'use strict';
-    $routeProvider.when('/login', {
+angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers', 'appname.services', 'ngAnimate', 'toastr', 'angular-loading-bar'])
+    .config(['cfpLoadingBarProvider', function (cfpLoadingBarProvider) {
+        cfpLoadingBarProvider.includeSpinner = true;
+        cfpLoadingBarProvider.includeBar = true;
+    }])
+    .config(['$routeProvider', function ($routeProvider) {
+        'use strict';
+
+        $routeProvider.when('/login', {
             title: 'Home',
             templateUrl: 'partials/login.html',
             controller: 'loginCtrl',
             resolve: {loginRedirect: loginRedirect}
         })
-        .when('/signup', {
-            title: 'Signup',
-            templateUrl: 'partials/signup.html',
-            controller: 'signupCtrl'
-        })
-        .when('/game', {
-            title: 'Match Predictions',
-            templateUrl: 'partials/game.html',
-            controller: 'gameCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/game/:userName', {
-            templateUrl: 'partials/game.html',
-            controller: 'gameCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/simulator', {
-            templateUrl: 'partials/simulator.html',
-            controller: 'simulatorCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/simulator/:matchID', {
-            templateUrl: 'partials/simulator.html',
-            controller: 'simulatorCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/teams', {
-            title: 'Match Predictions',
-            templateUrl: 'partials/teams.html',
-            controller: 'gameCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/teams/:userName', {
-            templateUrl: 'partials/teams.html',
-            controller: 'gameCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/leaderboard', {
-            title: 'Leaderboard',
-            templateUrl: 'partials/leaderboard.html',
-            controller: 'leaderboardCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/admin', {
-            title: 'Admin',
-            templateUrl: 'partials/admin.html',
-            controller: 'adminCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .when('/help', {
-            title: 'Help',
-            templateUrl: 'partials/help.html',
-            controller: 'helpCtrl',
-            resolve: {logincheck: checkLogin}
-        })
-        .otherwise({redirectTo: '/login'});
-}]).run(['$rootScope', '$q', '$http', function ($rootScope, $q, $http) {
+            .when('/signup', {
+                title: 'Signup',
+                templateUrl: 'partials/signup.html',
+                controller: 'signupCtrl'
+            })
+            .when('/game', {
+                title: 'Match Predictions',
+                templateUrl: 'partials/game.html',
+                controller: 'gameCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/game/:userName', {
+                templateUrl: 'partials/game.html',
+                controller: 'gameCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/simulator', {
+                templateUrl: 'partials/simulator.html',
+                controller: 'simulatorCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/simulator/:matchID', {
+                templateUrl: 'partials/simulator.html',
+                controller: 'simulatorCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/teams', {
+                title: 'Match Predictions',
+                templateUrl: 'partials/teams.html',
+                controller: 'gameCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/teams/:userName', {
+                templateUrl: 'partials/teams.html',
+                controller: 'gameCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/leaderboard', {
+                title: 'Leaderboard',
+                templateUrl: 'partials/leaderboard.html',
+                controller: 'leaderboardCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/admin', {
+                title: 'Admin',
+                templateUrl: 'partials/admin.html',
+                controller: 'adminCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/help', {
+                title: 'Help',
+                templateUrl: 'partials/help.html',
+                controller: 'helpCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .otherwise({redirectTo: '/login'});
+    }]).run(['$rootScope', '$q', '$http', function ($rootScope, $q, $http) {
 
     var loginSetIntialData = function () {
 

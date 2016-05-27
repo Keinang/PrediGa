@@ -10,9 +10,9 @@
         </select>
         <br/>
         <img ng-src="{{match.team1.length > 4 && 'img/'+match.team1+'.png' || 'img/question.png' }}">
-        <label>{{ match.team1}}</label> VS. <img
+        <label>{{ ::match.team1}}</label> VS. <img
             ng-src="{{match.team2.length > 4 && 'img/'+match.team2+'.png' || 'img/question.png' }}">
-            <label>{{match.team2}}</label>
+        <label>{{ ::match.team2}}</label>
     </div>
 
     <br/>
@@ -29,13 +29,13 @@
         </tr>
         </thead>
         <tr ng-repeat="x in matchesCombined | orderBy:'-score'">
-            <td><label>{{x.username}}</label></td>
-            <td><label>{{x._winner}}</label></td>
-            <td><label>{{x._team1score}}</label></td>
-            <td><label>{{x._team2score}}</label></td>
-            <td><label>{{x._goaldiff}}</label></td>
-            <td><label>{{x._firstscore}}</label></td>
-            <td><label>{{x.score || 0}}</label></td>
+            <td><label>{{ ::x.username}}</label></td>
+            <td><label>{{ ::x._winner}}</label></td>
+            <td><label>{{ ::x._team1score}}</label></td>
+            <td><label>{{ ::x._team2score}}</label></td>
+            <td><label>{{ ::x._goaldiff}}</label></td>
+            <td><label>{{ ::x._firstscore}}</label></td>
+            <td><label>{{ ::x.score}}</label></td>
         </tr>
     </table>
 </div>

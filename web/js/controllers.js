@@ -123,6 +123,28 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         };
         $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
+        $scope.isAdmin = function () {
+            return $rootScope.currentUser && $rootScope.currentUser && $rootScope.currentUser.isAdmin;
+        };
+        $scope.isSameUser = function () {
+            return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;
+        };
+
+        $scope.formatDate = function (date) {
+            var dateOut = new Date(date);
+            return dateOut;
+        };
+
+        $scope.isDateOK = function (date) {
+            // If the kick off time is less than 1 hour than time is passed:
+            var isTimeOK = (new Date(date)).getTime() - (new Date()).getTime() > 3600000;
+            return isTimeOK;
+        };
+        $scope.isDateOKNOT = function (date) {
+            var val = $scope.isDateOK(date);
+            return !val;
+        };
+
         $scope.filterByType = function (type) {
             if (type.startsWith("Champion")) {
                 return $scope.allTeams;
@@ -143,26 +165,6 @@ angular.module('appname.controllers', ['ngAnimate'])
                 return $scope.allTeams;
             }
         };
-        $scope.isAdmin = function () {
-            return $rootScope.currentUser && $rootScope.currentUser && $rootScope.currentUser.isAdmin;
-        };
-        $scope.isSameUser = function () {
-            return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;
-        };
-        $scope.formatDate = function (date) {
-            var dateOut = new Date(date);
-            return dateOut;
-        };
-
-        $scope.isDateOK = function (date) {
-            // If the kick off time is less than 1 hour than time is passed:
-            var isTimeOK = (new Date(date)).getTime() - (new Date()).getTime() > 3600000;
-            return isTimeOK;
-        };
-        $scope.isDateOKNOT = function (date) {
-            var val = $scope.isDateOK(date);
-            return !val;
-        };
 
         $scope.getClass = function (userVal, actualVal) {
             if (typeof(userVal) !== 'undefined' && userVal === actualVal) {
@@ -174,39 +176,36 @@ angular.module('appname.controllers', ['ngAnimate'])
 
         $scope.saveChanges = function (type) {
             if (type === 1) {
-                gameService.saveChangesMatches($scope.matchesCombined).then(function (result) {
+                gameService.saveChangesMatches($scope.matchespredictions).then(function (result) {
                     toastr.success('Successfully Saved');
                 });
             } else {
-                gameService.saveChangesTeams($scope.teamsCombined).then(function (result) {
+                gameService.saveChangesTeams($scope.teamspredictions).then(function (result) {
                     toastr.success('Successfully Saved');
                 });
             }
-        };
-
-        $scope.filterTeamsNames = function (matches) {
-            var uniqueNames = [];
-            if (matches) {
-                matches.forEach(function (entry) {
-                    if ($.inArray(entry.team1, uniqueNames) === -1) {
-                        uniqueNames.push(entry.team1);
-                    }
-                    if ($.inArray(entry.team2, uniqueNames) === -1) {
-                        uniqueNames.push(entry.team2);
-                    }
-                });
-            }
-
-            return uniqueNames;
         };
 
         $scope.isMatches = window.location.href.indexOf("game") !== -1;
         gameService.getUserPredictions($scope.userName, $scope.isMatches).then(function (result) {
             $scope.user = result.user;
-            if ($scope.isMatches) {
-                $scope.matchesCombined = combine(result.matches, result.matchespredictions);
+
+            if (result.needRefresh) {
+                gameService.getUserPredictions($scope.userName, $scope.isMatches).then(function (result2) {
+                    $scope.updateModel(result2);
+                });
             } else {
-                $scope.teamsCombined = combine(result.teams, result.teamspredictions);
+                $scope.updateModel(result);
+            }
+        });
+
+        $scope.updateModel = function (result) {
+            if ($scope.isMatches) {
+                $scope.matches = result.matches;
+                $scope.matchespredictions = result.matchespredictions;
+            } else {
+                $scope.teams = result.teams;
+                $scope.teamspredictions = result.teamspredictions;
 
                 $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
                 $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
@@ -221,7 +220,7 @@ angular.module('appname.controllers', ['ngAnimate'])
                 $scope.allTeamsABCD = $.merge($scope.allTeamsAB, $scope.allTeamsCD);
                 $scope.allTeams = $.merge($scope.allTeamsABCD, $scope.allTeamsEF);
             }
-        });
+        };
 
         $scope.getNumber = function (num) {
             var arr = [];
@@ -233,24 +232,7 @@ angular.module('appname.controllers', ['ngAnimate'])
     }
     ]);
 
-
-var combine = function (list1, list2) {
-    if (list1) {
-        list1.forEach(function (entry) {
-            // get all list2 values with the same id:
-            var list2Filtered = list2.filter(function (item) {
-                return (item.matchID === entry.matchID && typeof (entry.matchID) !== 'undefined' )
-                    || (item.teamID === entry.teamID && typeof (entry.teamID) !== 'undefined' )
-                    || (item._id === entry.user_id && typeof (entry.user_id) !== 'undefined' );
-            });
-            // merge values
-            entry = $.extend(entry, list2Filtered[0]);
-        });
-    }
-
-    return list1;
-};
-
+// TODO - remove all combines...
 var combineSimulator = function (matches, users) {
     if (matches) {
         matches.forEach(function (entry) {

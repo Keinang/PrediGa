@@ -111,6 +111,28 @@ module.exports = function (app, passport) {
                     return next(err);
                 }
                 response.status = 'OK';
+                // Creating 1st dummy games:
+                // Test match:
+                new matchespredictions({
+                    matchID: 52,
+                    user_id: user._id,
+                    team1: 'T2',
+                    team2: 'T1',
+                    _winner: 'T2',
+                    _team1score: '1',
+                    _team2score: '0',
+                    _goaldiff: '0',
+                    _firstscore: 'T1'
+                }).save(function (err) {
+                });
+                new teamspredictions({
+                    teamID: 19,
+                    user_id: user._id,
+                    _team: 'T2'
+                }).save(function () {
+
+                });
+
                 response.user = removeSensitiveInfo(user);
 
                 return res.json(200, response);
@@ -138,19 +160,12 @@ module.exports = function (app, passport) {
 
     app.get('/api/users', isLoggedIn, function (req, res) {
         user.find({}, function (err, users) {
-            var filtered = [];
-
             var response = {};
             response.status = 'OK';
 
-            // order by score:
-            var byScore = users.slice(0);
-            byScore.sort(function (a, b) {
-                return b.score - a.score;
-            });
-
             // filter admin + sensitive values:
-            byScore.forEach(function (user) {
+            var filtered = [];
+            users.forEach(function (user) {
                 if (!isAdminUser(user)) {
                     filtered.push(removeSensitiveInfo(user));
                 }
@@ -368,11 +383,11 @@ module.exports = function (app, passport) {
                                     //console.log('updateMatchPredictionValues (matchespredictions):' + aMatch.matchID);
 
                                     if (!error && dbMatchPrediction) {
-                                        dbMatchPrediction._winner = isAdmin ? aMatch.winner : aMatch._winner;
-                                        dbMatchPrediction._team1score = isAdmin ? aMatch.team1score : aMatch._team1score;
-                                        dbMatchPrediction._team2score = isAdmin ? aMatch.team2score : aMatch._team2score;
-                                        dbMatchPrediction._goaldiff = isAdmin ? aMatch.goaldiff : aMatch._goaldiff;
-                                        dbMatchPrediction._firstscore = isAdmin ? aMatch.firstscore : aMatch._firstscore;
+                                        dbMatchPrediction._winner = aMatch._winner;
+                                        dbMatchPrediction._team1score = aMatch._team1score;
+                                        dbMatchPrediction._team2score = aMatch._team2score;
+                                        dbMatchPrediction._goaldiff = aMatch._goaldiff;
+                                        dbMatchPrediction._firstscore = aMatch._firstscore;
                                         dbMatchPrediction.save(function (err) {
                                             //console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
                                         });
@@ -380,11 +395,11 @@ module.exports = function (app, passport) {
                                         new matchespredictions({
                                             matchID: aMatch.matchID,
                                             user_id: user._id,
-                                            _winner: isAdmin ? aMatch.winner : aMatch._winner,
-                                            _team1score: isAdmin ? aMatch.team1score : aMatch._team1score,
-                                            _team2score: isAdmin ? aMatch.goaldiff : aMatch._goaldiff,
-                                            _goaldiff: isAdmin ? aMatch.goaldiff : aMatch._goaldiff,
-                                            _firstscore: isAdmin ? aMatch.firstscore : aMatch._firstscore
+                                            _winner: aMatch._winner,
+                                            _team1score: aMatch._team1score,
+                                            _team2score: aMatch._goaldiff,
+                                            _goaldiff: aMatch._goaldiff,
+                                            _firstscore: aMatch._firstscore
                                         }).save(function (err) {
                                             //console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
                                         });
@@ -394,11 +409,11 @@ module.exports = function (app, passport) {
 
                             // update real matches
                             if (isAdmin) {
-                                dbMatch.winner = aMatch.winner;
-                                dbMatch.team1score = aMatch.team1score;
-                                dbMatch.team2score = aMatch.team2score;
-                                dbMatch.goaldiff = aMatch.goaldiff;
-                                dbMatch.firstscore = aMatch.firstscore;
+                                dbMatch.winner = aMatch._winner;
+                                dbMatch.team1score = aMatch._team1score;
+                                dbMatch.team2score = aMatch._team2score;
+                                dbMatch.goaldiff = aMatch._goaldiff;
+                                dbMatch.firstscore = aMatch._firstscore;
                                 dbMatch.save(function (err) {
                                     //console.log('updateMatchPredictionValues (matchespredictions) save admin:' + aMatch.matchID);
 
@@ -446,7 +461,7 @@ module.exports = function (app, passport) {
                                 user_id: user._id
                             }, function (error, dbTeamPrediction) {
                                 if (!error && dbTeamPrediction) {
-                                    dbTeamPrediction._team = isAdmin ? aTeam.team : aTeam._team;
+                                    dbTeamPrediction._team = aTeam._team;
                                     dbTeamPrediction.save();
 
 
@@ -454,7 +469,7 @@ module.exports = function (app, passport) {
                                     new teamspredictions({
                                         teamID: aTeam.teamID,
                                         user_id: user._id,
-                                        _team: isAdmin ? aTeam.team : aTeam._team
+                                        _team: aTeam._team
                                     }).save(function (err) {
 
                                     });
@@ -464,7 +479,7 @@ module.exports = function (app, passport) {
 
                         // update real teams
                         if (isAdmin) {
-                            dbTeam.team = aTeam.team;
+                            dbTeam.team = aTeam._team;
 
                             dbTeam.save(function () {
 
@@ -584,28 +599,43 @@ module.exports = function (app, passport) {
                     // regular flow, get all matches:
                     if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
                         // get all user's matches predictions
-                        matchespredictions.find({user_id: user_id}, function (err, matchespredictions) {
-                            if (!error && matchespredictions) {
-                                response.matchespredictions = matchespredictions;
+                        matchespredictions.find({user_id: user_id}, function (err, matchesPredictionsForUser) {
+                            if (!error && matchesPredictionsForUser) {
+                                response.matchespredictions = matchesPredictionsForUser;
 
-                                matches.find({}, function (err, matches) {
+                                matches.find({}, function (err, matchesFound) {
                                     if (!error) {
-                                        response.matches = matches;
+                                        response.matches = matchesFound;
                                     }
-                                    res.json(200, response);
+
+                                    // correct user matches predictions
+                                    if (matchesPredictionsForUser.length !== matchesFound.length) {
+                                        storeMissingPredictions(user_id, matchesFound, '1');
+                                        response.needRefresh = true;
+                                        res.json(200, response);
+                                    } else {
+                                        res.json(200, response);
+                                    }
                                 });
                             }
                         });
                     } else {
                         // get all teams:
-                        teams.find({}, function (err, teams) {
+                        teams.find({}, function (err, teamsFounds) {
                             if (!error) {
-                                response.teams = teams;
+                                response.teams = teamsFounds;
 
                                 // get all user's teams predictions
-                                teamspredictions.find({user_id: user_id}, function (err, teamspredictions) {
-                                    if (!error && teamspredictions) {
-                                        response.teamspredictions = teamspredictions;
+                                teamspredictions.find({user_id: user_id}, function (err, teamsPredictionsForUser) {
+                                    if (!error && teamsPredictionsForUser) {
+                                        response.teamspredictions = teamsPredictionsForUser;
+                                    }
+                                    // correct user teams predictions
+                                    if (teamsPredictionsForUser.length !== teamsFounds.length) {
+                                        storeMissingPredictions(user_id, teamsFounds, '2');
+                                        response.needRefresh = true;
+                                        res.json(200, response);
+                                    } else {
                                         res.json(200, response);
                                     }
                                 });
@@ -670,6 +700,43 @@ module.exports = function (app, passport) {
             }
         });
     });
+
+    //
+    function storeMissingPredictions(userId, arrOrig, type) {
+        arrOrig.forEach(
+            function (item) {
+                if (type == '1') {
+                    matchespredictions.findOne({
+                        user_id: userId,
+                        matchID: item.matchID
+                    }, function (err, userMatchPrediction) {
+                        if (!userMatchPrediction) {
+                            var newPredict = new matchespredictions({
+                                matchID: item.matchID,
+                                user_id: userId
+                            }).save(function (err) {
+                            });
+                        }
+
+                    });
+
+                } else {
+                    teamspredictions.findOne({
+                        user_id: userId,
+                        teamID: item.teamID
+                    }, function (err, userTeamPrediction) {
+                        if (!userTeamPrediction) {
+                            var newPredict = new teamspredictions({
+                                teamID: item.teamID,
+                                user_id: userId
+                            }).save(function (err) {
+                            });
+                        }
+                    });
+                }
+            }
+        );
+    }
 
 // =============================================================================
 // Helpers =====================================================================

@@ -6,19 +6,17 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
     .config(['$routeProvider', function ($routeProvider) {
         'use strict';
 
-        $routeProvider.when('/login', {
-            title: 'Home',
-            templateUrl: 'partials/login.html',
-            controller: 'loginCtrl',
-            resolve: {loginRedirect: loginRedirect}
-        })
+        $routeProvider
+            .when('/login', {
+                templateUrl: 'partials/login.html',
+                controller: 'loginCtrl',
+                resolve: {loginRedirect: loginRedirect}
+            })
             .when('/signup', {
-                title: 'Signup',
                 templateUrl: 'partials/signup.html',
                 controller: 'signupCtrl'
             })
             .when('/game', {
-                title: 'Match Predictions',
                 templateUrl: 'partials/game.html',
                 controller: 'gameCtrl',
                 resolve: {logincheck: checkLogin}
@@ -39,7 +37,6 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 resolve: {logincheck: checkLogin}
             })
             .when('/teams', {
-                title: 'Match Predictions',
                 templateUrl: 'partials/teams.html',
                 controller: 'gameCtrl',
                 resolve: {logincheck: checkLogin}
@@ -50,13 +47,11 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 resolve: {logincheck: checkLogin}
             })
             .when('/leaderboard', {
-                title: 'Leaderboard',
                 templateUrl: 'partials/leaderboard.html',
                 controller: 'leaderboardCtrl',
                 resolve: {logincheck: checkLogin}
             })
             .when('/help', {
-                title: 'Help',
                 templateUrl: 'partials/help.html',
                 controller: 'helpCtrl',
                 resolve: {logincheck: checkLogin}

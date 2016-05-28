@@ -71,7 +71,7 @@ angular.module('appname.controllers', [])
         $scope.update = function () {
             $scope.teamspredictions.forEach(function (team) {
                 team.score = 0;
-                if (team._team === $scope.simGame._team) {
+                if (typeof($scope.simGame._team) !== 'undefined' && team._team === $scope.simGame._team) {
                     team.score = $scope.teams[$scope.currentGame - 1].predictscore;
                 }
                 team.totalScore = $scope.getUserById(team.user_id).score + team.score;

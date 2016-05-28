@@ -44,7 +44,6 @@
                 <span class="icon-bar"></span>
             </button>
             <a class="navbar-brand" href="#/game"> <img alt="Brand" src="img/logo.png" id="headerlogo"></a>
-
         </div>
 
         <div class="navbar-header" style="padding-top: 25px">
@@ -61,11 +60,11 @@
                     <li><a href="#/game" ng-show="$root.currentUser">Match Predictions</a></li>
                     <li><a href="#/teams" ng-show="$root.currentUser">Teams Predictions</a></li>
                     <li><a href="#/simulator/:1" ng-show="$root.currentUser">Match Simulator</a></li>
-                    <li><a href="#/admin" ng-show="$root.currentUser && $root.currentUser.isAdmin">Admin</a></li>
                     <li><a href="#/leaderboard" ng-show="$root.currentUser">Leaderboard</a></li>
                     <li><a href="#/help" ng-show="$root.currentUser">Help</a></li>
                     <li><a href="" ng-click="logout()" ng-show="$root.currentUser">Sign Out</a></li>
-                    <li><label style="padding-top: 24px;">{{$root.currentUser.username}}</label></li>
+                    <li><label style="padding-top: 24px; color: darkblue; font-size: larger">{{$root.currentUser.username}}</label>
+                    </li>
                 </ul>
             </div>
         </div>

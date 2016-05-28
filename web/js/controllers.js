@@ -1,4 +1,4 @@
-angular.module('appname.controllers', ['ngAnimate'])
+angular.module('appname.controllers', [])
     .controller('BaseCtrl', ['$scope', 'logoutService', 'toastr', '$location', '$rootScope', function ($scope, logoutService, toastr, $location, $rootScope) {
         $scope.logout = function () {
             logoutService.logout();
@@ -107,48 +107,6 @@ angular.module('appname.controllers', ['ngAnimate'])
             $scope.matches = result.matches;
             $scope.simGame;
         });
-    }])
-    .controller('adminCtrl', ['$scope', '$rootScope', 'adminService', function ($scope, $rootScope, $adminService) {
-        $scope.groupByValue = function (items, groupByType) {
-            var result = {};
-            items.forEach(function (entry) {
-                var itemAttributeVal = entry[groupByType];
-
-                if (typeof(itemAttributeVal) !== 'undefined') {
-                    var obj = result [itemAttributeVal];
-                    if (typeof(obj) !== 'undefined') {
-                        result [itemAttributeVal] = {
-                            key: itemAttributeVal,
-                            value: obj.value += 1
-                        };
-                    } else {
-                        // first time:
-                        result [itemAttributeVal] = {
-                            key: itemAttributeVal,
-                            value: 1
-                        };
-                    }
-
-                }
-            });
-
-            return result;
-        };
-        $adminService.getPredictions().then(function (result) {
-            $scope.user = result.user;
-            if (result.matchespredictions) {
-
-                $scope.matchespredictions = groupBy(result.matchespredictions, function (item) {
-                    return [item.matchID];
-                });
-            }
-
-            if (result.teamspredictions) {
-                $scope.teamspredictions = groupBy(result.teamspredictions, function (item) {
-                    return [item.teamID];
-                });
-            }
-        })
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'leaderboardService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, leaderboardService, toastr) {
         $scope.redirectSim = function (matchID) {
@@ -272,18 +230,6 @@ angular.module('appname.controllers', ['ngAnimate'])
     }
     ]);
 
-
-function groupBy(array, f) {
-    var groups = {};
-    array.forEach(function (o) {
-        var group = JSON.stringify(f(o));
-        groups[group] = groups[group] || [];
-        groups[group].push(o);
-    });
-    return Object.keys(groups).map(function (group) {
-        return groups[group];
-    })
-}
 function getNumberGlobal(num) {
     var arr = [];
     for (var i = 0; i <= num; i++) {

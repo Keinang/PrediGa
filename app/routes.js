@@ -325,33 +325,6 @@ module.exports = function (app, passport) {
         return deferred.promise;
     }
 
-    // admin page
-    app.get('/api/predictions2', isLoggedIn, function (req, res) {
-        var user_id = req.user._id;
-        user.findOne({_id: user_id}, function (error, aUser) {
-            var response = {};
-            if (error || !aUser || !isAdminUser(aUser)) {
-                errorWrapper(response, res);
-            } else {
-                response.status = 'OK';
-                response.user = removeSensitiveInfo(aUser);
-
-                matchespredictions.find({}, function (err, matchespredictions) {
-                    if (!error && matchespredictions) {
-                        response.matchespredictions = matchespredictions;
-
-                        teamspredictions.find({}, function (err, teamspredictions) {
-                            if (!error && teamspredictions) {
-                                response.teamspredictions = teamspredictions;
-                                res.send(200, response);
-                            }
-                        });
-                    }
-                });
-            }
-        });
-    });
-
     // regular user flow
     // ~~~~~~~~~~~~~~~~~~~~~~~~~
 

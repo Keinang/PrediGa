@@ -67,18 +67,7 @@ angular.module('appname.services', [])
                 });
             }
         };
-    })
-    .factory('adminService', function (ulhttp) {
-        return {
-            getPredictions: function (data) {
-                var url = "/api/predictions2";
-                return ulhttp.get(url, data).then(function (result) {
-                    result = ulhttp.handleError(result);
-                    return result;
-                });
-            }
-        };
-    })
+    })    
     .factory('simulatorService', function (ulhttp) {
         return {
             matchSimulator: function (matchId) {

@@ -55,12 +55,6 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 controller: 'leaderboardCtrl',
                 resolve: {logincheck: checkLogin}
             })
-            .when('/admin', {
-                title: 'Admin',
-                templateUrl: 'partials/admin.html',
-                controller: 'adminCtrl',
-                resolve: {logincheck: checkLogin}
-            })
             .when('/help', {
                 title: 'Help',
                 templateUrl: 'partials/help.html',

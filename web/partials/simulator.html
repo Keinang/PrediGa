@@ -86,6 +86,7 @@
     <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
         <thead>
         <tr>
+            <th>#</th>
             <th>User Name</th>
             <th>Winner</th>
             <th>Team 1 Score</th>
@@ -97,6 +98,7 @@
         </tr>
         </thead>
         <tr ng-repeat="x in matchespredictions | orderBy:'-score'">
+            <td><label>{{$index+1}}</label></td>
             <td><label>{{ ::getUserById(x.user_id).username}}</label></td>
             <td><label ng-class="getClass(x._winner, simGame._winner )">{{ ::x._winner}}</label></td>
             <td><label ng-class="getClass(x._team1score, simGame._team1score )">{{ ::x._team1score}}</label></td>

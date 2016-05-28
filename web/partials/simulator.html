@@ -25,6 +25,7 @@
             <table class="table matches text-nowrap table-condensed" style="color:black;">
                 <thead>
                 <tr>
+                    <th>#</th>
                     <th>Winner</th>
                     <th>Team 1 Score</th>
                     <th>Team 2 Score</th>
@@ -33,6 +34,7 @@
                 </tr>
                 </thead>
                 <tr>
+                    <td><label>{{$index+1}}</label></td>
                     <td>
                         <select ng-model="simGame._winner" class="selectName" ng-change="update()"
                                 ng-init="simGame._winner = simGame._winner || 'Draw'">

@@ -46,6 +46,7 @@
     <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
         <thead>
         <tr>
+            <th>#</th>
             <th>User Name</th>
             <th>Team</th>
             <th>Points</th>
@@ -54,6 +55,7 @@
         </tr>
         </thead>
         <tr ng-repeat="x in teamspredictions | orderBy:'-score'">
+            <td><label>{{$index+1}}</label></td>
             <td><label>{{ ::getUserById(x.user_id).username}}</label></td>
             <td><label ng-class="getClass(x._team, simGame._team )">{{ ::x._team}}</label></td>
 

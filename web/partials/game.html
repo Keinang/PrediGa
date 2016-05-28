@@ -41,14 +41,14 @@
         </tr>
         </thead>
         <tr ng-repeat="x in matchespredictions | orderBy : 'matchID'">
-            <td class="clickableTd" ng-click="redirectSim(x.matchID);">
+            <td class="clickableTd" ng-click="redirectSim(x.matchID, 1);">
                 <label>{{ ::x.matchID }}</label>
             </td>
-            <td class="clickableTd" ng-click="redirectSim(x.matchID);">
+            <td class="clickableTd" ng-click="redirectSim(x.matchID, 1);">
                 <img ng-src="{{ matches[x.matchID - 1].team1.length > 4 && 'img/'+ matches[x.matchID - 1].team1 +'.png' || 'img/question.png'}}">
                 <label>{{ ::matches[x.matchID - 1].team1 }}</label>
             </td>
-            <td class="clickableTd" ng-click="redirectSim(x.matchID);">
+            <td class="clickableTd" ng-click="redirectSim(x.matchID, 1);">
                 <img ng-src="{{ matches[x.matchID - 1].team2.length > 4 && 'img/' + matches[x.matchID - 1].team2+'.png' || 'img/question.png'}}">
                 <label>{{ ::matches[x.matchID - 1].team2 }}</label>
 

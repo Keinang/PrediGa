@@ -1,5 +1,5 @@
 angular.module('appname.controllers', [])
-    .controller('BaseCtrl', ['$scope', 'logoutService', 'toastr', '$location', '$rootScope', function ($scope, logoutService, toastr, $location, $rootScope) {
+    .controller('BaseCtrl', ['$scope', 'logoutService', function ($scope, logoutService) {
         $scope.logout = function () {
             logoutService.logout();
         };
@@ -41,7 +41,7 @@ angular.module('appname.controllers', [])
     .controller('helpCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
     }])
-    .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', '$location', function ($scope, $rootScope, leaderboardService, $location) {
+    .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', function ($scope, $rootScope, leaderboardService) {
         $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;
         };
@@ -50,27 +50,49 @@ angular.module('appname.controllers', [])
             $scope.users = result.users;
         });
     }])
-    .controller('simulatorCtrl', ['$routeParams', '$scope', '$rootScope', 'simulatorService', '$location', function ($routeParams, $scope, $rootScope, simulatorService, $location) {
+    .controller('simulatorTeamsCtrl', ['$scope', '$routeParams', 'simulatorTeamsService', function ($scope, $routeParams, simulatorTeamsService) {
+        $scope.currentGame = typeof($routeParams.teamID) !== 'undefined' ? $routeParams.teamID.substr(1) : 1;
+
+        $scope.changeSim = function () {
+            window.location = '#/simulatorTeams/:' + $scope.currentGame;
+        };
+        $scope.getUserById = function (userId) {
+            return getUserById(userId, $scope.users);
+        };
+        $scope.getNumber = function (num) {
+            return getNumberGlobal(num);
+        };
+        $scope.getClass = function (userVal, actualVal) {
+            return getClassGlobal(userVal, actualVal);
+        };
+        $scope.filterByType = function (type) {
+            return filterByType(type);
+        };
+        $scope.update = function () {
+            $scope.teamspredictions.forEach(function (team) {
+                team.score = 0;
+                if (team._team === $scope.simGame._team) {
+                    team.score = $scope.teams[$scope.currentGame - 1].predictscore;
+                }
+                team.totalScore = $scope.getUserById(team.user_id).score + team.score;
+            })
+        };
+        // Calling for data for the 1st time:
+        simulatorTeamsService.teamSimulator($scope.currentGame).then(function (result) {
+            $scope.teamspredictions = result.teamspredictions;
+            $scope.users = result.users;
+            $scope.teams = result.teams;
+            $scope.simGame;
+        });
+    }])
+    .controller('simulatorCtrl', ['$scope', '$routeParams', 'simulatorService', function ($scope, $routeParams, simulatorService) {
         $scope.currentGame = typeof($routeParams.matchID) !== 'undefined' ? $routeParams.matchID.substr(1) : 1;
 
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
         };
         $scope.getUserById = function (userId) {
-            var res = [];
-            if (userId) {
-                $scope.users.forEach(function (user) {
-                    if (user._id === userId) {
-                        res.push(user);
-
-                    }
-                });
-            }
-            if (res) {
-                return res[0];
-            } else {
-                return null;
-            }
+            return getUserById(userId, $scope.users);
         };
 
         $scope.getNumber = function (num) {
@@ -109,8 +131,12 @@ angular.module('appname.controllers', [])
         });
     }])
     .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'leaderboardService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, leaderboardService, toastr) {
-        $scope.redirectSim = function (matchID) {
-            window.location = '#/simulator/:' + matchID;
+        $scope.redirectSim = function (id, type) {
+            if (type === 1 || type === '1') {
+                window.location = '#/simulator/:' + id;
+            } else {
+                window.location = '#/simulatorTeams/:' + id;
+            }
         };
         $scope.navigate = function (userName, type) {
             if (!userName || userName == null) {
@@ -146,24 +172,7 @@ angular.module('appname.controllers', [])
         };
 
         $scope.filterByType = function (type) {
-            if (type.startsWith("Champion")) {
-                return $scope.allTeams;
-            }
-            if (type.startsWith("A")) {
-                return $scope.groupA;
-            } else if (type.startsWith("B")) {
-                return $scope.groupB;
-            } else if (type.startsWith("C")) {
-                return $scope.groupC;
-            } else if (type.startsWith("D")) {
-                return $scope.groupD;
-            } else if (type.startsWith("E")) {
-                return $scope.groupE;
-            } else if (type.startsWith("F")) {
-                return $scope.groupF;
-            } else {
-                return $scope.allTeams;
-            }
+            return filterByType(type);
         };
 
         $scope.getClass = function (userVal, actualVal) {
@@ -208,19 +217,6 @@ angular.module('appname.controllers', [])
             } else {
                 $scope.teams = result.teams;
                 $scope.teamspredictions = result.teamspredictions;
-
-                $scope.groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
-                $scope.groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
-                $scope.groupC = ['Germany', 'Ukraine', 'Poland', 'Northern Ireland'];
-                $scope.groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
-                $scope.groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
-                $scope.groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
-
-                $scope.allTeamsAB = $.merge($scope.groupA, $scope.groupB);
-                $scope.allTeamsCD = $.merge($scope.groupC, $scope.groupD);
-                $scope.allTeamsEF = $.merge($scope.groupE, $scope.groupF);
-                $scope.allTeamsABCD = $.merge($scope.allTeamsAB, $scope.allTeamsCD);
-                $scope.allTeams = $.merge($scope.allTeamsABCD, $scope.allTeamsEF);
             }
         };
 
@@ -243,4 +239,55 @@ function getClassGlobal(userVal, actualVal) {
     } else {
         return 'red';
     }
+}
+function getUserById(userId, users) {
+    var res = [];
+    if (userId) {
+        users.forEach(function (user) {
+            if (user._id === userId) {
+                res.push(user);
+
+            }
+        });
+    }
+    if (res) {
+        return res[0];
+    } else {
+        return null;
+    }
+}
+var groupA = ['France', 'Romania', 'Albania', 'Switzerland'];
+var groupB = ['England', 'Russia', 'Wales', 'Slovakia'];
+var groupC = ['Germany', 'Ukraine', 'Poland', 'Northern Ireland'];
+var groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
+var groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
+var groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
+var allTeamsAB = $.merge(groupA, groupB);
+var allTeamsCD = $.merge(groupC, groupD);
+var allTeamsEF = $.merge(groupE, groupF);
+var allTeamsABCD = $.merge(allTeamsAB, allTeamsCD);
+var allTeams = $.merge(allTeamsABCD, allTeamsEF);
+
+function filterByType(type) {
+    if (type) {
+        if (type.startsWith("Champion")) {
+            return allTeams;
+        }
+        if (type.startsWith("A")) {
+            return groupA;
+        } else if (type.startsWith("B")) {
+            return groupB;
+        } else if (type.startsWith("C")) {
+            return groupC;
+        } else if (type.startsWith("D")) {
+            return groupD;
+        } else if (type.startsWith("E")) {
+            return groupE;
+        } else if (type.startsWith("F")) {
+            return groupF;
+        } else {
+            return allTeams;
+        }
+    }
+
 }

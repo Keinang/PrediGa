@@ -519,6 +519,47 @@ module.exports = function (app, passport) {
         });
     });
 
+
+    //teamsSimulator
+    app.get('/api/teamsSimulator', isLoggedIn, function (req, res) {
+        var teamId = req.query.teamId;
+        var user_id = req.user._id;
+        user.findOne({_id: user_id}, function (error, aUser) {
+            var response = {};
+            if (error || !aUser) {
+                errorWrapper(response, res);
+            } else {
+                response.status = 'OK';
+                response.user = removeSensitiveInfo(aUser);
+                teams.find({}, function (err, teams) {
+                    if (!error) {
+                        response.teams = removeSensitiveInfoArray(teams);
+
+                        user.find({}, function (error, allUsers) {
+                            response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
+
+                            // get all other user's matches predictions until this kickoff
+                            teamspredictions.find({teamID: teamId}, function (err, teamspredictions) {
+                                if (!error && teamspredictions) {
+                                    if (isAdminUser(aUser)) {
+                                        response.teamspredictions = removeAdminFromPredictions(teamspredictions, response.users);
+                                    } else {
+                                        response.teamspredictions = removeSensitiveInfoArrayWithDateAndAdmin(teamspredictions, response.teams, '2', response.users);
+                                    }
+
+                                    res.json(200, response);
+                                } else {
+                                    res.json(200, response);
+                                }
+                            });
+                        });
+                    } else {
+                        res.json(200, response);
+                    }
+                });
+            }
+        });
+    });
     // match simulator
     app.get('/api/matchSimulator', isLoggedIn, function (req, res) {
         var matchId = req.query.matchId;
@@ -530,8 +571,6 @@ module.exports = function (app, passport) {
             } else {
                 response.status = 'OK';
                 response.user = removeSensitiveInfo(aUser);
-
-                // looking for other user details, only results until this deadline date.
                 matches.find({}, function (err, matches) {
                     if (!error) {
                         response.matches = removeSensitiveInfoArray(matches);
@@ -794,7 +833,11 @@ module.exports = function (app, passport) {
             }
         }
 
-        return removeAdminFromPredictions(filteredPredictions, users);
+        if (filteredPredictions.length > 0) {
+            filteredPredictions = removeAdminFromPredictions(filteredPredictions, users);
+        }
+
+        return filteredPredictions;
     }
 
     function removeAdminFromPredictions(matches, users) {

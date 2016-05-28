@@ -36,6 +36,16 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 controller: 'simulatorCtrl',
                 resolve: {logincheck: checkLogin}
             })
+            .when('/simulatorTeams', {
+                templateUrl: 'partials/simulatorTeams.html',
+                controller: 'simulatorTeamsCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/simulatorTeams/:teamID', {
+                templateUrl: 'partials/simulatorTeams.html',
+                controller: 'simulatorTeamsCtrl',
+                resolve: {logincheck: checkLogin}
+            })
             .when('/teams', {
                 templateUrl: 'partials/teams.html',
                 controller: 'gameCtrl',

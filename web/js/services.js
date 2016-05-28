@@ -80,6 +80,18 @@ angular.module('appname.services', [])
             }
         };
     })
+    .factory('simulatorTeamsService', function (ulhttp) {
+        return {
+            teamSimulator: function (teamId) {
+                var url = "/api/teamsSimulator?teamId=" + teamId;
+                var data = {};
+                return ulhttp.get(url, data).then(function (result) {
+                    result = ulhttp.handleError(result);
+                    return result;
+                });
+            }
+        };
+    })
     .factory('gameService', function (ulhttp) {
         return {
             getUserPredictions: function (userName, isMatches) {

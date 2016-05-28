@@ -1,0 +1,63 @@
+<div class="col-sm-8 col-sm-offset-2" style="color: maroon">
+    <div style="float: left;">
+        <div style="float: left;">
+            <label>Team ID: &nbsp;</label>
+        </div>
+
+        <div style="float: left;">
+            <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
+                    ng-init="currentGame = currentGame || 1">
+                <option ng-repeat="x in teams | orderBy: 'teamID'">{{x.teamID}}</option>
+            </select>
+            <img style="width: 24px;height: 24px;"
+                 ng-src="{{ teams[currentGame - 1].name === 'Champion' && 'img/gold.png' || teams[currentGame - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
+            <label>{{ ::teams[currentGame - 1].name}}</label>
+        </div>
+        <br/>
+        <br/>
+        <div style="float: left;">
+            <table class="table matches text-nowrap table-condensed" style="color:black;">
+                <thead>
+                <tr>
+                    <th>Team</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <select ng-model="simGame._team" class="selectName" ng-change="update()"
+                                ng-init="simGame._team = simGame._team || allTeams[0]">
+                            <option ng-repeat="team in filterByType(teams[currentGame - 1].name)">{{::team}}</option>
+                            <option>T1</option>
+                            <option>T2</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <br/>
+    <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
+        <thead>
+        <tr>
+            <th>User Name</th>
+            <th>Team</th>
+            <th>Points</th>
+            <th>Points Collected</th>
+            <th>Total Score</th>
+        </tr>
+        </thead>
+        <tr ng-repeat="x in teamspredictions | orderBy:'-score'">
+            <td><label>{{ ::getUserById(x.user_id).username}}</label></td>
+            <td><label ng-class="getClass(x._team, simGame._team )">{{ ::x._team}}</label></td>
+
+            <td><label>{{ ::x.predictscore || 0}}</label></td>
+            <td><label ng-init="update()">{{ x.score || 0}}</label></td><!-- game score -->
+            <td><label ng-init="update()">{{ x.totalScore || 0}}</label></td><!-- total score -->
+        </tr>
+    </table>
+</div>
+
+<script>
+    ga('send', 'pageview', '/simulatorTeams.html');
+</script>

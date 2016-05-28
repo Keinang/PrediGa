@@ -36,6 +36,7 @@
             <th>Team</th>
             <th>Prediction Points</th>
             <th>Points Collected</th>
+            <th>More Info</th>
         </tr>
         </thead>
         <tr ng-repeat="x in teamspredictions | orderBy : 'teamID'">
@@ -45,7 +46,7 @@
             <td class="clickableTd" ng-click="redirectSim(x.teamID, 2);">
                 <img style="width: 24px;height: 24px;"
                      ng-src="{{ teams[x.teamID - 1].name === 'Champion' && 'img/gold.png' || teams[x.teamID - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
-                <label>{{ ::x.name }}</label>
+                <label>{{ ::teams[x.teamID - 1].name }}</label>
             </td>
             <td class="clickableTd" ng-click="redirectSim(x.teamID, 2);">
                 <label ng-bind="formatDate(teams[x.teamID - 1].deadline) |  date:'dd.MM.yyyy HH:mm'"></label>
@@ -80,6 +81,13 @@
             </td>
             <td>
                 <label>{{ ::x.score || 0 }}</label>
+            </td>
+            <td>
+                <a ng-href="{{teams[x.teamID - 1].name === 'Champion' &&  'http://www.oddschecker.com/football/euro-2016/winner' ||
+                              teams[x.teamID - 1].name === 'Runner up' && 'http://www.oddschecker.com/football/euro-2016/winner' || 'http://www.oddschecker.com/football/euro-2016/to-qualify'
+                }}">
+                    Check Online Bets
+                </a>
             </td>
         </tr>
     </table>

@@ -14,6 +14,10 @@ var userSchema = mongoose.Schema({
     isAdmin: {
         type: Boolean,
         default: false
+    },
+    lastplace: {
+        type: Number,
+        default: 50
     }
 });
 

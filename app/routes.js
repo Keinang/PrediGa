@@ -186,6 +186,11 @@ module.exports = function (app, passport) {
 
         // update user total score:
         user.find({}, function (err, users) {
+            // Before updating, sorting by sort for update the last place:
+            users = sortByScore(users);
+            for (var i = 0; i < users.length; i++) {
+                users[i].lastplace = i;
+            }
 
             users.forEach(function (user) {
                 //console.log('updateUsersTotalScores:' + user.username);
@@ -518,7 +523,6 @@ module.exports = function (app, passport) {
             }
         });
     });
-
 
     //teamsSimulator
     app.get('/api/teamsSimulator', isLoggedIn, function (req, res) {
@@ -861,12 +865,12 @@ module.exports = function (app, passport) {
         return isTimePassed;
     }
 
-    function sortByID(arr, type) {
+    function sortByScore(arr) {
         var arrSorted = [];
         if (arr) {
             arrSorted = arr.slice(0);
             arrSorted.sort(function (a, b) {
-                return type === '1' ? a.matchID - b.matchID : a.teamID - b.teamID;
+                return b.score - a.score;
             });
         }
         return arrSorted;

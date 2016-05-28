@@ -45,6 +45,24 @@ angular.module('appname.controllers', [])
         $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;
         };
+        $scope.getClassByPosition = function (lastPlace, currentPlace) {
+            if (typeof(lastPlace) !== 'undefined' && lastPlace > currentPlace) {
+                return 'green';
+            } else if (typeof(lastPlace) !== 'undefined' && lastPlace < currentPlace) {
+                return 'red';
+            } else {
+                return 'black';
+            }
+        };
+        $scope.getPositionStr = function (lastPlace, currentPlace) {
+            if (typeof(lastPlace) !== 'undefined' && lastPlace > currentPlace) {
+                return '+' + (lastPlace - currentPlace);
+            } else if (typeof(lastPlace) !== 'undefined' && lastPlace < currentPlace) {
+                return '-' + (currentPlace - lastPlace);
+            } else {
+                return '(0)';
+            }
+        };
         // Calling for data for the 1st time:
         leaderboardService.getAllUserList().then(function (result) {
             $scope.users = result.users;
@@ -67,6 +85,9 @@ angular.module('appname.controllers', [])
         };
         $scope.filterByType = function (type) {
             return filterByType(type);
+        };
+        $scope.betName = function (name) {
+            return betName(name);
         };
         $scope.update = function () {
             $scope.teamspredictions.forEach(function (team) {
@@ -100,6 +121,9 @@ angular.module('appname.controllers', [])
         };
         $scope.getClass = function (userVal, actualVal) {
             return getClassGlobal(userVal, actualVal);
+        };
+        $scope.betName = function (name) {
+            return betName(name);
         };
         $scope.update = function () {
             $scope.matchespredictions.forEach(function (match) {
@@ -178,7 +202,9 @@ angular.module('appname.controllers', [])
         $scope.getClass = function (userVal, actualVal) {
             return getClassGlobal(userVal, actualVal);
         };
-
+        $scope.betName = function (name) {
+            return betName(name);
+        };
         $scope.saveChanges = function (type) {
             if (type === 1) {
                 gameService.saveChangesMatches($scope.matchespredictions).then(function (result) {
@@ -290,4 +316,16 @@ function filterByType(type) {
         }
     }
 
+}
+
+function betName(name) {
+    if (name === 'Northern Ireland') {
+        name = 'n-ireland';
+    } else if (name === 'Republic of Ireland') {
+        name = 'rep-of-ireland';
+    }
+    else if (name === 'Czech Republic') {
+        name = 'Czech-Republic';
+    }
+    return name;
 }

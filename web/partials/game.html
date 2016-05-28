@@ -38,6 +38,7 @@
             <th>Goal Diff</th>
             <th>First To Score</th>
             <th>Points Collected</th>
+            <th>More Info</th>
         </tr>
         </thead>
         <tr ng-repeat="x in matchespredictions | orderBy : 'matchID'">
@@ -200,6 +201,10 @@
             </td>
             <td>
                 <label>{{ ::x.score || 0}}</label>
+            </td>
+            <td>
+                <a ng-href="http://www.oddschecker.com/football/euro-2016/{{betName(matches[x.matchID - 1].team1)}}-v-{{betName(matches[x.matchID - 1].team2)}}/correct-score">Check
+                    online Bets</a>
             </td>
         </tr>
     </table>

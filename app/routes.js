@@ -559,22 +559,30 @@ module.exports = function (app, passport) {
                 response.user = removeSensitiveInfo(aUser);
 
                 // looking for other user details, only results until this deadline date.
-                matches.find({matchID: matchId}, function (err, matches) {
+                matches.find({}, function (err, matches) {
                     if (!error) {
                         response.matches = removeSensitiveInfoArray(matches);
 
-                        // get all other user's matches predictions until this kickoff
-                        matchespredictions.find({matchID: matchId}, function (err, matchespredictions) {
-                            if (!error && matchespredictions) {
-                                response.matchespredictions = removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1');
+                        user.find({}, function (error, allUsers) {
+                            response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
 
-                                user.find({}, function (error, allUsers) {
-                                    response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
+                            // get all other user's matches predictions until this kickoff
+                            matchespredictions.find({matchID: matchId}, function (err, matchespredictions) {
+                                if (!error && matchespredictions) {
+                                    if (isAdminUser(aUser)) {
+                                        response.matchespredictions = removeAdminFromPredictions(matchespredictions, response.users);
+                                    } else {
+                                        response.matchespredictions = removeSensitiveInfoArrayWithDateAndAdmin(matchespredictions, response.matches, '1', response.users);
+                                    }
+
                                     res.json(200, response);
-                                });
-
-                            }
+                                } else {
+                                    res.json(200, response);
+                                }
+                            });
                         });
+                    } else {
+                        res.json(200, response);
                     }
                 });
             }
@@ -663,7 +671,7 @@ module.exports = function (app, passport) {
                                                 if (isAdminUser(aUser)) {
                                                     response.matchespredictions = matchespredictions;
                                                 } else {
-                                                    response.matchespredictions = removeSensitiveInfoArrayWithDate(matchespredictions, response.matches, '1');
+                                                    response.matchespredictions = removeSensitiveInfoArrayWithDateAndAdmin(matchespredictions, response.matches, '1');
                                                 }
 
                                                 res.json(200, response);
@@ -684,7 +692,7 @@ module.exports = function (app, passport) {
                                                     if (isAdminUser(aUser)) {
                                                         response.teamspredictions = teamspredictions;
                                                     } else {
-                                                        response.teamspredictions = removeSensitiveInfoArrayWithDate(teamspredictions, response.teams, '2');
+                                                        response.teamspredictions = removeSensitiveInfoArrayWithDateAndAdmin(teamspredictions, response.teams, '2');
                                                     }
 
                                                     res.json(200, response);
@@ -778,19 +786,18 @@ module.exports = function (app, passport) {
         return arr;
     }
 
-    function removeSensitiveInfoArrayWithDate(predictions, origList, type) {
+    function removeSensitiveInfoArrayWithDateAndAdmin(predictions, origList, type, users) {
         var filteredPredictions = [];
 
         if (predictions && origList) {
             if (type === '1') {
-                var matchFiltered = origList.filter(function (orgItem) {
+                var matchFilteredByDate = origList.filter(function (orgItem) {
                     return getIfTimePassed(orgItem.kickofftime);
                 });
-                if (matchFiltered) {
-
+                if (matchFilteredByDate) {
                     filteredPredictions = predictions.filter(function (predictItem) {
-                        for (var i = 0; i < matchFiltered.length; i++) {
-                            if (matchFiltered[i].matchID === predictItem.matchID) {
+                        for (var i = 0; i < matchFilteredByDate.length; i++) {
+                            if (matchFilteredByDate[i].matchID === predictItem.matchID) {
                                 return true;
                             }
                         }
@@ -798,14 +805,13 @@ module.exports = function (app, passport) {
                     });
                 }
             } else {
-                var teamFiltered = origList.filter(function (orgItem) {
+                var teamFilteredByDate = origList.filter(function (orgItem) {
                     return getIfTimePassed(orgItem.deadline);
                 });
-                if (teamFiltered) {
-
+                if (teamFilteredByDate) {
                     filteredPredictions = predictions.filter(function (predictItem) {
-                        for (var i = 0; i < teamFiltered.length; i++) {
-                            if (teamFiltered[i].teamID === predictItem.teamID) {
+                        for (var i = 0; i < teamFilteredByDate.length; i++) {
+                            if (teamFilteredByDate[i].teamID === predictItem.teamID) {
                                 return true;
                             }
                         }
@@ -815,7 +821,22 @@ module.exports = function (app, passport) {
             }
         }
 
-        return removeSensitiveInfoArray(filteredPredictions);
+        return removeAdminFromPredictions(filteredPredictions, users);
+    }
+
+    function removeAdminFromPredictions(matches, users) {
+        if (users) {
+            // filter the admin user
+            matches = matches.filter(function (predictItem) {
+                for (var i = 0; i < users.length; i++) {
+                    if (users[i]._id.toString() === predictItem.user_id) {
+                        return true;
+                    }
+                }
+                return false;
+            });
+        }
+        return matches;
     }
 
     function getIfTimePassed(dateValue) {

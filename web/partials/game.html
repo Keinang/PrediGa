@@ -1,15 +1,27 @@
-<br/>
-<br/>
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
 
     <div class="col-sm-offset-4">
-        <p class="h1"><b>{{::userName}}</b>'s predictions</p>
-        <button class="btn-primary btn-sm " ng-click="navigate(userName, 2);" ng-if="!isSameUser()">See User's Teams
-        </button>
-        <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-if="!isSameUser()">See my Matches
-        </button>
+        <div>
+            <p class="h1"><b>{{::userName}}</b>'s predictions</p>
+            <br/>
+            <div style="float: left;">
+                <div style="float: left;">
+                    <p>Change user: &nbsp;&nbsp;</p>
+                </div>
+                <div style="float: left;">
+                    <select ng-model="userName" class="selectName" ng-change="navigate(userName, 1)">
+                        <option ng-repeat="user in users | orderBy: 'username'">{{user.username}}</option>
+                    </select>
+                </div>
+            </div>
+            <br/>
+        </div>
+        <br/>
         <button class="btn-primary btn-sm " ng-click="saveChanges(1);" ng-if="isSameUser()">Save Changes</button>
-        <button class="btn-primary btn-sm " ng-click="navigate(null, 2);" ng-if="isSameUser()">See my Teams</button>
+        <button class="btn-primary btn-sm " ng-click="navigate(userName, 2);" ng-if="!isSameUser()">User's Teams
+        </button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 1);" ng-if="!isSameUser()">My Matches</button>
+        <button class="btn-primary btn-sm " ng-click="navigate(null, 2);" ng-if="isSameUser()">My Teams</button>
     </div>
     <p class="h3">Matches</p>
     <br/>

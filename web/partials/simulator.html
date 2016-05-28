@@ -1,18 +1,80 @@
-<br/>
-<br/>
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
+    <div style="float: left;">
+        <div style="float: left;">
+            <label>Match &nbsp;</label>
+        </div>
 
-    <br/>
-    <br/>
-    <div>
-        <label>Match</label> <select class="select" ng-change="changeSim()" ng-model="currentGame">
-        <option ng-repeat="n in [].constructor(53) track by $index">{{$index}}</option>
-        </select>
+        <div style="float: left;">
+            <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
+                    ng-init="currentGame = currentGame || 1">
+                <option ng-repeat="x in matches | orderBy: 'matchID'">{{x.matchID}}</option>
+            </select>
+
+
+            <img ng-src="{{matches[currentGame - 1].team1.length > 4 && 'img/'+matches[currentGame - 1].team1+'.png' || 'img/question.png' }}">
+            <label>{{ ::matches[currentGame - 1].team1}} - </label>
+            <img ng-src="{{matches[currentGame - 1].team2.length > 4 && 'img/'+matches[currentGame - 1].team2+'.png' || 'img/question.png' }}">
+            <label>{{ ::matches[currentGame - 1].team2}}</label>
+        </div>
         <br/>
-        <img ng-src="{{match.team1.length > 4 && 'img/'+match.team1+'.png' || 'img/question.png' }}">
-        <label>{{ ::match.team1}}</label> VS. <img
-            ng-src="{{match.team2.length > 4 && 'img/'+match.team2+'.png' || 'img/question.png' }}">
-        <label>{{ ::match.team2}}</label>
+        <br/>
+        <div style="float: left;">
+            <table class="table matches text-nowrap table-condensed" style="color:black;">
+                <thead>
+                <tr>
+                    <th>Winner</th>
+                    <th>Team 1 Score</th>
+                    <th>Team 2 Score</th>
+                    <th>Goal Diff</th>
+                    <th>First To Score</th>
+                </tr>
+                </thead>
+                <tr>
+                    <td>
+                        <select ng-model="simGame._winner" class="selectName" ng-change="update()"
+                                ng-init="simGame._winner = simGame._winner || 'Draw'">
+                            <option>{{ ::matches[currentGame - 1].team1 }}</option>
+                            <option>{{ ::matches[currentGame - 1].team2 }}</option>
+                            <option>Draw</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select ng-model="simGame._team1score" class="select" ng-change="update()"
+                                ng-init="simGame._team1score = simGame._team1score || '0'">
+                            <option>0</option>
+                            <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select ng-model="simGame._team2score" class="select" ng-change="update()"
+                                ng-init="simGame._team2score = simGame._team2score || '0'">
+                            <option>0</option>
+                            <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select ng-model="simGame._goaldiff" class="select" ng-change="update()"
+                                ng-init="simGame._goaldiff = simGame._goaldiff || '0'">
+                            <option>0</option>
+                            <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
+                        </select>
+                    </td>
+
+                    <td>
+                        <select ng-model="simGame._firstscore" class="selectName" ng-change="update()"
+                                ng-init="simGame._firstscore = simGame._firstscore || 'None'">
+                            <option>{{ ::matches[currentGame - 1].team1 }}</option>
+                            <option>{{ ::matches[currentGame - 1].team2 }}</option>
+                            <option>None</option>
+                        </select>
+                    </td>
+                </tr>
+
+            </table>
+        </div>
     </div>
 
     <br/>
@@ -26,16 +88,18 @@
             <th>Goal Diff</th>
             <th>First To Score</th>
             <th>Points Collected</th>
+            <th>Total Score</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in matchesCombined | orderBy:'-score'">
-            <td><label>{{ ::x.username}}</label></td>
-            <td><label>{{ ::x._winner}}</label></td>
-            <td><label>{{ ::x._team1score}}</label></td>
-            <td><label>{{ ::x._team2score}}</label></td>
-            <td><label>{{ ::x._goaldiff}}</label></td>
-            <td><label>{{ ::x._firstscore}}</label></td>
-            <td><label>{{ ::x.score}}</label></td>
+        <tr ng-repeat="x in matchespredictions | orderBy:'-score'">
+            <td><label>{{ ::getUserById(x.user_id).username}}</label></td>
+            <td><label ng-class="getClass(x._winner, simGame._winner )">{{ ::x._winner}}</label></td>
+            <td><label ng-class="getClass(x._team1score, simGame._team1score )">{{ ::x._team1score}}</label></td>
+            <td><label ng-class="getClass(x._team2score, simGame._team2score )">{{ ::x._team2score}}</label></td>
+            <td><label ng-class="getClass(x._goaldiff, simGame._goaldiff )">{{ ::x._goaldiff}}</label></td>
+            <td><label ng-class="getClass(x._firstscore, simGame._firstscore )">{{ ::x._firstscore}}</label></td>
+            <td><label ng-init="update()">{{ x.score || 0}}</label></td><!-- game score -->
+            <td><label ng-init="update()">{{ x.totalScore || 0}}</label></td><!-- total score -->
         </tr>
     </table>
 </div>

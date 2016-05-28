@@ -56,15 +56,57 @@ angular.module('appname.controllers', ['ngAnimate'])
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
         };
+        $scope.getUserById = function (userId) {
+            var res = [];
+            if (userId) {
+                $scope.users.forEach(function (user) {
+                    if (user._id === userId) {
+                        res.push(user);
+
+                    }
+                });
+            }
+            if (res) {
+                return res[0];
+            } else {
+                return null;
+            }
+        };
+
+        $scope.getNumber = function (num) {
+            return getNumberGlobal(num);
+        };
+        $scope.getClass = function (userVal, actualVal) {
+            return getClassGlobal(userVal, actualVal);
+        };
+        $scope.update = function () {
+            $scope.matchespredictions.forEach(function (match) {
+                match.score = 0;
+                if (match._winner === $scope.simGame._winner) {
+                    match.score += 2;
+                }
+                if (match._team1score === $scope.simGame._team1score) {
+                    match.score += 2;
+                }
+                if (match._team2score === $scope.simGame._team2score) {
+                    match.score += 2;
+                }
+                if (match._goaldiff === $scope.simGame._goaldiff) {
+                    match.score += 2;
+                }
+                if (match._firstscore === $scope.simGame._firstscore) {
+                    match.score += 2;
+                }
+                match.totalScore = $scope.getUserById(match.user_id).score + match.score;
+            })
+        };
         // Calling for data for the 1st time:
         simulatorService.matchSimulator($scope.currentGame).then(function (result) {
-            $scope.matchesCombined = combineSimulator(result.matchespredictions, result.users);
-            $scope.match = result.matches[0]; // always one match
+            $scope.matchespredictions = result.matchespredictions;
+            $scope.users = result.users;
+            $scope.matches = result.matches;
+            $scope.simGame;
         });
-
-        $scope.range1 = function (i) {
-            return i ? range1(i - 1).concat(i) : []
-        }
     }])
     .controller('adminCtrl', ['$scope', '$rootScope', 'adminService', function ($scope, $rootScope, $adminService) {
         $scope.groupByValue = function (items, groupByType) {
@@ -108,7 +150,7 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         })
     }])
-    .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, toastr) {
+    .controller('gameCtrl', ['$routeParams', '$rootScope', '$scope', '$timeout', 'gameService', 'leaderboardService', 'toastr', function ($routeParams, $rootScope, $scope, $timeout, gameService, leaderboardService, toastr) {
         $scope.redirectSim = function (matchID) {
             window.location = '#/simulator/:' + matchID;
         };
@@ -167,11 +209,7 @@ angular.module('appname.controllers', ['ngAnimate'])
         };
 
         $scope.getClass = function (userVal, actualVal) {
-            if (typeof(userVal) !== 'undefined' && userVal === actualVal) {
-                return 'green';
-            } else {
-                return 'red';
-            }
+            return getClassGlobal(userVal, actualVal);
         };
 
         $scope.saveChanges = function (type) {
@@ -199,6 +237,12 @@ angular.module('appname.controllers', ['ngAnimate'])
             }
         });
 
+        leaderboardService.getAllUserList().then(function (result) {
+            if (result) {
+                $scope.users = result.users;
+            }
+        });
+
         $scope.updateModel = function (result) {
             if ($scope.isMatches) {
                 $scope.matches = result.matches;
@@ -223,34 +267,11 @@ angular.module('appname.controllers', ['ngAnimate'])
         };
 
         $scope.getNumber = function (num) {
-            var arr = [];
-            for (var i = 0; i <= num; i++) {
-                arr.push(i);
-            }
-            return arr;
+            return getNumberGlobal(num);
         };
     }
     ]);
 
-// TODO - remove all combines...
-var combineSimulator = function (matches, users) {
-    if (matches) {
-        matches.forEach(function (entry) {
-            if (entry) {
-                // get all list2 values with the same id:
-                var usersFiltered = users.filter(function (user) {
-                    return (user._id === entry.user_id && typeof (entry.user_id) !== 'undefined' );
-                });
-                // merge values
-                if (usersFiltered && usersFiltered[0]) {
-                    entry.username = usersFiltered[0].username;
-                }
-            }
-        });
-    }
-
-    return matches;
-};
 
 function groupBy(array, f) {
     var groups = {};
@@ -262,4 +283,18 @@ function groupBy(array, f) {
     return Object.keys(groups).map(function (group) {
         return groups[group];
     })
+}
+function getNumberGlobal(num) {
+    var arr = [];
+    for (var i = 0; i <= num; i++) {
+        arr.push(i);
+    }
+    return arr;
+}
+function getClassGlobal(userVal, actualVal) {
+    if (typeof(userVal) !== 'undefined' && userVal === actualVal) {
+        return 'green';
+    } else {
+        return 'red';
+    }
 }

@@ -535,7 +535,7 @@ module.exports = function (app, passport) {
                 response.user = removeSensitiveInfo(aUser);
                 teams.find({}, function (err, teams) {
                     if (!error) {
-                        response.teams = removeSensitiveInfoArray(teams);
+                        response.teams = sortByID(removeSensitiveInfoArray(teams), '2');
 
                         user.find({}, function (error, allUsers) {
                             response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
@@ -575,7 +575,7 @@ module.exports = function (app, passport) {
                 response.user = removeSensitiveInfo(aUser);
                 matches.find({}, function (err, matches) {
                     if (!error) {
-                        response.matches = removeSensitiveInfoArray(matches);
+                        response.matches = sortByID(removeSensitiveInfoArray(matches), '1');
 
                         user.find({}, function (error, allUsers) {
                             response.users = removeSensitiveInfoArrayAndAdmin(allUsers);
@@ -627,7 +627,7 @@ module.exports = function (app, passport) {
 
                                 matches.find({}, function (err, matchesFound) {
                                     if (!error) {
-                                        response.matches = matchesFound;
+                                        response.matches = sortByID(matchesFound, '1');
                                     }
 
                                     // correct user matches predictions
@@ -645,7 +645,7 @@ module.exports = function (app, passport) {
                         // get all teams:
                         teams.find({}, function (err, teamsFounds) {
                             if (!error) {
-                                response.teams = teamsFounds;
+                                response.teams = sortByID(teamsFounds, '2');
 
                                 // get all user's teams predictions
                                 teamspredictions.find({user_id: user_id}, function (err, teamsPredictionsForUser) {
@@ -677,7 +677,7 @@ module.exports = function (app, passport) {
                             if (typeof (isMatches) !== 'undefined' && isMatches === 'true') {
                                 matches.find({}, function (err, matches) {
                                     if (!error) {
-                                        response.matches = matches;
+                                        response.matches = sortByID(matches, '1');
 
                                         // get all other user's matches predictions until this kickoff
                                         matchespredictions.find({user_id: otherUserID}, function (err, matchespredictions) {
@@ -697,7 +697,7 @@ module.exports = function (app, passport) {
                                 // get all teams:
                                 teams.find({}, function (err, teams) {
                                         if (!error) {
-                                            response.teams = teams;
+                                            response.teams = sortByID(teams, '2');
 
                                             // get all user's teams predictions
                                             teamspredictions.find({user_id: otherUserID}, function (err, teamspredictions) {
@@ -869,6 +869,17 @@ module.exports = function (app, passport) {
             arrSorted = arr.slice(0);
             arrSorted.sort(function (a, b) {
                 return b.score - a.score;
+            });
+        }
+        return arrSorted;
+    }
+
+    function sortByID(arr, type) {
+        var arrSorted = [];
+        if (arr) {
+            arrSorted = arr.slice(0);
+            arrSorted.sort(function (a, b) {
+                return type === '1' ? a.matchID - b.matchID : a.teamID - b.teamID;
             });
         }
         return arrSorted;

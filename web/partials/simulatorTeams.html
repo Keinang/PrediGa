@@ -10,7 +10,7 @@
         <div style="float: left;">
             <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
                     ng-init="currentGame = currentGame || 1">
-                <option ng-repeat="x in teams | orderBy: 'teamID'">{{x.teamID}}</option>
+                <option ng-repeat="x in teams | orderBy: 'teamID'" value="{{x.teamID}}">{{x.teamID}}: {{x.name}}</option>
             </select>
             <img style="width: 24px;height: 24px;"
                  ng-src="{{ teams[currentGame - 1].name === 'Champion' && 'img/gold.png' || teams[currentGame - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">

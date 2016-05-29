@@ -10,7 +10,7 @@
         <div style="float: left;">
             <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
                     ng-init="currentGame = currentGame || 1">
-                <option ng-repeat="x in matches | orderBy: 'matchID'">{{x.matchID}}</option>
+                <option ng-repeat="x in matches | orderBy: 'matchID'" value="{{x.matchID}}">{{x.matchID}}: {{x.team1}} - {{x.team2}}</option>
             </select>
 
 

@@ -35,6 +35,7 @@
         <tr>
             <th>#</th>
             <th>Type</th>
+            <th>Description</th>
             <th>Deadline</th>
             <th>Team</th>
             <th>Prediction Points</th>
@@ -50,6 +51,9 @@
                 <img style="width: 24px;height: 24px;"
                      ng-src="{{ teams[x.teamID - 1].name === 'Champion' && 'img/gold.png' || teams[x.teamID - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
                 <label>{{ ::teams[x.teamID - 1].name }}</label>
+            </td>
+            <td class="clickableTd" ng-click="redirectSim(x.teamID, 2);">
+                <label>{{ ::teams[x.teamID - 1].desc }}</label>
             </td>
             <td class="clickableTd" ng-click="redirectSim(x.teamID, 2);">
                 <label ng-bind="formatDate(teams[x.teamID - 1].deadline) |  date:'dd.MM.yyyy HH:mm'"></label>

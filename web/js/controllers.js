@@ -288,11 +288,13 @@ var groupC = ['Germany', 'Ukraine', 'Poland', 'Northern Ireland'];
 var groupD = ['Spain', 'Czech Republic', 'Turkey', 'Croatia'];
 var groupE = ['Belgium', 'Italy', 'Republic of Ireland', 'Sweden'];
 var groupF = ['Portugal', 'Iceland', 'Austria', 'Hungary'];
-var allTeamsAB = $.merge(groupA, groupB);
-var allTeamsCD = $.merge(groupC, groupD);
-var allTeamsEF = $.merge(groupE, groupF);
-var allTeamsABCD = $.merge(allTeamsAB, allTeamsCD);
-var allTeams = $.merge(allTeamsABCD, allTeamsEF);
+var allTeams = [];
+$.merge(allTeams, groupA);
+$.merge(allTeams, groupB);
+$.merge(allTeams, groupC);
+$.merge(allTeams, groupD);
+$.merge(allTeams, groupE);
+$.merge(allTeams, groupF);
 
 function filterByType(type) {
     if (type) {

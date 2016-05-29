@@ -2,6 +2,7 @@
 <br/>
 <br/>
 <div class="col-sm-8 col-sm-offset-2" style="color: maroon">
+    <p class="h1">Teams Simulator</p>
     <div style="float: left;">
         <div style="float: left;">
             <label>Team ID: &nbsp;</label>
@@ -10,11 +11,11 @@
         <div style="float: left;">
             <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
                     ng-init="currentGame = currentGame || 1">
-                <option ng-repeat="x in teams | orderBy: 'teamID'" value="{{x.teamID}}">{{x.teamID}}: {{x.name}}</option>
+                <option ng-repeat="x in teams | orderBy: 'teamID'" value="{{x.teamID}}">{{x.teamID}}: {{x.desc}}</option>
             </select>
             <img style="width: 24px;height: 24px;"
                  ng-src="{{ teams[currentGame - 1].name === 'Champion' && 'img/gold.png' || teams[currentGame - 1].name === 'Runner up' && 'img/silver.png' || 'img/bronze.png'}}">
-            <label>{{ ::teams[currentGame - 1].name}}</label>
+            <label>{{ ::teams[currentGame - 1].desc}}</label>
 
             <a ng-href="{{teams[currentGame - 1].name === 'Champion' &&  'http://www.oddschecker.com/football/euro-2016/winner' ||
                           teams[currentGame - 1].name === 'Runner up' && 'http://www.oddschecker.com/football/euro-2016/winner' || 'http://www.oddschecker.com/football/euro-2016/to-qualify'

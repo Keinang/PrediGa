@@ -33,14 +33,12 @@ module.exports = function (app, passport) {
                 return res.json(200, response);
             } else {
                 initialData.insertData(matches, teams).then(function () {
-                    updateUsersScores().then(function () {
-                        console.log('Done updating initial data.');
+                    console.log('Done updating initial data.');
 
-                        // done:
-                        response.status = 'OK';
-                        response.user = removeSensitiveInfo(user);
-                        return res.json(200, response);
-                    });
+                    // done:
+                    response.status = 'OK';
+                    response.user = removeSensitiveInfo(user);
+                    return res.json(200, response);
                 });
             }
         });

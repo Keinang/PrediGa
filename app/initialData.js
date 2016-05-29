@@ -387,6 +387,7 @@ module.exports = {
                     new teams({
                         teamID: 1,
                         name: 'Champion',
+                        desc: 'Champion',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 16
 
@@ -395,6 +396,7 @@ module.exports = {
                     new teams({
                         teamID: 2,
                         name: 'Runner up',
+                        desc: 'Runner up',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 8
                     }).save(function (err) {
@@ -402,6 +404,7 @@ module.exports = {
                     new teams({
                         teamID: 3,
                         name: 'A1',
+                        desc: 'Winner of group A',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -409,6 +412,7 @@ module.exports = {
                     new teams({
                         teamID: 4,
                         name: 'A2',
+                        desc: 'Runner up of group A',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -416,6 +420,7 @@ module.exports = {
                     new teams({
                         teamID: 5,
                         name: 'B1',
+                        desc: 'Winner of group B',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -423,6 +428,7 @@ module.exports = {
                     new teams({
                         teamID: 6,
                         name: 'B2',
+                        desc: 'Runner up of group B',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -430,6 +436,7 @@ module.exports = {
                     new teams({
                         teamID: 7,
                         name: 'C1',
+                        desc: 'Winner of group C',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -437,6 +444,7 @@ module.exports = {
                     new teams({
                         teamID: 8,
                         name: 'C2',
+                        desc: 'Runner up of group C',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -444,6 +452,7 @@ module.exports = {
                     new teams({
                         teamID: 9,
                         name: 'D1',
+                        desc: 'Winner of group D',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -451,6 +460,7 @@ module.exports = {
                     new teams({
                         teamID: 10,
                         name: 'D2',
+                        desc: 'Runner up of group D',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -458,6 +468,7 @@ module.exports = {
                     new teams({
                         teamID: 11,
                         name: 'E1',
+                        desc: 'Winner of group E',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -465,6 +476,7 @@ module.exports = {
                     new teams({
                         teamID: 12,
                         name: 'E2',
+                        desc: 'Runner up of group E',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function (err) {
@@ -472,6 +484,7 @@ module.exports = {
                     new teams({
                         teamID: 13,
                         name: 'F1',
+                        desc: 'Winner of group F',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -480,6 +493,7 @@ module.exports = {
                     new teams({
                         teamID: 14,
                         name: 'F2',
+                        desc: 'Runner up of group F',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -488,7 +502,8 @@ module.exports = {
 
                     new teams({
                         teamID: 15,
-                        name: '1st of 3rd place table',
+                        name: '3rd #1',
+                        desc: '1st of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -497,7 +512,8 @@ module.exports = {
 
                     new teams({
                         teamID: 16,
-                        name: '2nd of 3rd place table',
+                        name: '3rd #2',
+                        desc: '2nd of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -506,7 +522,8 @@ module.exports = {
 
                     new teams({
                         teamID: 17,
-                        name: '3rd of 3rd place table',
+                        name: '3rd #3',
+                        desc: '3rd of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -515,7 +532,8 @@ module.exports = {
 
                     new teams({
                         teamID: 18,
-                        name: '4th of 3rd place table',
+                        name: '3rd #4',
+                        desc: '4th of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
                     }).save(function () {
@@ -545,6 +563,7 @@ module.exports = {
                     new teams({
                         teamID: 19,
                         name: 'Test',
+                        desc: 'Test',
                         deadline: new Date("2016-05-01T19:00:00Z"),
                         predictscore: 0,
                         team: 'T1'

@@ -7,6 +7,7 @@ var mongoose = require('mongoose');
 var teamsSchema = mongoose.Schema({
     teamID: Number,
     name: String,
+    desc: String,
     team: String,
     deadline: Date,
     predictscore: Number

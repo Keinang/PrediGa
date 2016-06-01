@@ -35,6 +35,7 @@
             <th>Team 1</th>
             <th>Team 2</th>
             <th>Kick Off Time</th>
+            <th>Prediction Time</th>
             <th>Winner</th>
             <th>Team 1 Score</th>
             <th>Team 2 Score</th>
@@ -58,6 +59,9 @@
 
             <td class="clickableTd" ng-click="redirectSim(x.matchID);">
                 <label ng-bind="formatDate(matches[x.matchID - 1].kickofftime) |  date:'dd.MM.yyyy HH:mm'"></label>
+            </td>
+            <td class="clickableTd" ng-click="redirectSim(x.matchID);">
+                <label ng-bind="formatDate(matches[x.matchID - 1].kickofftime, 1) |  date:'dd.MM.yyyy HH:mm'"></label>
             </td>
             <td>
                 <!-- user values (_winner) -->

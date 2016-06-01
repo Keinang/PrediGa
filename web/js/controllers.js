@@ -79,6 +79,9 @@ angular.module('appname.controllers', [])
         $scope.changeSim = function () {
             window.location = '#/simulatorTeams/:' + $scope.currentGame;
         };
+        $scope.redirect = function (username) {
+            window.location = '#/game/:' + username;
+        };
         $scope.getUserById = function (userId) {
             return getUserById(userId, $scope.users);
         };
@@ -116,6 +119,9 @@ angular.module('appname.controllers', [])
 
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
+        };
+        $scope.redirect = function (username) {
+            window.location = '#/game/:' + username;
         };
         $scope.getUserById = function (userId) {
             return getUserById(userId, $scope.users);
@@ -185,8 +191,12 @@ angular.module('appname.controllers', [])
             return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;
         };
 
-        $scope.formatDate = function (date) {
+        $scope.formatDate = function (date, substractHours) {
             var dateOut = new Date(date);
+            if (substractHours) {
+                dateOut.setHours(dateOut.getHours() - substractHours);
+            }
+
             return dateOut;
         };
 

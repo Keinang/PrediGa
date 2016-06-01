@@ -102,7 +102,8 @@
             <th>Total Score</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in matchespredictions | orderBy:'-score'">
+        <tr ng-repeat="x in matchespredictions | orderBy:'-score'" ng-click="redirect(getUserById(x.user_id).username);"
+            class="clickableTd">
             <td><label>{{$index+1}}</label></td>
             <td><label>{{ ::getUserById(x.user_id).username}}</label></td>
             <td><label ng-class="getClass(x._winner, simGame._winner )">{{ ::x._winner}}</label></td>

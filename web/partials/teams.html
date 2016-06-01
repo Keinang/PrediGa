@@ -56,7 +56,7 @@
                 <label>{{ ::teams[x.teamID - 1].desc }}</label>
             </td>
             <td class="clickableTd" ng-click="redirectSim(x.teamID, 2);">
-                <label ng-bind="formatDate(teams[x.teamID - 1].deadline) |  date:'dd.MM.yyyy HH:mm'"></label>
+                <label ng-bind="formatDate(teams[x.teamID - 1].deadline, 1) |  date:'dd.MM.yyyy HH:mm'"></label>
             </td>
             <td>
                 <!-- user values -->

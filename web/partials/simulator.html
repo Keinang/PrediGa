@@ -12,7 +12,9 @@
         <div style="float: left;">
             <select style="width: 100px" class="select" ng-change="changeSim()" ng-model="currentGame"
                     ng-init="currentGame = currentGame || 1">
-                <option ng-repeat="x in matches | orderBy: 'matchID'" value="{{x.matchID}}">{{x.matchID}}: {{x.team1}} - {{x.team2}}</option>
+                <option ng-repeat="x in matches | orderBy: 'matchID'" value="{{x.matchID}}">{{x.matchID}}: {{x.team1}} -
+                    {{x.team2}}
+                </option>
             </select>
 
 
@@ -21,7 +23,8 @@
             <img ng-src="{{matches[currentGame - 1].team2.length > 4 && 'img/'+matches[currentGame - 1].team2+'.png' || 'img/question.png' }}">
             <label>{{ ::matches[currentGame - 1].team2}}</label>
 
-            <a ng-href="http://www.oddschecker.com/football/euro-2016/{{betName(matches[currentGame - 1].team1)}}-v-{{betName(matches[currentGame - 1].team2)}}/correct-score">Check
+            <a target="newwindow"
+               ng-href="http://www.oddschecker.com/football/euro-2016/{{betName(matches[currentGame - 1].team1)}}-v-{{betName(matches[currentGame - 1].team2)}}/correct-score">Check
                 online betting</a>
         </div>
         <br/>

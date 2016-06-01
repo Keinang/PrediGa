@@ -210,7 +210,8 @@
                 <label>{{ ::x.score || 0}}</label>
             </td>
             <td>
-                <a ng-href="http://www.oddschecker.com/football/euro-2016/{{betName(matches[x.matchID - 1].team1)}}-v-{{betName(matches[x.matchID - 1].team2)}}/correct-score">Check
+                <a target="newwindow"
+                   ng-href="http://www.oddschecker.com/football/euro-2016/{{betName(matches[x.matchID - 1].team1)}}-v-{{betName(matches[x.matchID - 1].team2)}}/correct-score">Check
                     online betting</a>
             </td>
         </tr>

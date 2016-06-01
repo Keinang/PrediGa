@@ -90,7 +90,8 @@
                 <label>{{ ::x.score || 0 }}</label>
             </td>
             <td>
-                <a ng-href="{{teams[x.teamID - 1].name === 'Champion' &&  'http://www.oddschecker.com/football/euro-2016/winner' ||
+                <a target="newwindow"
+                   ng-href="{{teams[x.teamID - 1].name === 'Champion' &&  'http://www.oddschecker.com/football/euro-2016/winner' ||
                               teams[x.teamID - 1].name === 'Runner up' && 'http://www.oddschecker.com/football/euro-2016/winner' || 'http://www.oddschecker.com/football/euro-2016/to-qualify'
                 }}">
                     Check online betting

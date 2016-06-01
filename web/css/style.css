@@ -249,6 +249,7 @@ body {
     width: 1%;
 }
 
-footer {
-    background-color: #ccc;
+.changedSelect {
+    color: black;
+    background-color: yellowgreen;
 }

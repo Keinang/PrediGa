@@ -217,17 +217,39 @@ angular.module('appname.controllers', [])
         $scope.getClass = function (userVal, actualVal) {
             return getClassGlobal(userVal, actualVal);
         };
+        $scope.getClassSelectValue = function (orig, now) {
+            return getClassSelectValue(orig, now);
+        };
         $scope.betName = function (name) {
             return betName(name);
+        };
+        $scope.resetSelectOrigValues = function (arr, type) {
+            if (type === 1) {
+                arr.forEach(function (item) {
+                    item._winnerOrig = item._winner;
+                    item._team1scoreOrig = item._team1score;
+                    item._team2scoreOrig = item._team2score;
+                    item._goaldiffOrig = item._goaldiff;
+                    item._firstscoreOrig = item._firstscore;
+                });
+            } else {
+                arr.forEach(function (item) {
+                    item._teamOrig = item._team;
+                });
+            }
         };
         $scope.saveChanges = function (type) {
             if (type === 1) {
                 gameService.saveChangesMatches($scope.matchespredictions).then(function (result) {
                     toastr.success('Successfully Saved');
+                    // reset orig values
+                    $scope.resetSelectOrigValues($scope.matchespredictions, 1);
                 });
             } else {
                 gameService.saveChangesTeams($scope.teamspredictions).then(function (result) {
                     toastr.success('Successfully Saved');
+                    // reset orig values
+                    $scope.resetSelectOrigValues($scope.teamspredictions, 2);
                 });
             }
         };
@@ -281,6 +303,14 @@ function getClassGlobal(userVal, actualVal) {
         return 'red';
     }
 }
+function getClassSelectValue(orig, now) {
+    if (typeof(orig) !== 'undefined' && orig === now) {
+
+    } else {
+        return 'changedSelect';
+    }
+}
+
 function getUserById(userId, users) {
     var res = [];
     if (userId) {

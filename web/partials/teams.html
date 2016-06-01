@@ -61,7 +61,9 @@
             <td>
                 <!-- user values -->
                 <div ng-if="isDateOK(teams[x.teamID - 1].deadline) && isSameUser() && !isAdmin()">
-                    <select ng-model="x._team" class="selectName">
+                    <select ng-model="x._team" class="selectName" ng-class="getClassSelectValue(x._teamOrig,x._team)"
+                            ng-init="x._teamOrig = x._team"
+                    >
                         <option ng-repeat="team in filterByType(teams[x.teamID - 1].name)">{{::team}}</option>
                     </select>
                     <br/>

@@ -67,6 +67,7 @@
                 <!-- user values (_winner) -->
                 <div ng-if="isDateOK(matches[x.matchID - 1].kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._winner" class="selectName"
+                            ng-class="getClassSelectValue(x._winnerOrig,x._winner)" ng-init="x._winnerOrig = x._winner"
                             ng-init="x._winner = x._winner || 'Draw'">
                         <option>{{ ::matches[x.matchID - 1].team1 }}</option>
                         <option>{{ ::matches[x.matchID - 1].team2 }}</option>
@@ -96,6 +97,8 @@
                 <!-- user values (_team1score)-->
                 <div ng-if="isDateOK(matches[x.matchID - 1].kickofftime ) && isSameUser() && !isAdmin()">
                     <select ng-model="x._team1score" class="select"
+                            ng-class="getClassSelectValue(x._team1scoreOrig,x._team1score)"
+                            ng-init="x._team1scoreOrig = x._team1score"
                             ng-init="x._team1score = x._team1score || '0'">
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
@@ -124,6 +127,8 @@
                 <!-- user values (_team2score) -->
                 <div ng-if="isDateOK(matches[x.matchID - 1].kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._team2score" class="select"
+                            ng-class="getClassSelectValue(x._team2scoreOrig,x._team2score)"
+                            ng-init="x._team2scoreOrig = x._team2score"
                             ng-init="x._team2score = x._team2score || '0'">
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
@@ -152,6 +157,8 @@
                 <!-- user values (_goaldiff) -->
                 <div ng-if="isDateOK(matches[x.matchID - 1].kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._goaldiff" class="select"
+                            ng-class="getClassSelectValue(x._goaldiffOrig,x._goaldiff)"
+                            ng-init="x._goaldiffOrig = x._goaldiff"
                             ng-init="x._goaldiff = x._goaldiff || '0'">
                         <option>0</option>
                         <option ng-repeat="i in getNumber(15) track by $index">{{$index+1}}</option>
@@ -180,6 +187,8 @@
                 <!-- user values (_firstscore) -->
                 <div ng-if="isDateOK(matches[x.matchID - 1].kickofftime) && isSameUser() && !isAdmin()">
                     <select ng-model="x._firstscore" class="selectName"
+                            ng-class="getClassSelectValue(x._firstscoreOrig,x._firstscore)"
+                            ng-init="x._firstscoreOrig = x._firstscore"
                             ng-init="x._firstscore = x._firstscore || 'None'">
                         <option>{{ ::matches[x.matchID - 1].team1 }}</option>
                         <option>{{ ::matches[x.matchID - 1].team2 }}</option>

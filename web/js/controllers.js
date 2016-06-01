@@ -41,6 +41,11 @@ angular.module('appname.controllers', [])
     .controller('helpCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
 
     }])
+    .controller('contactCtrl', ['$scope', '$rootScope', function ($scope, $rootScope) {
+        $scope.sendMail = function (name, message) {
+            window.open("mailto:keinan.gilad@gmail.com?subject=PrediGa Contact us question&body=Hi, My name is " + name + ". " + message, "_self");
+        };
+    }])
     .controller('leaderboardCtrl', ['$scope', '$rootScope', 'leaderboardService', function ($scope, $rootScope, leaderboardService) {
         $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;

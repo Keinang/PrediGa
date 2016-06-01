@@ -248,3 +248,7 @@ body {
     white-space: nowrap;
     width: 1%;
 }
+
+footer {
+    background-color: #ccc;
+}

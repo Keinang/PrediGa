@@ -66,6 +66,19 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 controller: 'helpCtrl',
                 resolve: {logincheck: checkLogin}
             })
+            .when('/about', {
+                templateUrl: 'partials/about.html',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/contact', {
+                templateUrl: 'partials/contact.html',
+                controller: 'contactCtrl',
+                resolve: {logincheck: checkLogin}
+            })
+            .when('/privacy', {
+                templateUrl: 'partials/privacy.html',
+                resolve: {logincheck: checkLogin}
+            })
             .otherwise({redirectTo: '/login'});
     }]).run(['$rootScope', '$q', '$http', function ($rootScope, $q, $http) {
 

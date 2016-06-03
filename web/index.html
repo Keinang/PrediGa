@@ -2,6 +2,7 @@
 <html lang="en" ng-app="summerproject" ng-controller="BaseCtrl">
 <head>
     <meta charset="UTF-8">
+    <meta name="keywords" content="Euro2016, Football, Prediction, Simulator, UEFA Euro 2016 "/>
     <title>Prediction Game</title>
     <link rel="shortcut icon" type="image/x-icon" href="img/logo.png"/>
     `
@@ -97,13 +98,39 @@
     </div>
 </nav>
 
-<!-- Ads-->
-<script type="text/javascript"> var infolinks_pid = 2785774;
-var infolinks_wsid = 0; </script>
-<script type="text/javascript" src="//resources.infolinks.com/js/infolinks_main.js"></script>
 
-<!-- Prediga Main Content-->
-<div ng-view class="animate-view"></div>
+<div class="row" style="padding-top: 42px; padding-left: 15px">
+    <div class="col-md-1">
+        <!-- Ads-->
+        <script type="text/javascript">
+            ( function () {
+                if (window.CHITIKA === undefined) {
+                    window.CHITIKA = {'units': []};
+                }
+                var unit = {
+                    "calltype": "async[2]",
+                    "publisher": "Keinang",
+                    "width": 160,
+                    "height": 600,
+                    "sid": "Chitika Default"
+                };
+                var placement_id = window.CHITIKA.units.length;
+                window.CHITIKA.units.push(unit);
+                document.write('<div id="chitikaAdBlock-' + placement_id + '"></div>');
+            }());
+        </script>
+        <script type="text/javascript" src="//cdn.chitika.net/getads.js" async></script>
+    </div>
+
+    <!-- PrediGa Main Content-->
+    <div ng-view class="animate-view col-md-9"></div>
+</div>
+
+<div class="container">
+    <br/>
+    <br/>
+
+</div>
 <br/>
 <br/>
 

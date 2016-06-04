@@ -164,7 +164,7 @@ module.exports = function (app, passport) {
             // filter admin + sensitive values:
             var filtered = [];
             users.forEach(function (user) {
-                if (!isAdminUser(user)) {
+                if (!isAdminUser(user) && !isDemoUser(user)) {
                     filtered.push(removeSensitiveInfo(user));
                 }
             });
@@ -893,6 +893,13 @@ module.exports = function (app, passport) {
 
     function isAdminUser(user) {
         if (user.username === 'admin' && user.email === 'admin@admin') {
+            return true;
+        }
+        return false;
+    }
+
+    function isDemoUser(user) {
+        if (user.username === 'demo' && user.email === 'demo@demo') {
             return true;
         }
         return false;

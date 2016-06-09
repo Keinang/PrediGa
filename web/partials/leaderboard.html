@@ -13,6 +13,7 @@
             <th class="col-sm-1">Position</th>
             <th class="col-sm-2">User Name</th>
             <th class="col-sm-1">Score</th>
+            <th class="col-sm-1">Strikes</th>
         </tr>
         </thead>
         <tr ng-repeat="x in users | orderBy : '-score'" ng-click="redirect(x);">
@@ -28,6 +29,7 @@
                 <label>{{ ::x.username }}</label>
             </td>
             <td><label>{{ ::x.score }}</label></td>
+            <td><label>{{ ::x.strikes }}</label></td>
         </tr>
     </table>
 </div>

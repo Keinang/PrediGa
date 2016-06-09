@@ -195,11 +195,15 @@ module.exports = function (app, passport) {
 
                 // starting from 0:
                 var totalScore = 0;
+                var strikes = 0;
 
                 matchespredictions.find({user_id: user._id}, function (err, matchespredictionsRows) {
                     if (matchespredictionsRows) {
                         matchespredictionsRows.forEach(function (matchespredictionsRow) {
                             totalScore += typeof(matchespredictionsRow.score) === 'number' ? matchespredictionsRow.score : 0;
+                            if (matchespredictionsRow.score === 10) {
+                                strikes += 1;
+                            }
                         });
                     }
 
@@ -211,6 +215,7 @@ module.exports = function (app, passport) {
                         }
                         // Finish iterating, saving the total score:
                         user.score = totalScore;
+                        user.strikes = strikes;
                         user.save(function (err) {
 
                         });

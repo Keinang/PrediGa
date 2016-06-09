@@ -11,6 +11,10 @@ var userSchema = mongoose.Schema({
         type: Number,
         default: 0
     },
+    strikes: {
+        type: Number,
+        default: 0
+    },
     isAdmin: {
         type: Boolean,
         default: false

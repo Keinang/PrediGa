@@ -5,8 +5,9 @@
     <div class="col-sm-offset-4">
         <p class="h1">Leaderboard</p>
         <p class="h3">Click on any row to see user's predictions</p>
-
+        <button class="btn-primary btn-sm " ng-click="changeOrderBy();">Order By Strikes/Score</button>
     </div>
+
     <table class="table table-striped clickable" style="color:black">
         <thead>
         <tr>
@@ -16,7 +17,7 @@
             <th class="col-sm-1">Strikes</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in users | orderBy : '-score'" ng-click="redirect(x);">
+        <tr ng-repeat="x in users | orderBy :orderBy" ng-click="redirect(x);">
             <td>
                 <label>{{$index+1}}</label>
                 <label ng-class="getClassByPosition(x.lastplace, $index+1)"

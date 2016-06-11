@@ -50,6 +50,14 @@ angular.module('appname.controllers', [])
         $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;
         };
+        $scope.orderBy = '-score';
+        $scope.changeOrderBy = function () {
+            if ($scope.orderBy == '-score') {
+                $scope.orderBy = '-strikes';
+            } else {
+                $scope.orderBy = '-score';
+            }
+        };
         $scope.getClassByPosition = function (lastPlace, currentPlace) {
             if (typeof(lastPlace) !== 'undefined' && lastPlace > currentPlace) {
                 return 'green';
@@ -78,6 +86,10 @@ angular.module('appname.controllers', [])
 
         $scope.changeSim = function () {
             window.location = '#/simulatorTeams/:' + $scope.currentGame;
+        };
+        $scope.changeSimNext = function () {
+            $scope.currentGame = parseInt($scope.currentGame) + 1;
+            $scope.changeSim();
         };
         $scope.redirect = function (username) {
             window.location = '#/game/:' + username;
@@ -119,6 +131,10 @@ angular.module('appname.controllers', [])
 
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
+        };
+        $scope.changeSimNext = function () {
+            $scope.currentGame = parseInt($scope.currentGame) + 1;
+            $scope.changeSim();
         };
         $scope.redirect = function (username) {
             window.location = '#/game/:' + username;

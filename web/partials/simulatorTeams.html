@@ -46,12 +46,19 @@
                 </tr>
             </table>
         </div>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <br/>
+        <button class="btn-primary btn-sm " ng-click="changeSimNext(-1);">Prev Game</button>
+        <button class="btn-primary btn-sm " ng-click="changeSimNext(1);">Next Game</button>
+        <button class="btn-primary btn-sm " ng-click="changeOrderBy();">Order By Collected/Total</button>
+        <br/>
+        <br/>
     </div>
 
     <br/>
-    <div style="float: left;">
-        <button class="btn-primary btn-sm " ng-click="changeSimNext();">Next Game</button>
-    </div>
     <br/>
     <table class="table table-striped matches text-nowrap table-condensed" style="color:black;">
         <thead>
@@ -64,7 +71,8 @@
             <th>Total Score</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in teamspredictions | orderBy:'-score'" ng-click="redirect(getUserById(x.user_id).username);"
+        <tr ng-repeat="x in teamspredictions | orderBy:orderBy || '-score'"
+            ng-click="redirect(getUserById(x.user_id).username);"
             class="clickableTd">
             <td><label>{{$index+1}}</label></td>
             <td><label>{{ ::getUserById(x.user_id).username}}</label></td>

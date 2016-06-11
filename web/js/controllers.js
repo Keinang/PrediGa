@@ -87,9 +87,20 @@ angular.module('appname.controllers', [])
         $scope.changeSim = function () {
             window.location = '#/simulatorTeams/:' + $scope.currentGame;
         };
-        $scope.changeSimNext = function () {
-            $scope.currentGame = parseInt($scope.currentGame) + 1;
+        $scope.changeSimNext = function (inc) {
+            $scope.currentGame = parseInt($scope.currentGame) + inc;
+            if ($scope.currentGame < 1) {
+                $scope.currentGame = 1;
+            }
             $scope.changeSim();
+        };
+        $scope.orderBy;
+        $scope.changeOrderBy = function () {
+            if (!$scope.orderBy || $scope.orderBy === '-score') {
+                $scope.orderBy = '-totalScore';
+            } else {
+                $scope.orderBy = '-score';
+            }
         };
         $scope.redirect = function (username) {
             window.location = '#/game/:' + username;
@@ -132,9 +143,20 @@ angular.module('appname.controllers', [])
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
         };
-        $scope.changeSimNext = function () {
-            $scope.currentGame = parseInt($scope.currentGame) + 1;
+        $scope.changeSimNext = function (inc) {
+            $scope.currentGame = parseInt($scope.currentGame) + inc;
+            if ($scope.currentGame < 1) {
+                $scope.currentGame = 1;
+            }
             $scope.changeSim();
+        };
+        $scope.orderBy;
+        $scope.changeOrderBy = function () {
+            if (!$scope.orderBy || $scope.orderBy === '-score') {
+                $scope.orderBy = '-totalScore';
+            } else {
+                $scope.orderBy = '-score';
+            }
         };
         $scope.redirect = function (username) {
             window.location = '#/game/:' + username;

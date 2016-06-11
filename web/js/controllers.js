@@ -405,7 +405,7 @@ function filterByType(type) {
 
 function betName(name) {
     if (name === 'Northern Ireland') {
-        name = 'n-ireland';
+        name = 'northern-ireland';
     } else if (name === 'Republic of Ireland') {
         name = 'rep-of-ireland';
     }

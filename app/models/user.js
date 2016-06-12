@@ -22,6 +22,10 @@ var userSchema = mongoose.Schema({
     lastplace: {
         type: Number,
         default: 50
+    },
+    place: {
+        type: Number,
+        default: -1
     }
 });
 

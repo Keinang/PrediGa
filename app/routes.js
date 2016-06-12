@@ -163,11 +163,22 @@ module.exports = function (app, passport) {
 
             // filter admin + sensitive values:
             var filtered = [];
-            users.forEach(function (user) {
+
+            users = sortByScore(users);
+            var place = 1;
+            var currentScore = users[1].score;
+
+            for (var i = 0; i < users.length; i++) {
+                var user = users[i];
                 if (!isAdminUser(user) && !isDemoUser(user)) {
+                    if (user.score < currentScore) {
+                        currentScore = user.score;
+                        place += 1;
+                    }
+                    user.place = place;
                     filtered.push(removeSensitiveInfo(user));
                 }
-            });
+            }
 
             response.users = filtered;
             res.json(200, response);
@@ -184,10 +195,20 @@ module.exports = function (app, passport) {
 
         // update user total score:
         user.find({}, function (err, users) {
-            // Before updating, sorting by sort for update the last place:
+            // Before updating, sorting by place to update the last place:
             users = sortByScore(users);
+            var place = 1;
+            var currentScore = users[1].score;
+
             for (var i = 0; i < users.length; i++) {
-                users[i].lastplace = i;
+                var user = users[i];
+                if (!isAdminUser(user) && !isDemoUser(user)) {
+                    if (user.score < currentScore) {
+                        currentScore = user.score;
+                        place += 1;
+                    }
+                    user.lastplace = place;
+                }
             }
 
             users.forEach(function (user) {
@@ -797,7 +818,7 @@ module.exports = function (app, passport) {
         if (arr) {
             var arr2 = [];
             arr.forEach(function (item) {
-                if (!isAdminUser(item)) {
+                if (!isAdminUser(item) && !isDemoUser(item)) {
                     arr2.push(removeSensitiveInfo(item));
                 }
             })

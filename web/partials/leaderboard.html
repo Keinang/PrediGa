@@ -21,7 +21,7 @@
             ng-class="getRowClass(x.username)"
         >
             <td>
-                <label>{{::x.place}}</label>
+                <label>{{ getPositionIndex(x.place, $index +1) }}</label>
                 <label ng-class="getClassByPosition(x.lastplace, x.place)"
                        ng-init="x.change = getPositionStr(x.lastplace, x.place)">{{ ::x.change}}</label>
             </td>

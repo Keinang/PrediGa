@@ -83,6 +83,13 @@ angular.module('appname.controllers', [])
                 return '(0)';
             }
         };
+        $scope.getPositionIndex = function (place, supposeToBePlace) {
+            if (place === supposeToBePlace) {
+                return place;
+            } else {
+                return "-";
+            }
+        };
         $scope.updateStrikes = function () {
             var strikesBest = -1;
             var strikesBest2 = -1;
@@ -109,7 +116,7 @@ angular.module('appname.controllers', [])
 
         $scope.getRowClass = function (username) {
             if (username === $rootScope.currentUser.username) {
-                return "backgroundBold"
+                return "backgroundBold";
             } else {
                 return null;
             }

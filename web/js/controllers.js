@@ -76,9 +76,9 @@ angular.module('appname.controllers', [])
         };
         $scope.getPositionStr = function (lastPlace, currentPlace) {
             if (typeof(lastPlace) !== 'undefined' && lastPlace > currentPlace) {
-                return '+' + (lastPlace - currentPlace);
+                return '(+' + (lastPlace - currentPlace) + ')';
             } else if (typeof(lastPlace) !== 'undefined' && lastPlace < currentPlace) {
-                return '-' + (currentPlace - lastPlace);
+                return '(-' + (currentPlace - lastPlace) + ')';
             } else {
                 return '(0)';
             }

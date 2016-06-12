@@ -77,8 +77,8 @@ angular.module('appname.controllers', [])
             }
         };
         $scope.updateStrikes = function () {
-            var strikesBest = $scope.users[0].strikes;
-            var strikesBest2 = $scope.users[0].strikes;
+            var strikesBest = -1;
+            var strikesBest2 = -1;
             $scope.users.forEach(function (user) {
                 if (user.strikes > strikesBest) {
                     strikesBest2 = strikesBest;

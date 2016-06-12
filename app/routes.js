@@ -363,6 +363,15 @@ module.exports = function (app, passport) {
                                 }, function (error, dbMatchPrediction) {
                                     //console.log('updateMatchPredictionValues (matchespredictions):' + aMatch.matchID);
 
+                                    if (!isAdmin) {
+                                        // having default values for all matches:
+                                        aMatch._winner = aMatch._winner || "Draw";
+                                        aMatch._team1score = aMatch._team1score || 0;
+                                        aMatch._team2score = aMatch._goaldiff || 0;
+                                        aMatch._goaldiff = aMatch._goaldiff || 0;
+                                        aMatch._firstscore = aMatch._firstscore || "None";
+                                    }
+
                                     if (!error && dbMatchPrediction) {
                                         dbMatchPrediction._winner = aMatch._winner;
                                         dbMatchPrediction._team1score = aMatch._team1score;
@@ -372,6 +381,7 @@ module.exports = function (app, passport) {
                                         dbMatchPrediction.save(function (err) {
                                             //console.log('updateMatchPredictionValues (matchespredictions) save:' + aMatch.matchID);
                                         });
+                                        // no prediction in db, creating new one
                                     } else if (aMatch.matchID !== null && typeof (aMatch.matchID) !== 'undefined') {
                                         new matchespredictions({
                                             matchID: aMatch.matchID,
@@ -397,7 +407,6 @@ module.exports = function (app, passport) {
                                 dbMatch.firstscore = aMatch._firstscore;
                                 dbMatch.save(function (err) {
                                     //console.log('updateMatchPredictionValues (matchespredictions) save admin:' + aMatch.matchID);
-
                                 });
                             }
                         } else {

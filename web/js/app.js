@@ -79,6 +79,10 @@ angular.module('summerproject', ['ngRoute', 'ngResource', 'appname.controllers',
                 templateUrl: 'partials/privacy.html',
                 resolve: {logincheck: checkLogin}
             })
+            .when('/legal', {
+                templateUrl: 'partials/legal.html',
+                resolve: {logincheck: checkLogin}
+            })
             .otherwise({redirectTo: '/login'});
     }]).run(['$rootScope', '$q', '$http', function ($rootScope, $q, $http) {
 

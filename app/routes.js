@@ -167,13 +167,17 @@ module.exports = function (app, passport) {
             users = sortByScore(users);
             var place = 1;
             var currentScore = users[1].score;
+            var positionsToAdd = 0;
 
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
                 if (!isAdminUser(user) && !isDemoUser(user)) {
                     if (user.score < currentScore) {
                         currentScore = user.score;
-                        place += 1;
+                        place += positionsToAdd;
+                        positionsToAdd = 1;
+                    } else {
+                        positionsToAdd += 1;
                     }
                     user.place = place;
                     filtered.push(removeSensitiveInfo(user));
@@ -199,13 +203,17 @@ module.exports = function (app, passport) {
             users = sortByScore(users);
             var place = 1;
             var currentScore = users[1].score;
+            var positionsToAdd = 0;
 
             for (var i = 0; i < users.length; i++) {
                 var user = users[i];
                 if (!isAdminUser(user) && !isDemoUser(user)) {
                     if (user.score < currentScore) {
                         currentScore = user.score;
-                        place += 1;
+                        place += positionsToAdd;
+                        positionsToAdd = 1;
+                    } else {
+                        positionsToAdd += 1;
                     }
                     user.lastplace = place;
                 }

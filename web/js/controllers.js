@@ -84,7 +84,7 @@ angular.module('appname.controllers', [])
                     strikesBest2 = strikesBest;
                     strikesBest = user.strikes;
                 }
-                else if (user.strikes > strikesBest2) {
+                else if (user.strikes > strikesBest2 && user.strikes !== strikesBest) {
                     strikesBest2 = user.strikes;
                 }
             });

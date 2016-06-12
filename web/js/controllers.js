@@ -257,9 +257,9 @@ angular.module('appname.controllers', [])
                 window.location = '#/teams/:' + userName;
             }
         };
-        $scope.userName = typeof($routeParams.userName) !== 'undefined' && $rootScope.currentUser ? $routeParams.userName.substr(1) : $rootScope.currentUser.username;
+        $scope.userName = typeof($routeParams.userName) !== 'undefined' ? $routeParams.userName.substr(1) : typeof($rootScope.currentUser) !== 'undefined' ? $rootScope.currentUser.username : null;
         $scope.isAdmin = function () {
-            return $rootScope.currentUser && $rootScope.currentUser && $rootScope.currentUser.isAdmin;
+            return typeof($rootScope.currentUser) !== 'undefined' && $rootScope.currentUser && $rootScope.currentUser.isAdmin;
         };
         $scope.isSameUser = function () {
             return typeof($scope.userName) !== 'undefined' && $rootScope.currentUser && $scope.userName === $rootScope.currentUser.username;

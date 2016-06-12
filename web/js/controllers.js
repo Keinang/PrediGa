@@ -76,9 +76,25 @@ angular.module('appname.controllers', [])
                 return '(0)';
             }
         };
+        $scope.updateStrikes = function () {
+            var strikesBest = 0;
+            var strikesBest2 = 0;
+            $scope.users.forEach(function (user) {
+                if (user.strikes > strikesBest) {
+                    strikesBest2 = strikesBest;
+                    strikesBest = user.strikes;
+                }
+                else if (user.strikes > strikesBest2) {
+                    strikesBest2 = user.strikes;
+                }
+            });
+            $scope.strikesBest = strikesBest;
+            $scope.strikesBest2 = strikesBest2;
+        };
         // Calling for data for the 1st time:
         leaderboardService.getAllUserList().then(function (result) {
             $scope.users = result.users;
+            $scope.updateStrikes();
         });
     }])
     .controller('simulatorTeamsCtrl', ['$scope', '$routeParams', 'simulatorTeamsService', function ($scope, $routeParams, simulatorTeamsService) {

@@ -27,6 +27,10 @@
                 <img style="width: 24px;height: 24px;"
                      ng-show="x.place === 1 || x.place === 2 || x.place === 3 "
                      ng-src="{{x.place === 1 && 'img/Champion.png' || x.place === 2 && 'img/second.png' || x.place === 3 && 'img/third.png' || null }}"/>
+
+                <img style="width: 24px;height: 24px;"
+                     ng-show="x.strikes === strikesBest || x.strikes === strikesBest2"
+                     ng-src="{{ x.strikes === strikesBest && 'img/strikesBest.png' || x.strikes === strikesBest2 && 'img/strikesBest2.png' || null }}"/>
                 <label>{{ ::x.username }}</label>
             </td>
             <td><label>{{ ::x.score }}</label></td>

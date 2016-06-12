@@ -17,7 +17,9 @@
             <th class="col-sm-1">Strikes</th>
         </tr>
         </thead>
-        <tr ng-repeat="x in users | orderBy :orderBy" ng-click="redirect(x);">
+        <tr ng-repeat="x in users | orderBy :orderBy" ng-click="redirect(x);"
+            ng-class="getRowClass(x.username)"
+        >
             <td>
                 <label>{{::x.place}}</label>
                 <label ng-class="getClassByPosition(x.lastplace, x.place)"

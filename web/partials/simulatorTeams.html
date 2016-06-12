@@ -72,6 +72,7 @@
         </tr>
         </thead>
         <tr ng-repeat="x in teamspredictions | orderBy:orderBy || '-score'"
+            ng-class="getRowClass(getUserById(x.user_id).username)"
             ng-click="redirect(getUserById(x.user_id).username);"
             class="clickableTd">
             <td><label>{{$index+1}}</label></td>

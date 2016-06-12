@@ -50,6 +50,13 @@ angular.module('appname.controllers', [])
         $scope.redirect = function (item) {
             window.location = '#/game/:' + item.username;
         };
+        $scope.getRowClass = function (username) {
+            if (username === $rootScope.currentUser.username) {
+                return "backgroundBold"
+            } else {
+                return null;
+            }
+        };
         $scope.orderBy = '-score';
         $scope.changeOrderBy = function () {
             if ($scope.orderBy == '-score') {
@@ -97,9 +104,16 @@ angular.module('appname.controllers', [])
             $scope.updateStrikes();
         });
     }])
-    .controller('simulatorTeamsCtrl', ['$scope', '$routeParams', 'simulatorTeamsService', function ($scope, $routeParams, simulatorTeamsService) {
+    .controller('simulatorTeamsCtrl', ['$scope', '$routeParams', 'simulatorTeamsService', '$rootScope', function ($scope, $routeParams, simulatorTeamsService, $rootScope) {
         $scope.currentGame = typeof($routeParams.teamID) !== 'undefined' ? $routeParams.teamID.substr(1) : 1;
 
+        $scope.getRowClass = function (username) {
+            if (username === $rootScope.currentUser.username) {
+                return "backgroundBold"
+            } else {
+                return null;
+            }
+        };
         $scope.changeSim = function () {
             window.location = '#/simulatorTeams/:' + $scope.currentGame;
         };
@@ -153,9 +167,15 @@ angular.module('appname.controllers', [])
             $scope.simGame;
         });
     }])
-    .controller('simulatorCtrl', ['$scope', '$routeParams', 'simulatorService', function ($scope, $routeParams, simulatorService) {
+    .controller('simulatorCtrl', ['$scope', '$routeParams', 'simulatorService', '$rootScope', function ($scope, $routeParams, simulatorService, $rootScope) {
         $scope.currentGame = typeof($routeParams.matchID) !== 'undefined' ? $routeParams.matchID.substr(1) : 1;
-
+        $scope.getRowClass = function (username) {
+            if (username === $rootScope.currentUser.username) {
+                return "backgroundBold"
+            } else {
+                return null;
+            }
+        };
         $scope.changeSim = function () {
             window.location = '#/simulator/:' + $scope.currentGame;
         };

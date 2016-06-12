@@ -396,7 +396,7 @@ module.exports = function (app, passport) {
                                         // having default values for all matches:
                                         aMatch._winner = aMatch._winner || "Draw";
                                         aMatch._team1score = aMatch._team1score || 0;
-                                        aMatch._team2score = aMatch._goaldiff || 0;
+                                        aMatch._team2score = aMatch._team2score || 0;
                                         aMatch._goaldiff = aMatch._goaldiff || 0;
                                         aMatch._firstscore = aMatch._firstscore || "None";
                                     }

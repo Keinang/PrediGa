@@ -274,7 +274,7 @@ module.exports = {
                     // playoffs
                     new matches({
                         matchID: 37,
-                        team1: 'A2',
+                        team1: 'Switzerland',
                         team2: 'C2',
                         kickofftime: new Date("2016-06-25T13:00:00Z")
                     }).save(function (err) {
@@ -282,28 +282,28 @@ module.exports = {
                     new matches({
                         matchID: 38,
                         team1: 'B1',
-                        team2: 'ACD3',
+                        team2: 'Albania/C3/D3',
                         kickofftime: new Date("2016-06-25T16:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 39,
                         team1: 'D1',
-                        team2: 'BEF3',
+                        team2: 'B3/E3/F3',
                         kickofftime: new Date("2016-06-25T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 40,
-                        team1: 'A1',
-                        team2: 'CDE3',
+                        team1: 'France',
+                        team2: 'C3/D3/E3',
                         kickofftime: new Date("2016-06-26T13:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 41,
                         team1: 'C1',
-                        team2: 'ABF3',
+                        team2: 'Albania/B3/F3',
                         kickofftime: new Date("2016-06-26T16:00:00Z")
                     }).save(function (err) {
                     }),

@@ -29,7 +29,6 @@ module.exports = function (app, passport) {
             var response = {};
             if (error || !isAdminUser(user)) {
                 response.status = 'ERROR';
-                response.message = error.message;
                 return res.json(200, response);
             } else {
                 initialData.insertData(matches, teams).then(function () {

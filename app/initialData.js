@@ -708,6 +708,47 @@ module.exports = {
                         predictscore: 4
                     }).save(function () {
 
+                    }),
+
+                    new teams({
+                        teamID: 18,
+                        name: '3rd #4',
+                        desc: '4th of 3rd place table',
+                        deadline: new Date("2016-06-10T19:00:00Z"),
+                        predictscore: 4
+                    }).save(function () {
+
+                    }),
+
+
+                    // *****
+                    // Fakes
+                    // *****
+
+                    // Test match:
+                    new matches({
+                        matchID: 52,
+                        team1: 'T1',
+                        team2: 'T2',
+                        kickofftime: new Date("2016-05-01T19:00:00Z"),
+                        winner: 'T1',
+                        team1score: '2',
+                        team2score: '1',
+                        goaldiff: '1',
+                        firstscore: 'T2'
+
+                    }).save(function (err) {
+                    }),
+
+                    new teams({
+                        teamID: 19,
+                        name: 'Test',
+                        desc: 'Test',
+                        deadline: new Date("2016-05-01T19:00:00Z"),
+                        predictscore: 0,
+                        team: 'T1'
+                    }).save(function () {
+
                     })
 
                 ]).spread(function () {

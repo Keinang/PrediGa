@@ -358,28 +358,48 @@ module.exports = {
                         matchID: 29,
                         team1: 'Ukraine',
                         team2: 'Poland',
-                        kickofftime: new Date("2016-06-21T16:00:00Z")
+                        kickofftime: new Date("2016-06-21T16:00:00Z"),
+                        winner: 'Poland',
+                        team1score: 0,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Poland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 30,
                         team1: 'Northern Ireland',
                         team2: 'Germany',
-                        kickofftime: new Date("2016-06-21T16:00:00Z")
+                        kickofftime: new Date("2016-06-21T16:00:00Z"),
+                        winner: 'Germany',
+                        team1score: 0,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Germany'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 31,
                         team1: 'Czech Republic',
                         team2: 'Turkey',
-                        kickofftime: new Date("2016-06-21T19:00:00Z")
+                        kickofftime: new Date("2016-06-21T19:00:00Z"),
+                        winner: 'Germany',
+                        team1score: 0,
+                        team2score: 2,
+                        goaldiff: 2,
+                        firstscore: 'Germany'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 32,
                         team1: 'Croatia',
                         team2: 'Spain',
-                        kickofftime: new Date("2016-06-21T19:00:00Z")
+                        kickofftime: new Date("2016-06-21T19:00:00Z"),
+                        winner: 'Croatia',
+                        team1score: 2,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Spain'
                     }).save(function (err) {
                     }),
                     new matches({
@@ -415,35 +435,35 @@ module.exports = {
                     new matches({
                         matchID: 37,
                         team1: 'Switzerland',
-                        team2: 'C2',
+                        team2: 'Poland',
                         kickofftime: new Date("2016-06-25T13:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 38,
-                        team1: 'B1',
-                        team2: 'Albania/C3/D3',
+                        team1: 'Wales',
+                        team2: '3rd Group C/D',
                         kickofftime: new Date("2016-06-25T16:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 39,
-                        team1: 'D1',
-                        team2: 'B3/E3/F3',
+                        team1: 'Croatia',
+                        team2: '3rd Group B/E/F',
                         kickofftime: new Date("2016-06-25T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 40,
                         team1: 'France',
-                        team2: 'C3/D3/E3',
+                        team2: '3rd Group C/E',
                         kickofftime: new Date("2016-06-26T13:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 41,
-                        team1: 'C1',
-                        team2: 'Albania/B3/F3',
+                        team1: 'Germany',
+                        team2: '3rd Group A/B',
                         kickofftime: new Date("2016-06-26T16:00:00Z")
                     }).save(function (err) {
                     }),
@@ -456,14 +476,14 @@ module.exports = {
                     }),
                     new matches({
                         matchID: 43,
-                        team1: 'E1',
-                        team2: 'D2',
+                        team1: 'Italy',
+                        team2: 'Spain',
                         kickofftime: new Date("2016-06-27T16:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 44,
-                        team1: 'B2',
+                        team1: 'England',
                         team2: 'F2',
                         kickofftime: new Date("2016-06-27T19:00:00Z")
                     }).save(function (err) {

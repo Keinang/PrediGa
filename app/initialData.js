@@ -383,11 +383,11 @@ module.exports = {
                         team1: 'Czech Republic',
                         team2: 'Turkey',
                         kickofftime: new Date("2016-06-21T19:00:00Z"),
-                        winner: 'Germany',
+                        winner: 'Turkey',
                         team1score: 0,
                         team2score: 2,
                         goaldiff: 2,
-                        firstscore: 'Germany'
+                        firstscore: 'Turkey'
                     }).save(function (err) {
                     }),
                     new matches({

@@ -406,14 +406,24 @@ module.exports = {
                         matchID: 33,
                         team1: 'Iceland',
                         team2: 'Austria',
-                        kickofftime: new Date("2016-06-22T16:00:00Z")
+                        kickofftime: new Date("2016-06-22T16:00:00Z"),
+                        winner: 'Iceland',
+                        team1score: 2,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Iceland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 34,
                         team1: 'Hungary',
                         team2: 'Portugal',
-                        kickofftime: new Date("2016-06-22T16:00:00Z")
+                        kickofftime: new Date("2016-06-22T16:00:00Z"),
+                        winner: 'Draw',
+                        team1score: 3,
+                        team2score: 3,
+                        goaldiff: 0,
+                        firstscore: 'Hungary'
                     }).save(function (err) {
                     }),
                     new matches({
@@ -442,34 +452,34 @@ module.exports = {
                     new matches({
                         matchID: 38,
                         team1: 'Wales',
-                        team2: '3rd Group C/D',
+                        team2: 'Northern Ireland or Turkey',
                         kickofftime: new Date("2016-06-25T16:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 39,
                         team1: 'Croatia',
-                        team2: '3rd Group B/E/F',
+                        team2: 'Portugal',
                         kickofftime: new Date("2016-06-25T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 40,
                         team1: 'France',
-                        team2: '3rd Group C/E',
+                        team2: 'Northern Ireland or E3',
                         kickofftime: new Date("2016-06-26T13:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 41,
                         team1: 'Germany',
-                        team2: '3rd Group A/B',
+                        team2: 'Slovakia',
                         kickofftime: new Date("2016-06-26T16:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 42,
-                        team1: 'F1',
+                        team1: 'Hungary',
                         team2: 'E2',
                         kickofftime: new Date("2016-06-26T19:00:00Z")
                     }).save(function (err) {
@@ -484,7 +494,7 @@ module.exports = {
                     new matches({
                         matchID: 44,
                         team1: 'England',
-                        team2: 'F2',
+                        team2: 'Iceland',
                         kickofftime: new Date("2016-06-27T19:00:00Z")
                     }).save(function (err) {
                     }),
@@ -566,7 +576,8 @@ module.exports = {
                         name: 'A1',
                         desc: 'Winner of group A',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'France'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -574,7 +585,8 @@ module.exports = {
                         name: 'A2',
                         desc: 'Runner up of group A',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Switzerland'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -582,7 +594,8 @@ module.exports = {
                         name: 'B1',
                         desc: 'Winner of group B',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Wales'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -590,7 +603,8 @@ module.exports = {
                         name: 'B2',
                         desc: 'Runner up of group B',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'England'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -598,7 +612,8 @@ module.exports = {
                         name: 'C1',
                         desc: 'Winner of group C',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Germany'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -606,7 +621,8 @@ module.exports = {
                         name: 'C2',
                         desc: 'Runner up of group C',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Poland'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -614,7 +630,8 @@ module.exports = {
                         name: 'D1',
                         desc: 'Winner of group D',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Croatia'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -622,7 +639,8 @@ module.exports = {
                         name: 'D2',
                         desc: 'Runner up of group D',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Spain'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -646,7 +664,8 @@ module.exports = {
                         name: 'F1',
                         desc: 'Winner of group F',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Hungary'
                     }).save(function () {
 
                     }),
@@ -655,7 +674,8 @@ module.exports = {
                         name: 'F2',
                         desc: 'Runner up of group F',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Iceland'
                     }).save(function () {
 
                     }),
@@ -686,47 +706,6 @@ module.exports = {
                         desc: '3rd of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
                         predictscore: 4
-                    }).save(function () {
-
-                    }),
-
-                    new teams({
-                        teamID: 18,
-                        name: '3rd #4',
-                        desc: '4th of 3rd place table',
-                        deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
-                    }).save(function () {
-
-                    }),
-
-
-                    // *****
-                    // Fakes
-                    // *****
-
-                    // Test match:
-                    new matches({
-                        matchID: 52,
-                        team1: 'T1',
-                        team2: 'T2',
-                        kickofftime: new Date("2016-05-01T19:00:00Z"),
-                        winner: 'T1',
-                        team1score: '2',
-                        team2score: '1',
-                        goaldiff: '1',
-                        firstscore: 'T2'
-
-                    }).save(function (err) {
-                    }),
-
-                    new teams({
-                        teamID: 19,
-                        name: 'Test',
-                        desc: 'Test',
-                        deadline: new Date("2016-05-01T19:00:00Z"),
-                        predictscore: 0,
-                        team: 'T1'
                     }).save(function () {
 
                     })

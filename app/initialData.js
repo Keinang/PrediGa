@@ -430,14 +430,24 @@ module.exports = {
                         matchID: 35,
                         team1: 'Italy',
                         team2: 'Republic of Ireland',
-                        kickofftime: new Date("2016-06-22T19:00:00Z")
+                        kickofftime: new Date("2016-06-22T19:00:00Z"),
+                        winner: 'Republic of Ireland',
+                        team1score: 0,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Republic of Ireland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 36,
                         team1: 'Sweden',
                         team2: 'Belgium',
-                        kickofftime: new Date("2016-06-22T19:00:00Z")
+                        kickofftime: new Date("2016-06-22T19:00:00Z"),
+                        winner: 'Belgium',
+                        team1score: 0,
+                        team2score: 1,
+                        goaldiff: 0,
+                        firstscore: 'Belgium'
                     }).save(function (err) {
                     }),
 
@@ -452,7 +462,7 @@ module.exports = {
                     new matches({
                         matchID: 38,
                         team1: 'Wales',
-                        team2: 'Northern Ireland or Turkey',
+                        team2: 'Northern Ireland',
                         kickofftime: new Date("2016-06-25T16:00:00Z")
                     }).save(function (err) {
                     }),
@@ -466,7 +476,7 @@ module.exports = {
                     new matches({
                         matchID: 40,
                         team1: 'France',
-                        team2: 'Northern Ireland or E3',
+                        team2: 'Republic of Ireland',
                         kickofftime: new Date("2016-06-26T13:00:00Z")
                     }).save(function (err) {
                     }),
@@ -480,7 +490,7 @@ module.exports = {
                     new matches({
                         matchID: 42,
                         team1: 'Hungary',
-                        team2: 'E2',
+                        team2: 'Belgium',
                         kickofftime: new Date("2016-06-26T19:00:00Z")
                     }).save(function (err) {
                     }),
@@ -648,7 +658,8 @@ module.exports = {
                         name: 'E1',
                         desc: 'Winner of group E',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Italy'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -656,7 +667,8 @@ module.exports = {
                         name: 'E2',
                         desc: 'Runner up of group E',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Belgium'
                     }).save(function (err) {
                     }),
                     new teams({
@@ -685,7 +697,8 @@ module.exports = {
                         name: '3rd #1',
                         desc: '1st of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Slovakia'
                     }).save(function () {
 
                     }),
@@ -695,7 +708,8 @@ module.exports = {
                         name: '3rd #2',
                         desc: '2nd of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Republic of Ireland'
                     }).save(function () {
 
                     }),
@@ -705,7 +719,8 @@ module.exports = {
                         name: '3rd #3',
                         desc: '3rd of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Portugal'
                     }).save(function () {
 
                     }),
@@ -715,7 +730,8 @@ module.exports = {
                         name: '3rd #4',
                         desc: '4th of 3rd place table',
                         deadline: new Date("2016-06-10T19:00:00Z"),
-                        predictscore: 4
+                        predictscore: 4,
+                        team: 'Northern Ireland'
                     }).save(function () {
 
                     }),

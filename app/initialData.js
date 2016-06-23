@@ -446,7 +446,7 @@ module.exports = {
                         winner: 'Belgium',
                         team1score: 0,
                         team2score: 1,
-                        goaldiff: 0,
+                        goaldiff: 1,
                         firstscore: 'Belgium'
                     }).save(function (err) {
                     }),

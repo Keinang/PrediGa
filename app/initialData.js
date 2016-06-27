@@ -456,85 +456,125 @@ module.exports = {
                         matchID: 37,
                         team1: 'Switzerland',
                         team2: 'Poland',
-                        kickofftime: new Date("2016-06-25T13:00:00Z")
+                        kickofftime: new Date("2016-06-25T13:00:00Z"),
+                        winner: 'Draw',
+                        team1score: 1,
+                        team2score: 1,
+                        goaldiff: 0,
+                        firstscore: 'Poland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 38,
                         team1: 'Wales',
                         team2: 'Northern Ireland',
-                        kickofftime: new Date("2016-06-25T16:00:00Z")
+                        kickofftime: new Date("2016-06-25T16:00:00Z"),
+                        winner: 'Wales',
+                        team1score: 1,
+                        team2score: 0,
+                        goaldiff: 1,
+                        firstscore: 'Wales'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 39,
                         team1: 'Croatia',
                         team2: 'Portugal',
-                        kickofftime: new Date("2016-06-25T19:00:00Z")
+                        kickofftime: new Date("2016-06-25T19:00:00Z"),
+                        winner: 'Draw',
+                        team1score: 0,
+                        team2score: 0,
+                        goaldiff: 0,
+                        firstscore: 'None'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 40,
                         team1: 'France',
                         team2: 'Republic of Ireland',
-                        kickofftime: new Date("2016-06-26T13:00:00Z")
+                        kickofftime: new Date("2016-06-26T13:00:00Z"),
+                        winner: 'France',
+                        team1score: 2,
+                        team2score: 1,
+                        goaldiff: 1,
+                        firstscore: 'Republic of Ireland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 41,
                         team1: 'Germany',
                         team2: 'Slovakia',
-                        kickofftime: new Date("2016-06-26T16:00:00Z")
+                        kickofftime: new Date("2016-06-26T16:00:00Z"),
+                        winner: 'Germany',
+                        team1score: 3,
+                        team2score: 0,
+                        goaldiff: 3,
+                        firstscore: 'Germany'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 42,
                         team1: 'Hungary',
                         team2: 'Belgium',
-                        kickofftime: new Date("2016-06-26T19:00:00Z")
+                        kickofftime: new Date("2016-06-26T19:00:00Z"),
+                        winner: 'Belgium',
+                        team1score: 0,
+                        team2score: 4,
+                        goaldiff: 4,
+                        firstscore: 'Belgium'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 43,
                         team1: 'Italy',
                         team2: 'Spain',
-                        kickofftime: new Date("2016-06-27T16:00:00Z")
+                        kickofftime: new Date("2016-06-27T16:00:00Z"),
+                        winner: 'Italy',
+                        team1score: 2,
+                        team2score: 0,
+                        goaldiff: 0,
+                        firstscore: 'Italy'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 44,
                         team1: 'England',
                         team2: 'Iceland',
-                        kickofftime: new Date("2016-06-27T19:00:00Z")
+                        kickofftime: new Date("2016-06-27T19:00:00Z"),
+                        winner: 'Iceland',
+                        team1score: 1,
+                        team2score: 2,
+                        goaldiff: 1,
+                        firstscore: 'Iceland'
                     }).save(function (err) {
                     }),
 
                     // Q-Finals
                     new matches({
                         matchID: 45,
-                        team1: 'W37',
-                        team2: 'W39',
+                        team1: 'Poland',
+                        team2: 'Portugal',
                         kickofftime: new Date("2016-06-30T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 46,
-                        team1: 'W38',
-                        team2: 'W42',
+                        team1: 'Wales',
+                        team2: 'Belgium',
                         kickofftime: new Date("2016-07-01T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 47,
-                        team1: 'W41',
-                        team2: 'W43',
+                        team1: 'Germany',
+                        team2: 'Italy',
                         kickofftime: new Date("2016-07-02T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 48,
-                        team1: 'W40',
-                        team2: 'W44',
+                        team1: 'France',
+                        team2: 'Iceland',
                         kickofftime: new Date("2016-07-03T19:00:00Z")
                     }).save(function (err) {
                     }),

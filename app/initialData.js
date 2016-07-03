@@ -554,43 +554,63 @@ module.exports = {
                         matchID: 45,
                         team1: 'Poland',
                         team2: 'Portugal',
-                        kickofftime: new Date("2016-06-30T19:00:00Z")
+                        kickofftime: new Date("2016-06-30T19:00:00Z"),
+                        winner: 'Draw',
+                        team1score: 1,
+                        team2score: 1,
+                        goaldiff: 0,
+                        firstscore: 'Poland'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 46,
                         team1: 'Wales',
                         team2: 'Belgium',
-                        kickofftime: new Date("2016-07-01T19:00:00Z")
+                        kickofftime: new Date("2016-07-01T19:00:00Z"),
+                        winner: 'Wales',
+                        team1score: 3,
+                        team2score: 1,
+                        goaldiff: 2,
+                        firstscore: 'Belgium'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 47,
                         team1: 'Germany',
                         team2: 'Italy',
-                        kickofftime: new Date("2016-07-02T19:00:00Z")
+                        kickofftime: new Date("2016-07-02T19:00:00Z"),
+                        winner: 'Draw',
+                        team1score: 1,
+                        team2score: 1,
+                        goaldiff: 0,
+                        firstscore: 'Germany'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 48,
                         team1: 'France',
                         team2: 'Iceland',
-                        kickofftime: new Date("2016-07-03T19:00:00Z")
+                        kickofftime: new Date("2016-07-03T19:00:00Z"),
+                        winner: 'France',
+                        team1score: 5,
+                        team2score: 2,
+                        goaldiff: 3,
+                        firstscore: 'France'
                     }).save(function (err) {
                     }),
 
                     // S-Final
                     new matches({
                         matchID: 49,
-                        team1: 'W45',
-                        team2: 'W46',
+                        team1: 'Portugal',
+                        team2: 'Wales',
                         kickofftime: new Date("2016-07-06T19:00:00Z")
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 50,
-                        team1: 'W47',
-                        team2: 'W48',
+                        team1: 'Germany',
+                        team2: 'France',
                         kickofftime: new Date("2016-07-07T19:00:00Z")
                     }).save(function (err) {
                     }),

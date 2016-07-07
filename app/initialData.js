@@ -604,21 +604,31 @@ module.exports = {
                         matchID: 49,
                         team1: 'Portugal',
                         team2: 'Wales',
-                        kickofftime: new Date("2016-07-06T19:00:00Z")
+                        kickofftime: new Date("2016-07-06T19:00:00Z"),
+                        winner: 'Portugal',
+                        team1score: 2,
+                        team2score: 0,
+                        goaldiff: 2,
+                        firstscore: 'Portugal'
                     }).save(function (err) {
                     }),
                     new matches({
                         matchID: 50,
                         team1: 'Germany',
                         team2: 'France',
-                        kickofftime: new Date("2016-07-07T19:00:00Z")
+                        kickofftime: new Date("2016-07-07T19:00:00Z"),
+                        winner: 'France',
+                        team1score: 0,
+                        team2score: 2,
+                        goaldiff: 2,
+                        firstscore: 'France'
                     }).save(function (err) {
                     }),
                     // Final
                     new matches({
                         matchID: 51,
-                        team1: 'W49',
-                        team2: 'W50',
+                        team1: 'Portugal',
+                        team2: 'France',
                         kickofftime: new Date("2016-07-10T19:00:00Z")
                     }).save(function (err) {
                     }),
